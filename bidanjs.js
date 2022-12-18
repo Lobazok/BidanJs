@@ -1,4 +1,17 @@
-function Neurons(){
+const colors = require("colors/safe")
+colors.setTheme({
+    error: ["red", "italic", "bold"],
+    warn: "red",
+    LyInput: "blue",
+    LyInputTitle: ["blue", "bold"],
+    Ly: "cyan",
+    LyTitle: ["cyan", "bold"],
+    LyOutput: "green",
+    LyTitleOutput: ["green", "bold"],
+})
+
+function Neurons(name){
+    this.name = name
 }
 
 function logError(error){
@@ -17,36 +30,37 @@ function Neuralnetwork() {
             //Input es un numero
             //agregamos las neuronas a LayerInput
             for (let index = 0; index < Input; index++) {
-                this.LayerInput.push(new Neurons())
+                this.LayerInput.push(new Neurons("LayerInput" + index))
             }
         } else {
             //Input no es un numero
-            console.log("Bidan error 001: el valor de LayerInputConfig no es un numero")
+            logError("Bidan error 001: el valor de LayerInputConfig no es un numero")
         }
     }
 
     //funcion para configurar las capas
     this.LayersConfig = (ArrayInput) => {
-        //comprobamos si Input es un numero
+        //comprobamos si Input es un array
         if (typeof ArrayInput == "object") {
-            //Input es un numero
+            //Input es un array
             //agregamos las neuronas a LayerInput
             for (let index = 0; index < ArrayInput.length; index++) {
                 let layer = []
                 for (let o = 0; o < ArrayInput[index]; o++) {
-                    layer.push(new Neurons())
+                    layer.push(new Neurons("Layer" + index + "Neuron" + o))
                 }
                 this.Layer.push(layer)
             }
         }else if(typeof ArrayInput == "number"){
+            //Input es un numero
             let layer = []
             for (let o = 0; o < ArrayInput; o++) {
-                layer.push(new Neurons())
+                layer.push(new Neurons("Layer" + o + "Neuron" + o))
             }
             this.Layer.push(layer)
         }else {
-            //Input no es un numero
-            console.log("Bidan error 001: el valor de NewLayers no es un array")
+            //Input no es un array ni numero
+            logError("Bidan error 001: el valor de NewLayers no es un array")
         }
     }
 
@@ -57,40 +71,40 @@ function Neuralnetwork() {
             //Input es un numero
             //agregamos las neuronas a LayerInput
             for (let index = 0; index < Output; index++) {
-                this.LayerOutput.push(new Neurons())
+                this.LayerOutput.push(new Neurons("LayerOutput" + index))
             }
         } else {
             //Input no es un numero
-            console.log("Bidan error 001: el valor de LayerOutputConfig no es un numero")
+            logError("Bidan error 001: el valor de LayerOutputConfig no es un numero")
         }
     }
 
     //funcion para obtener informacion de la red nueronal
     this.info = ()=>{
         if(this.LayerInput.length != 0){
-			console.log("Number of neurons in the input layer: " + this.LayerInput.length)
+			console.log(colors.LyInputTitle("Number of neurons in the input layer: " + this.LayerInput.length))
 		}else{
-			console.log("Bidan error 000: error de configuracion en capa de entrada")
+			console.log(colors.warn("Bidan error 000: error de configuracion en capa de entrada"))
 		}
 
 		if(this.Layer.length != 0){
-			console.log("Number of hidden Layers: " + this.Layer.length)
+			console.log(colors.LyTitle("Number of hidden Layers: " + this.Layer.length))
 			for (let index = 0; index < this.Layer.length; index++) {
-				console.log(" Number of neurons in the layer " + index + ": " + this.Layer[index].length)
+				console.log(colors.Ly(" Number of neurons in the layer " + index + ": " + this.Layer[index].length))
 			}
 		}else{
-			console.log("Bidan error 000: error de configuracion de capas ocultas")
+			console.log(colors.warn("Bidan error 000: error de configuracion de capas ocultas"))
 		}	
 
         if(this.LayerOutput.length != 0){
-			console.log("Number of neurons in the output layer: " + this.LayerOutput.length)
+			console.log(colors.LyTitleOutput("Number of neurons in the output layer: " + this.LayerOutput.length))
 		}else{
-			console.log("Bidan error 000: error de configuracion en capa de salida")
+			console.log(colors.warn("Bidan error 000: error de configuracion en capa de salida"))
 		}
     }
 
     //funcion para configurar la red neuronal, llama a todas las funciones anteriores
-    this.init = (LayerInputConfig,LayersConfig,LayerOutputConfig)=>{
+    this.config = (LayerInputConfig,LayersConfig,LayerOutputConfig)=>{
         this.LayerInputConfig(LayerInputConfig)
         this.LayersConfig(LayersConfig)
         this.LayerOutputConfig(LayerOutputConfig)
@@ -98,5 +112,6 @@ function Neuralnetwork() {
 }
 
 module.exports = {
-    Neuralnetwork
+    Neuralnetwork,
+    Neurons
 }
