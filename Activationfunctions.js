@@ -2,9 +2,10 @@ const colors = require("colors/safe")
 colors.setTheme({
     error: ["red", "italic", "bold"],
     warn: "red",
-    LyInput: "blue",
     LyInputTitle: ["blue", "bold"],
+    LyInput: "blue",
     Ly: "cyan",
+    Lymin: ["cyan", "dim", "reset"],
     LyTitle: ["cyan", "bold"],
     LyOutput: "green",
     LyTitleOutput: ["green", "bold"],
