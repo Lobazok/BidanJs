@@ -14,12 +14,13 @@ function logError(error) {
     console.log(colors.error(error))
 }
 
-const relu = (Input)=>{
-    if(typeof Input == "number"){
-        if(Input > 0){
+const relu = (Input) => {
+    var name = "relu"
+    if (typeof Input == "number") {
+        if (Input > 0) {
             return Input
-        }else return 0
-    }else logError("Bidan error 003: la funcion de activacion <<Relu>> no obtuvo un valor numerico")
+        } else return 0
+    } else logError("Bidan error 003: la funcion de activacion <<Relu>> no obtuvo un valor numerico")
 }
 
 module.exports = {
