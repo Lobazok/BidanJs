@@ -2,8 +2,8 @@ const colors = require("colors/safe")
 colors.setTheme({
     error: ["red", "italic", "bold"],
     warn: "red",
-    LyInput: ["red", "dim"],
-    LyInputTitle: "blue",
+    LyInput: "blue",
+    LyInputTitle: ["blue", "bold"],
     Ly: "cyan",
     Lymin: ["cyan", "dim", "reset"],
     LyTitle: ["cyan", "bold"],
@@ -108,8 +108,8 @@ function Neuralnetwork() {
     //funcion para obtener informacion de la red nueronal
     this.info = () => {
         if (this.LayerInput.length != 0) {
-            console.log(colors.LyInput("Number of neurons in the input layer: " + this.LayerInput.length))
-            console.log(colors.LyInputTitle(" Input layer activation function: " + this.LayerInputActivationfunction.name))
+            console.log(colors.LyInputTitle("Number of neurons in the input layer: " + this.LayerInput.length))
+            console.log(colors.LyInput(" Input layer activation function: " + this.LayerInputActivationfunction.name))
         } else {
             console.log(colors.warn("Bidan error 000: error de configuracion en capa de entrada"))
         }
