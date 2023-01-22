@@ -30,7 +30,7 @@ de esta manera se usan las funciones
 
 + LayerOutputConfig para la configuración de capa de salida, el primer parámetro es la cantidad de neuronas en forma de número y el segundo la función de activación que usa la capa.
 
-## optener informacion de la red
+## obtener  información de la  red
 
 ~~~ JavaScript
 lian.info()
@@ -42,13 +42,19 @@ se utiliza la funcion ***info*** para mostrar la informacion en la terminal
 ~~~ JavaScript
 lian.saveCofig("jinnData")
 ~~~
-***saveCofig*** se usa para guardar la información de la red, el primer parámetro es nombre del archivo (sin la terminación en .json)
+***saveCofig*** se usa para guardar la información de la red, el primer parámetro es nombre del archivo **(sin la terminación en .json)**
 
 
 ## replicar otra red
 ~~~ JavaScript
 lian.mirror("jinnData")
 ~~~
-***mirror*** se usa para replicar la configuración de otra red, el primer parámetro es nombre del archivo (sin la terminación en .json)
+***mirror*** se usa para replicar la configuración de otra red, el primer parámetro es nombre del archivo **(sin la terminación en .json)**
 
-## funciones de activacion
+## funciones de activación
+se proporcionan **5 funciones de activación**
++ relu, da 0 si el resultado es negativo, si no es negativo devuelve el input
++ leaky relu, a relu se le aplicara un sesgo de 0.01 en caso de que la entrada sea negativa
++ step si el número es positivo devuelve 1, sí no 0, es binario
++ logistica
++ Tangente hiperbólica (TAHN)
