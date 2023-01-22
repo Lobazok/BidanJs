@@ -45,6 +45,7 @@ class Neuralnetwork {
         this.LayerInputActivationfunction = undefined
         this.LayerActivationfunction = []
         this.LayerOutputActivationfunction = undefined
+        //aqui va la configuracion
         this.data = {
             "LayerInputConfig": [],
             "LayersConfig": [],
@@ -148,19 +149,18 @@ class Neuralnetwork {
         this.LayerOutputConfig(LayerOutputConfig, LayerOutputActivationfunction)
     }
 
+    //funcion que replica la configuracion de una red
     mirror = (direction) => {
+        //obtenemos la configuracion y la transformamos en un array
         const data = Object.values(JSON.parse(fs.readFileSync(direction, "utf-8")))
-
         let configuration = [];
         for (var i = 0; i < data.length; i++) {
             configuration.push(data[i][0], data[i][1])
         }
-        
         const findFunction = (functionName)=>{
             return funcions.find((f) => f.name === functionName)
         }
 
-        console.log(findFunction(configuration[1]));
         this.config(configuration[0], findFunction(configuration[1]) , configuration[2], findFunction(configuration[3]), configuration[4], findFunction(configuration[5]))
     }
 
@@ -190,11 +190,10 @@ class Neuralnetwork {
             console.log(colors.warn("Bidan error 000: error de configuracion en capa de salida"))
         }
     }
+
+    //funcion para guardar una configuracion
     saveCofig = (name) => {
-        console.log("#");
-
         const json = JSON.stringify(this.data)
-
         fs.writeFileSync(name + ".json", json)
     }
 }
