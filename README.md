@@ -20,7 +20,7 @@ lian.info()
 **BidanJs** is focused on the **ease** of use for **novice** developers and on providing **functionalities** for the most **advanced**, uses **JavaScript** technologies **recommended** in services that use JavaScript and can be used with **TypeScript**
 
 ## Documentation
-in the folder **Documentation** is encorded **all the necessary documentation** sorted by complexity**, it is in two languages **Spanish** and **English**
+in the folder **Documentation** is encorded **all the necessary documentation** **sorted by complexity**, it is in two languages **Spanish** and **English**
 
 ## collaboration
 We are willing to all collaboration, if you have a contribution contact us
@@ -50,4 +50,4 @@ lian.info()
 en la carpeta **Documentation** se encuertra **toda la documentacion** necesaria **ordenada por complejidad**, es en dos idiomas **Español** y **Ingles**
 
 ## colaboracion
-estamos dispuestos a toda colaboración, si tienes un aporte contacta con nosotros
+estamos dispuestos a toda colaboración, si tienes un aporte contacte con nosotros
