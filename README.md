@@ -47,7 +47,7 @@ lian.info()
 **BidanJs** está enfocada en la **facilidad** de uso para desarrolladores **novatos** y en brindar **funcionalidades** para los más **avanzados**, utiliza tecnologías **JavaScript** se **recomienda** en servicios que usan JavaScript y puede ser usado con **TypeScript**
 
 ## documentacion
-en la carpeta **Documentation** se encuertra **toda la documentacion** necesaria **ordenada por complejidad**, es en dos idiomas **Español** y **Ingles**
+en la carpeta **Documentation** se encuertra **toda la documentacion** necesaria **ordenada por complejidad**, es en dos idiomas **Español** e **Ingles**
 
 ## colaboracion
 estamos dispuestos a toda colaboración, si tienes un aporte contacte con nosotros
