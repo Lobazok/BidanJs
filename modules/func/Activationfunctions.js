@@ -57,7 +57,16 @@ const tanh = (Input) => {
     } else logError("Bidan error 003: la funcion de activacion <<Relu>> no obtuvo un valor numerico")
 }
 
+const funcions = [
+    step,
+    relu,
+    leakyrule,
+    logistica,
+    tanh
+]
+
 module.exports = {
+    funcions,
     step,
     relu,
     leakyrule,

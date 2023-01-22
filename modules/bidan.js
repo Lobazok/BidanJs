@@ -1,4 +1,7 @@
 const colors = require("colors/safe")
+const fs = require("fs")
+const { funcions } = require("./func/Activationfunctions")
+
 colors.setTheme({
     error: ["red", "italic", "bold"],
     warn: "red",
@@ -42,6 +45,11 @@ class Neuralnetwork {
         this.LayerInputActivationfunction = undefined
         this.LayerActivationfunction = []
         this.LayerOutputActivationfunction = undefined
+        this.data = {
+            "LayerInputConfig": [],
+            "LayersConfig": [],
+            "LayerOutputConfig": []
+        }
     }
     //funcion para configurar las capas de entrada
     LayerInputConfig = (Input, Activationfunction) => {
@@ -49,7 +57,7 @@ class Neuralnetwork {
             //comprobamos si Input es un numero
             if (typeof Input == "number") {
                 //Input es un numero
-
+                this.data.LayerInputConfig = [Input, Activationfunction.name]
                 //comprobamos si input es un numero valido(mayor a 0)
                 if (Input > 0) {
                     //input es valido
@@ -74,24 +82,26 @@ class Neuralnetwork {
     LayersConfig = (ArrayInput, Activationfunction) => {
         //comprobamos si Input es un array
         if (typeof Activationfunction == "function") {
+            this.data.LayersConfig = [ArrayInput, Activationfunction.name]
             if (typeof ArrayInput == "object") {
+
                 //Input es un array
                 for (let index = 0; index < ArrayInput.length; index++) {
                     if (typeof ArrayInput[index] == "number") {
                         if (ArrayInput[index] > 0) {
                             //agregamos las neuronas a LayerInput
-                                this.LayerActivationfunction[index] = Activationfunction
-                                let layer = []
-                                for (let o = 0; o < ArrayInput[index]; o++) {
-                                    layer.push(new Neurons("Layer" + index + "Neuron" + o, Activationfunction))
-                                }
-                                this.Layer.push(layer)
-                        }else if (Input == 0) {
+                            this.LayerActivationfunction[index] = Activationfunction
+                            let layer = []
+                            for (let o = 0; o < ArrayInput[index]; o++) {
+                                layer.push(new Neurons("Layer" + index + "Neuron" + o, Activationfunction))
+                            }
+                            this.Layer.push(layer)
+                        } else if (Input == 0) {
                             logError("Bidan error 003: una capa no puede tener cero neuronas")
                         } else logError("Bidan error 003: una capa no puede tener un numero negativo de neuronas")
-                    }else logError("Bidan error 001: el valor de NewLayers no es un array")
+                    } else logError("Bidan error 001: el valor de NewLayers no es un array")
                 }
-                
+
             } else if (typeof ArrayInput == "number") {
                 //Input es un numero
                 if (ArrayInput > 0) {
@@ -116,6 +126,7 @@ class Neuralnetwork {
         if (typeof Activationfunction == "function") {
             //comprobamos si Input es un numero
             if (typeof Output == "number") {
+                this.data.LayerOutputConfig = [Output, Activationfunction.name]
                 //Input es un numero
                 this.LayerOutputActivationfunction = Activationfunction
                 //agregamos las neuronas a LayerInput
@@ -126,6 +137,31 @@ class Neuralnetwork {
         } else if (typeof Activationfunction == "undefined") {
             logError("Bidan error 002: la funcion de activacion de la capa de salida no fue especificada")
         } else logError("Bidan error 002: la funcion de activacion de la capa de salida no es una funcion")
+    }
+
+
+
+    //funcion para configurar la red neuronal, llama a todas las funciones anteriores
+    config = (LayerInputConfig, LayerInputActivationfunction, LayersConfig, LayersActivationfunction, LayerOutputConfig, LayerOutputActivationfunction) => {
+        this.LayerInputConfig(LayerInputConfig, LayerInputActivationfunction)
+        this.LayersConfig(LayersConfig, LayersActivationfunction)
+        this.LayerOutputConfig(LayerOutputConfig, LayerOutputActivationfunction)
+    }
+
+    mirror = (direction) => {
+        const data = Object.values(JSON.parse(fs.readFileSync(direction, "utf-8")))
+
+        let configuration = [];
+        for (var i = 0; i < data.length; i++) {
+            configuration.push(data[i][0], data[i][1])
+        }
+        
+        const findFunction = (functionName)=>{
+            return funcions.find((f) => f.name === functionName)
+        }
+
+        console.log(findFunction(configuration[1]));
+        this.config(configuration[0], findFunction(configuration[1]) , configuration[2], findFunction(configuration[3]), configuration[4], findFunction(configuration[5]))
     }
 
     //funcion para obtener informacion de la red nueronal
@@ -154,12 +190,12 @@ class Neuralnetwork {
             console.log(colors.warn("Bidan error 000: error de configuracion en capa de salida"))
         }
     }
+    saveCofig = (name) => {
+        console.log("#");
 
-    //funcion para configurar la red neuronal, llama a todas las funciones anteriores
-    config = (LayerInputConfig, LayerInputActivationfunction, LayersConfig, LayersActivationfunction, LayerOutputConfig, LayerOutputActivationfunction) => {
-        this.LayerInputConfig(LayerInputConfig, LayerInputActivationfunction)
-        this.LayersConfig(LayersConfig, LayersActivationfunction)
-        this.LayerOutputConfig(LayerOutputConfig, LayerOutputActivationfunction)
+        const json = JSON.stringify(this.data)
+
+        fs.writeFileSync(name + ".json", json)
     }
 }
 
