@@ -91,7 +91,7 @@ class Neuralnetwork {
                 if (ArrayInput > 0) {
                     let layer = []
                     for (let o = 0; o < ArrayInput; o++) {
-                        layer.push(new perceptron("Layer" + o + "Neuron" + o))
+                        layer.push(new perceptron("Layer" + o + "Neuron" + o, Activationfunction))
                     }
                     this.LayerActivationfunction[0] = Activationfunction
                     this.Layer.push(layer)
@@ -140,11 +140,11 @@ class Neuralnetwork {
         for (var i = 0; i < data.length; i++) {
             configuration.push(data[i][0], data[i][1])
         }
-        const findFunction = (functionName)=>{
+        const findFunction = (functionName) => {
             return funcions.find((f) => f.name === functionName)
         }
 
-        this.config(configuration[0], findFunction(configuration[1]) , configuration[2], findFunction(configuration[3]), configuration[4], findFunction(configuration[5]))
+        this.config(configuration[0], findFunction(configuration[1]), configuration[2], findFunction(configuration[3]), configuration[4], findFunction(configuration[5]))
     }
 
     //funcion para obtener informacion de la red nueronal
@@ -178,6 +178,37 @@ class Neuralnetwork {
     saveCofig = (name) => {
         const json = JSON.stringify(this.data)
         fs.writeFileSync(name + ".json", json)
+    }
+
+    //funcion para iniciar las conexiones entre neuronas
+    initConnections = () => {
+        if (this.LayerInput.length != 0 && this.Layer.length != 0 && this.LayerOutput.length != 0) {
+            for (let i = 0; i < this.LayerInput.length; i++) {
+                this.LayerInput[i].Output = this.Layer[0]
+            }
+
+            for (let o = 0; o < this.Layer.length; o++) {
+
+                for (let u = 0; u < this.Layer[o].length; u++) {
+
+                    if (this.Layer[o + 1]) {
+                        this.Layer[o][u].Output = this.Layer[o + 1]
+                    } else {
+                        this.Layer[o][u].Output = this.LayerOutput
+                    }
+                }
+            }
+            /*for (let i = 0; i < this.LayerOutput.length; i++) {
+                                //this.LayerOutput[i].info()
+                } */
+        } else if (this.Layer.length != 0 && this.LayerOutput.length != 0) {
+            console.log(colors.warn("Bidan error 000: error de configuracion en capa de entrada"));
+        } else if (this.LayerInput.length != 0 && this.LayerOutput.length != 0) {
+            console.log(colors.warn("Bidan error 000: error de configuracion de capas ocultas"))
+        } else if (this.LayerInput.length != 0 && this.Layer.length != 0) {
+            console.log(colors.warn("Bidan error 000: error de configuracion en capa de salida"))
+        } else console.log(colors.warn("Bidan error 000: error de configuracion en multiples capas"))
+
     }
 }
 
