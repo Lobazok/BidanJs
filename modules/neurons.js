@@ -21,37 +21,41 @@ class perceptron {
         this.name = name
         this.Activationfunction = Activationfunction
         this.Input = []
+        this.pesos = []
         this.sesgo = 0
         this.Output = []
     }
 
-    addInput = (num)=>{
+    addInput = (num) => {
         this.Input.push(num)
     }
     cal = () => {
         if (typeof this.Input == "object") {
             let r = 0;
-            [...this.Input, this.sesgo].forEach(x => {
-                r += x
-            });
-            return r
-        }else logError("Bidan error 004: la neurona: " + this.name + " no risivio un array de numeros como input")
+            for (let i = 0; i < this.Input.length; i++) {
+                if (this.pesos.length != 0) {
+                    r += Input[i] * peso[i];
+                } else r += Input[i]
+            }
+            r += this.sesgo;
+            return r;
+        } else logError("Bidan error 004: la neurona: " + this.name + " no risivio un array de numeros como input");
     }
     activation = () => {
         if (typeof this.Input == "object") {
             if (typeof this.Activationfunction == "function") {
-                let result = this.Activationfunction(this.cal())
+                let result = this.Activationfunction(this.cal());
                 for (let index = 0; index < this.Output.length; index++) {
-                    this.Output[index].addInput(result)
+                    this.Output[index].addInput(result);
                 }
             } else {
-                logError("Bidan error 002: la funcion de activacion de la nueronas:" + this.name + " no es una funcion")
+                logError("Bidan error 002: la funcion de activacion de la nueronas:" + this.name + " no es una funcion");
             }
 
-        }else logError("Bidan error 004: la neurona: " + this.name + " no risivio un array de numeros como input")
+        } else logError("Bidan error 004: la neurona: " + this.name + " no risivio un array de numeros como input");
     }
 
-    info = ()=>{
+    info = () => {
         console.log("Neuron: " + this.name);
         console.log(" Activation function: " + this.Activationfunction.name);
         console.log(" result bruto: " + this.cal());
