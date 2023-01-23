@@ -23,14 +23,16 @@ class perceptron {
         this.name = name
         this.Activationfunction = Activationfunction
         this.Input = []
-        this.ActivationInput
+        this.ActivationInput = 0
         this.pesos = []
         this.sesgo = 0
         this.Output = []
     }
 
     addInput = (num) => {
-        this.Input.push(num)
+        if (typeof num === "number") {
+            this.Input.push(num)
+        }
     }
     cal = () => {
         if (typeof this.Input == "object") {
@@ -45,20 +47,20 @@ class perceptron {
         } else logError("Bidan error 004: la neurona: " + this.name + " no risivio un array de numeros como input");
     }
     activation = () => {
-        if (typeof this.Input == "object") {
-            if (typeof this.Activationfunction == "function") {
-                if (this.ActivationInput === this.Input.length) {
-                    let result = this.Activationfunction(this.cal());
-                    for (let index = 0; index < this.Output.length; index++) {
-                        this.Output[index].addInput(result);
-                        this.Output[index].activation()
-                    }
-                }
-            } else {
-                logError("Bidan error 002: la funcion de activacion de la nueronas:" + this.name + " no es una funcion");
-            }
+        if (typeof this.Activationfunction == "function") {
+            if (this.ActivationInput === this.Input.length) {
+                let r = this.cal()
 
-        } else logError("Bidan error 004: la neurona: " + this.name + " no risivio un array de numeros como input");
+                let result = this.Activationfunction(r);
+
+                for (let index = 0; index < this.Output.length; index++) {
+                    this.Output[index].addInput(result);
+                    this.Output[index].activation()
+                }
+            }
+        } else {
+            logError("Bidan error 002: la funcion de activacion de la nueronas:" + this.name + " no es una funcion, en");
+        }
     }
 
     info = () => {
@@ -267,6 +269,26 @@ class Neuralnetwork {
         } else if (this.LayerInput.length != 0 && this.Layer.length != 0) {
             console.log(colors.warn("Bidan error 000: error de configuracion en capa de salida"))
         } else console.log(colors.warn("Bidan error 000: error de configuracion en multiples capas"))
+
+    }
+
+    MSE = (expectedOutput, obtainedOutput) => {
+        if (typeof expectedOutput === "object" && typeof obtainedOutput === "object") {
+            let error = 0
+
+            for (let i = 0; i < expectedOutput.length; i++) {
+                error += (expectedOutput[i] - obtainedOutput[i]) ** 2
+            }
+            return error / expectedOutput.length
+        } if (typeof expectedOutput === "number" && typeof obtainedOutput === "number") {
+            let error = 0
+            error += (expectedOutput - obtainedOutput) ** 2
+            return error
+        } else if (typeof expectedOutput === "object") {
+            logError("Bidan error 004: error de configuracion en MSE en expectedOutput");
+        } else if (typeof obtainedOutput === "object") {
+            logError("Bidan error 004: error de configuracion en MSE en obtainedOutput");
+        } else logError("Bidan error 004: error de configuracion en MSE");
 
     }
 }

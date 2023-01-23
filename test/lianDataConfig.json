@@ -1,1 +1,1 @@
-{"LayerInputConfig":[1,"relu"],"LayersConfig":[[7,2,1],null],"LayerOutputConfig":[1,"sigmoid"]}
+{"LayerInputConfig":[1,"relu"],"LayersConfig":[[7,2,1],"relu"],"LayerOutputConfig":[1,"sigmoid"]}

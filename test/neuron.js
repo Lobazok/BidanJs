@@ -1,12 +1,17 @@
 const bidan = require("../modules/bidan.js")
-const { relu, logistica, tanh } = require("../modules/func/Activationfunctions.js")
+const { relu, tanh } = require("../modules/func/Activationfunctions.js")
 
-var ni = new bidan.Neurons("ni", logistica)
+ var ni = new bidan.Neurons("ni", relu)
 
 ni.addInput(0)
 ni.addInput(1)
 ni.addInput(0)
+ni.ActivationInput = 3
 ni.pesos = [4,2,1]
-ni.activation()
+//console.log(ni.cal());
 
-ni.info()
+relu(ni.cal())
+
+//ni.activation()
+
+/* ni.info() */
