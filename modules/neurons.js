@@ -34,8 +34,8 @@ class perceptron {
             let r = 0;
             for (let i = 0; i < this.Input.length; i++) {
                 if (this.pesos.length != 0) {
-                    r += Input[i] * peso[i];
-                } else r += Input[i]
+                     r += this.Input[i] * this.pesos[i];
+                } else r += this.Input[i]
             }
             r += this.sesgo;
             return r;
