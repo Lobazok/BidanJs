@@ -1,6 +1,7 @@
 const colors = require("colors/safe")
 const fs = require("fs")
 const { funcions } = require("./func/Activationfunctions")
+const { perceptron } = require("./neurons")
 
 colors.setTheme({
     error: ["red", "italic", "bold"],
@@ -18,24 +19,6 @@ function logError(error) {
     console.log(colors.error(error))
 }
 
-class Neurons {
-    constructor(name, Activationfunction) {
-        this.name = name
-        this.Activationfunction = Activationfunction
-        this.Inputs = []
-    }
-
-    activation = () => {
-        if (typeof this.Inputs == "number") {
-            if (typeof this.Activationfunction == "function") {
-                //aqui le pasamos a las siguientes neuronaas los resultados
-            } else {
-                logError("Bidan error 002: la funcion de activacion de la nueronas:" + this.name + " no es una funcion")
-            }
-
-        }
-    }
-}
 
 class Neuralnetwork {
     constructor() {
@@ -65,7 +48,7 @@ class Neuralnetwork {
                     //agregamos las neuronas a LayerInput
                     this.LayerInputActivationfunction = Activationfunction
                     for (let index = 0; index < Input; index++) {
-                        this.LayerInput.push(new Neurons("LayerInput" + index, Activationfunction))
+                        this.LayerInput.push(new perceptron("LayerInput" + index, Activationfunction))
                     }
                 } else if (Input == 0) {
                     logError("Bidan error 003: una capa no puede tener cero neuronas")
@@ -94,7 +77,7 @@ class Neuralnetwork {
                             this.LayerActivationfunction[index] = Activationfunction
                             let layer = []
                             for (let o = 0; o < ArrayInput[index]; o++) {
-                                layer.push(new Neurons("Layer" + index + "Neuron" + o, Activationfunction))
+                                layer.push(new perceptron("Layer" + index + "Neuron" + o, Activationfunction))
                             }
                             this.Layer.push(layer)
                         } else if (Input == 0) {
@@ -108,7 +91,7 @@ class Neuralnetwork {
                 if (ArrayInput > 0) {
                     let layer = []
                     for (let o = 0; o < ArrayInput; o++) {
-                        layer.push(new Neurons("Layer" + o + "Neuron" + o))
+                        layer.push(new perceptron("Layer" + o + "Neuron" + o))
                     }
                     this.LayerActivationfunction[0] = Activationfunction
                     this.Layer.push(layer)
@@ -132,7 +115,7 @@ class Neuralnetwork {
                 this.LayerOutputActivationfunction = Activationfunction
                 //agregamos las neuronas a LayerInput
                 for (let index = 0; index < Output; index++) {
-                    this.LayerOutput.push(new Neurons("LayerOutput" + index, Activationfunction))
+                    this.LayerOutput.push(new perceptron("LayerOutput" + index, Activationfunction))
                 }
             } else logError("Bidan error 001: el valor de LayerOutputConfig no es un numero")
         } else if (typeof Activationfunction == "undefined") {
@@ -200,5 +183,5 @@ class Neuralnetwork {
 
 module.exports = {
     Neuralnetwork,
-    Neurons
+    Neurons: perceptron
 }
