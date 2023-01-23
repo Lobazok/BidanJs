@@ -1,1 +1,1 @@
-{"LayerInputConfig":[1,"logistica"],"LayersConfig":[[2,3],"relu"],"LayerOutputConfig":[4,"logistica"]}
+{"LayerInputConfig":[1,"relu"],"LayersConfig":[[50,50,48],"relu"],"LayerOutputConfig":[1,"logistica"]}

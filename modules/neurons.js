@@ -47,6 +47,7 @@ class perceptron {
                 let result = this.Activationfunction(this.cal());
                 for (let index = 0; index < this.Output.length; index++) {
                     this.Output[index].addInput(result);
+                    this.Output[index].activation()
                 }
             } else {
                 logError("Bidan error 002: la funcion de activacion de la nueronas:" + this.name + " no es una funcion");
