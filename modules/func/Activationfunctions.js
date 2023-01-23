@@ -43,7 +43,7 @@ const leakyrule = (Input) => {
 }
 
 
-const logistica = (Input) => {
+const sigmoid = (Input) => {
     var name = "logistica"
     if (typeof Input == "number") {
         return 1 / (1 + (Math.E ** -Input))
@@ -61,7 +61,7 @@ const funcions = [
     step,
     relu,
     leakyrule,
-    logistica,
+    sigmoid,
     tanh
 ]
 
@@ -70,6 +70,6 @@ module.exports = {
     step,
     relu,
     leakyrule,
-    logistica,
+    sigmoid,
     tanh
 }

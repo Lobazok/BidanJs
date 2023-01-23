@@ -1,10 +1,10 @@
 const bidan = require("../modules/bidan.js")
-const { relu, logistica } = require("../modules/func/Activationfunctions.js")
+const { relu, sigmoid } = require("../modules/func/Activationfunctions.js")
 
 var lian = new bidan.Neuralnetwork()
 lian.LayerInputConfig(1, relu)
-lian.LayersConfig([7, 2,1], relu)
-lian.LayerOutputConfig(1, logistica)
+lian.LayersConfig([7, 2,1], [relu, relu, sigmoid])
+lian.LayerOutputConfig(1, sigmoid)
 
 lian.saveCofig("lianDataConfig")
 //lian.info()

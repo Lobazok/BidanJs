@@ -65,10 +65,9 @@ class Neuralnetwork {
     //funcion para configurar las capas
     LayersConfig = (ArrayInput, Activationfunction) => {
         //comprobamos si Input es un array
-        if (typeof Activationfunction == "function") {
-            this.data.LayersConfig = [ArrayInput, Activationfunction.name]
+        if (typeof Activationfunction == "function" || typeof Activationfunction == "object") {
             if (typeof ArrayInput == "object") {
-
+                this.data.LayersConfig = [ArrayInput, Activationfunction.name]
                 //Input es un array
                 for (let index = 0; index < ArrayInput.length; index++) {
                     if (typeof ArrayInput[index] == "number") {
@@ -76,9 +75,17 @@ class Neuralnetwork {
                             //agregamos las neuronas a LayerInput
                             this.LayerActivationfunction[index] = Activationfunction
                             let layer = []
-                            for (let o = 0; o < ArrayInput[index]; o++) {
-                                layer.push(new perceptron("Layer" + index + "Neuron" + o, Activationfunction))
-                            }
+                            if (typeof Activationfunction == "function") {
+                                for (let o = 0; o < ArrayInput[index]; o++) {
+                                    layer.push(new perceptron("Layer" + index + "Neuron" + o, Activationfunction))
+                                }
+                            } else if (typeof Activationfunction == "object" && Activationfunction.length === ArrayInput.length) {
+                                for (let o = 0; o < ArrayInput[index]; o++) {
+                                    layer.push(new perceptron("Layer" + index + "Neuron" + o, Activationfunction[index]))
+                                }
+                            } else if (typeof Activationfunction == "object") {
+                                logError("Bidan error 002: la funcion de activacion fue especifica como array pero no coinside con el ArrayInput")
+                            } else logError("Bidan error 002: la funcion de activacion de la capa no fue especificada")
                             this.Layer.push(layer)
                         } else if (Input == 0) {
                             logError("Bidan error 003: una capa no puede tener cero neuronas")
@@ -185,17 +192,20 @@ class Neuralnetwork {
         if (this.LayerInput.length != 0 && this.Layer.length != 0 && this.LayerOutput.length != 0) {
             for (let i = 0; i < this.LayerInput.length; i++) {
                 this.LayerInput[i].Output = this.Layer[0]
+                this.LayerInput[i].ActivationInput = 1
             }
 
             for (let o = 0; o < this.Layer.length; o++) {
 
                 for (let u = 0; u < this.Layer[o].length; u++) {
-
                     if (this.Layer[o + 1]) {
                         this.Layer[o][u].Output = this.Layer[o + 1]
                     } else {
                         this.Layer[o][u].Output = this.LayerOutput
                     }
+                    if (this.Layer[o - 1]) {
+                        this.Layer[o][u].ActivationInput = this.Layer[o - 1].length
+                    } else this.Layer[o][u].ActivationInput = this.LayerInput.length
                 }
             }
             /*for (let i = 0; i < this.LayerOutput.length; i++) {

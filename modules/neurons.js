@@ -21,6 +21,7 @@ class perceptron {
         this.name = name
         this.Activationfunction = Activationfunction
         this.Input = []
+        this.ActivationInput
         this.pesos = []
         this.sesgo = 0
         this.Output = []
@@ -34,7 +35,7 @@ class perceptron {
             let r = 0;
             for (let i = 0; i < this.Input.length; i++) {
                 if (this.pesos.length != 0) {
-                     r += this.Input[i] * this.pesos[i];
+                    r += this.Input[i] * this.pesos[i];
                 } else r += this.Input[i]
             }
             r += this.sesgo;
@@ -44,10 +45,12 @@ class perceptron {
     activation = () => {
         if (typeof this.Input == "object") {
             if (typeof this.Activationfunction == "function") {
-                let result = this.Activationfunction(this.cal());
-                for (let index = 0; index < this.Output.length; index++) {
-                    this.Output[index].addInput(result);
-                    this.Output[index].activation()
+                if (this.ActivationInput === this.Input.length) {
+                    let result = this.Activationfunction(this.cal());
+                    for (let index = 0; index < this.Output.length; index++) {
+                        this.Output[index].addInput(result);
+                        this.Output[index].activation()
+                    }
                 }
             } else {
                 logError("Bidan error 002: la funcion de activacion de la nueronas:" + this.name + " no es una funcion");
