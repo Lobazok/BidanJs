@@ -12,6 +12,9 @@ colors.setTheme({
     LyTitle: ["cyan", "bold"],
     LyOutput: "green",
     LyTitleOutput: ["green", "bold"],
+    save: ["bgGreen", "bold"],
+    mirror: ["bgCyan", "bold"],
+    initC: ["bgBlue"]
 })
 
 function logError(error) {
@@ -24,7 +27,7 @@ class perceptron {
         this.Activationfunction = Activationfunction
         this.Input = []
         this.ActivationInput = 0
-        this.pesos = []
+        this.weight = []
         this.sesgo = 0
         this.Output = []
     }
@@ -38,8 +41,8 @@ class perceptron {
         if (typeof this.Input == "object") {
             let r = 0;
             for (let i = 0; i < this.Input.length; i++) {
-                if (this.pesos.length != 0) {
-                    r += this.Input[i] * this.pesos[i];
+                if (this.weight.length != 0) {
+                    r += this.Input[i] * this.weight[i];
                 } else r += this.Input[i]
             }
             r += this.sesgo;
@@ -69,6 +72,7 @@ class perceptron {
         console.log(" result bruto: " + this.cal());
         console.log(" result: " + this.Activationfunction(this.cal()));
     }
+
 }
 
 class Neuralnetwork {
@@ -203,6 +207,7 @@ class Neuralnetwork {
         }
 
         this.config(configuration[0], findFunction(configuration[1]), configuration[2], findFunction(configuration[3]), configuration[4], findFunction(configuration[5]))
+        console.log(colors.mirror("mirror Neuralnetwork"));
     }
 
     //funcion para obtener informacion de la red nueronal
@@ -234,6 +239,7 @@ class Neuralnetwork {
 
     //funcion para guardar una configuracion
     saveCofig = (name) => {
+        console.log(colors.save("Config of Neuralnetwork save"));
         const json = JSON.stringify(this.data)
         fs.writeFileSync(name + ".json", json)
     }
@@ -255,13 +261,34 @@ class Neuralnetwork {
                         this.Layer[o][u].Output = this.LayerOutput
                     }
                     if (this.Layer[o - 1]) {
+                        let weight = []
+                        for (let index = 0; index < this.Layer[o - 1].length; index++) {
+                            weight.push(Math.random())
+                        }
+                        this.Layer[o][u].weight = weight
+
                         this.Layer[o][u].ActivationInput = this.Layer[o - 1].length
-                    } else this.Layer[o][u].ActivationInput = this.LayerInput.length
+                    } else {
+                        let weight = []
+                        for (let index = 0; index < this.LayerInput.length; index++) {
+                            weight.push(Math.random())
+                        }
+                        this.Layer[o][u].weight = weight
+                        this.Layer[o][u].ActivationInput = this.LayerInput.length
+                    }
                 }
             }
-            /*for (let i = 0; i < this.LayerOutput.length; i++) {
-                                //this.LayerOutput[i].info()
-                } */
+
+            for (let i = 0; i < this.LayerOutput.length; i++) {
+                //this.LayerOutput[i].info()
+                let weight = []
+                for (let index = 0; index < this.Layer[this.Layer.length - 1]; index++) {
+                    weight.push(Math.random())
+                }
+                this.LayerOutput[i].weight = weight
+            }
+            console.log(colors.initC("init Connections of Neuralnetwork"));
+
         } else if (this.Layer.length != 0 && this.LayerOutput.length != 0) {
             console.log(colors.warn("Bidan error 000: error de configuracion en capa de entrada"));
         } else if (this.LayerInput.length != 0 && this.LayerOutput.length != 0) {
@@ -291,9 +318,62 @@ class Neuralnetwork {
         } else logError("Bidan error 004: error de configuracion en MSE");
 
     }
+    DerivativeMSE = (expectedOutput, obtainedOutput, weight, n) => {
+        if (typeof expectedOutput === "object" && typeof obtainedOutput === "object") {
+            return (2 / n) * (obtainedOutput - expectedOutput) * weight;
+        } else if (typeof expectedOutput === "object") {
+            logError("Bidan error 004: error de configuracion en DerivativeMSE en expectedOutput");
+        } else if (typeof obtainedOutput === "object") {
+            logError("Bidan error 004: error de configuracion en DerivativeMSE en obtainedOutput");
+        } else logError("Bidan error 004: error de configuracion en DerivativeMSE");
+
+    }
+    weightadjustmentMSE = (expectedOutput, obtainedOutput, weight, n, learningRate) => {
+        let derivativeMSE = DerivativeMSE(expectedOutput, obtainedOutput, weight, n);
+        weight = weight - learningRate * derivativeMSE;
+    }
+
+    StartPrediction = (ArrayInput) => {
+        if (typeof ArrayInput === "object") {
+            
+        }else if(typeof ArrayInput === "number" && this.LayerInput.length === 1){
+            this.LayerInput[0].addInput(ArrayInput)
+            this.LayerInput[0].activation()
+        }else logError("error 005: en StartPrediction los datos no son ni array ni numeros")
+    }
+
+    //funcion para guardar una configuracion
+    saveWeight = (name) => {
+        let data = {
+            config: this.data,
+            weight: {
+                LayerInput: [],
+                Layer: [],
+                LayerOutput: []
+            }
+        }
+
+        for (let i = 0; i < this.LayerOutput.length; i++) {
+            data.weight.LayerInput.push(this.LayerInput[i].weight)
+        }
+        for (let i = 0; i < this.LayerInput.length; i++) {
+            data.weight.LayerOutput.push(this.LayerOutput[i].weight)
+        }
+        for (let o = 0; o < this.Layer.length; o++) {
+            for (let u = 0; u < this.Layer[o].length; u++) {
+                data.weight.Layer.push(this.Layer[o][u].weight)
+            }
+        }
+
+        const json = JSON.stringify(data)
+        fs.writeFileSync(name + ".json", json)
+    }
+    Backpropagation = ()=>{
+
+    }
 }
 
 module.exports = {
     Neuralnetwork,
-    Neurons: perceptron
+    perceptron
 }
