@@ -71,6 +71,8 @@ class perceptron {
 
     info = () => {
         console.log("Neuron: " + this.name);
+        console.log(" Input: " + this.Input);
+        console.log(" Output: " + this.Output.length);
         console.log(" Activation function: " + this.Activationfunction.name);
         console.log(" result bruto: " + this.cal());
         console.log(" result: " + this.Activationfunction(this.cal()));
@@ -378,17 +380,23 @@ class Neuralnetwork {
             return -error;
         }
 
-        StartPrediction = (ArrayInput) => {
+        StartPrediction = (ArrayInput, bool = true) => {
             if (typeof ArrayInput === "object") {
                 for (let i = 0; i < ArrayInput.length; i++) {
                     this.LayerInput[i].addInput(ArrayInput[i])
                     this.LayerInput[i].activation()
                 }
-                console.log(colors.initC("Start Prediction"));
+
+                if (bool === true) {
+                    console.log(colors.initC("Start Prediction"));
+                }
             } else if (typeof ArrayInput === "number" && this.LayerInput.length === 1) {
                 this.LayerInput[0].addInput(ArrayInput)
                 this.LayerInput[0].activation()
-                console.log(colors.initC("Start Prediction"));
+                
+                if (bool === true) {
+                    console.log(colors.initC("Start Prediction"));
+                }
             } else logError("error 005: en StartPrediction los datos no son ni array ni numeros")
         }
 
