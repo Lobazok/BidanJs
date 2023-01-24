@@ -6,5 +6,7 @@ lian.LayerInputConfig(2, sigmoid)
 lian.LayersConfig([3,4,2], relu)
 lian.LayerOutputConfig(4, sigmoid)
 
-lian.saveCofig("lianDataConfig")
+lian.initConnections()
+
 lian.info()
+lian.saveWeight("pesosLian")

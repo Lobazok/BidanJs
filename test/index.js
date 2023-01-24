@@ -6,8 +6,18 @@ lian.LayerInputConfig(1, relu)
 lian.LayersConfig([2, 3], relu)
 lian.LayerOutputConfig(1, sigmoid)
 
-lian.info()
+//lian.info()
 
 lian.initConnections()
+//lian.initWeights()
+lian.useWeights("lianPesos.json")
 
-lian.saveWeight("pesosLian")
+lian.StartPrediction(1)
+lian.Output()
+lian.Backpropagation(0, 1)
+
+lian.saveWeight("lianPesos")
+
+lian.Layer[1][0].info()
+lian.LayerOutput[0].info()
+lian.Output()
