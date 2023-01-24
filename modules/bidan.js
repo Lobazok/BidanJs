@@ -366,8 +366,8 @@ class Neuralnetwork {
 
         weightadjustmentMSE = (expectedOutput, obtainedOutput, weight, n, learningRate) => {
             let derivativeMSE = (2 / n) * (obtainedOutput - expectedOutput) * weight;
-            weight = weight - learningRate * derivativeMSE;
-            return weight
+            let newweight = weight - learningRate * derivativeMSE;
+            return newweight
         }
 
         CrossEntropy = (expectedOutput, obtainedOutput) => {
@@ -440,14 +440,18 @@ class Neuralnetwork {
         }
         Backpropagation = (expectedOutput, learningRate) => {
             for (let i = 0; i < this.LayerOutput.length; i++) {
-                this.LayerOutput[i].weight = this.weightadjustmentMSE(expectedOutput, this.LayerOutput[i].Activationfunction(this.LayerOutput[i].cal())
-                    , this.LayerOutput[i].weight, this.LayerOutput.length, learningRate)
+                for (let o = 0; o < this.LayerOutput[i].weight.length; o++) {
+                    this.LayerOutput[i].weight[o] = this.weightadjustmentMSE(expectedOutput, this.LayerOutput[i].Activationfunction(this.LayerOutput[i].cal())
+                    , this.LayerOutput[i].weight[o], this.LayerOutput.length, learningRate)
+                }
             }
             for (let i = 0; i < this.Layer.length; i++) {
                 for (let o = 0; o < this.Layer[i].length; o++) {
-                    let hiddenError = this.CrossEntropy(this.Layer[i][o].Activationfunction(this.Layer[i][o].cal()))
-                    let dLdw = hiddenError * this.Layer[i][o].Input;
-                    this.Layer[i][o].weight[o] = this.Layer[i][o].weight[o] - learningRate * dLdw;
+                    for (let u = 0; u < this.Layer[i][o].weight.length; u++) {
+                        let hiddenError = this.CrossEntropy(this.Layer[i][o].Activationfunction(this.Layer[i][o].cal()))
+                    let dLdw = hiddenError * this.Layer[i][o].Input[u];
+                    this.Layer[i][o].weight[u] = this.Layer[i][o].weight[u] - learningRate * dLdw;
+                    }
                 }
             }
             /*  for (let i = 0; i < this.LayerInput.length; i++) {

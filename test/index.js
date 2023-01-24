@@ -4,20 +4,21 @@ const { relu, sigmoid } = require("../modules/func/Activationfunctions.js")
 var lian = new bidan.Neuralnetwork()
 lian.LayerInputConfig(1, relu)
 lian.LayersConfig([2, 3], relu)
-lian.LayerOutputConfig(1, sigmoid)
+lian.LayerOutputConfig(1, relu)
 
 //lian.info()
 
 lian.initConnections()
-//lian.initWeights()
-lian.useWeights("lianPesos.json")
 
-lian.StartPrediction(1)
-lian.Output()
+lian.useWeights("lianPesos.json")
+lian.initWeights()
+
+
+lian.StartPrediction(0)
+//lian.Output()
 lian.Backpropagation(0, 1)
 
 lian.saveWeight("lianPesos")
 
-lian.Layer[1][0].info()
 lian.LayerOutput[0].info()
 lian.Output()
