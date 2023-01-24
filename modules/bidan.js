@@ -333,13 +333,26 @@ class Neuralnetwork {
         weight = weight - learningRate * derivativeMSE;
     }
 
+    CrossEntropy = (expectedOutput, obtainedOutput) => {
+        let error = 0;
+        for (let i = 0; i < expectedOutput.length; i++) {
+            error += expectedOutput[i] * Math.log(obtainedOutput[i]) + (1 - expectedOutput[i]) * Math.log(1 - obtainedOutput[i]);
+        }
+        return -error;
+    }
+
     StartPrediction = (ArrayInput) => {
         if (typeof ArrayInput === "object") {
-            
-        }else if(typeof ArrayInput === "number" && this.LayerInput.length === 1){
+            for (let i = 0; i < ArrayInput.length; i++) {
+                this.LayerInput[i].addInput(ArrayInput[i])
+                this.LayerInput[i].activation()
+            }
+            console.log(colors.initC("Start Prediction"));
+        } else if (typeof ArrayInput === "number" && this.LayerInput.length === 1) {
             this.LayerInput[0].addInput(ArrayInput)
             this.LayerInput[0].activation()
-        }else logError("error 005: en StartPrediction los datos no son ni array ni numeros")
+            console.log(colors.initC("Start Prediction"));
+        } else logError("error 005: en StartPrediction los datos no son ni array ni numeros")
     }
 
     //funcion para guardar una configuracion
@@ -368,8 +381,39 @@ class Neuralnetwork {
         const json = JSON.stringify(data)
         fs.writeFileSync(name + ".json", json)
     }
-    Backpropagation = ()=>{
 
+    useWeights = (direction) => {
+        const data = Object.values(JSON.parse(fs.readFileSync(direction, "utf-8")))
+
+        for (let i = 0; i < this.LayerOutput.length; i++) {
+            data.weight.LayerInput.push(data.weight.LayerInput[i].weight)
+        }
+        for (let i = 0; i < this.LayerInput.length; i++) {
+            data.weight.LayerOutput.push(data.weight.LayerOutput[i].weight)
+        }
+        for (let o = 0; o < this.Layer.length; o++) {
+            for (let u = 0; u < this.Layer[o].length; u++) {
+                data.weight.Layer.push(data.weight.Layer[o][u].weight)
+            }
+        }
+    }
+    Backpropagation = (expectedOutput, learningRate) => {
+        for (let i = 0; i < this.LayerOutput.length; i++) {
+            this.LayerOutput[i].weight = this.weightadjustmentMSE(expectedOutput, this.LayerOutput[i].Activationfunction(this.LayerOutput[i].cal)
+                , this.LayerOutput[i].weight, this.LayerOutput.length, learningRate)
+        }
+        for (let i = 0; i < this.Layer.length; i++) {
+            for (let o = 0; o < this.Layerlength; o++) {
+                let hiddenError = this.CrossEntropy(this.Layer[i][o].Activationfunction(this.Layer[i][o].cal))
+                let dLdw = hiddenError * this.Layer[i][o].Input;
+                this.Layer[i][o].weight[o] = this.Layer[i][o].weight[o] - learningRate * dLdw;
+            }
+        }
+        for (let i = 0; i < this.LayerInput.length; i++) {
+                let hiddenError = this.CrossEntropy(this.LayerInput[i].Activationfunction(this.LayerInput[i].cal))
+                let dLdw = hiddenError * this.LayerInput[i].Input;
+                this.LayerInput[i].weight[i] = this.LayerInput[i].weight[i] - learningRate * dLdw;
+        }
     }
 }
 
