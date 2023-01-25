@@ -1,4 +1,5 @@
 const colors = require("colors/safe")
+const { error } = require("console")
 const fs = require("fs")
 const { funcions } = require("./func/Activationfunctions")
 
@@ -15,6 +16,8 @@ colors.setTheme({
     save: ["bgGreen", "bold"],
     mirror: ["bgCyan", "bold"],
     initC: ["bgBlue"],
+    resu: ["brightMagenta", "italic"],
+    expe: ["brightYellow", "italic"]
 })
 
 function logError(error) {
@@ -28,7 +31,6 @@ class perceptron {
         this.Input = []
         this.ActivationInput = 0
         this.weight = []
-        this.sesgo = 0
         this.Output = []
     }
 
@@ -41,14 +43,8 @@ class perceptron {
         if (typeof this.Input == "object") {
             let r = 0;
             for (let i = 0; i < this.Input.length; i++) {
-                if (this.weight) {
-                    if (this.weight.length != 0) {
-
-                        r += (this.Input[i] * this.weight[i])
-                    } else r += this.Input[i]
-                } else r += this.Input[i]
+                r += (this.Input[i] * this.weight[i])
             }
-            r += this.sesgo;
             return r;
         } else logError("Bidan error 004: la neurona: " + this.name + " no risivio un array de numeros como input");
     }
@@ -67,16 +63,19 @@ class perceptron {
         } else {
             logError("Bidan error 002: la funcion de activacion de la nueronas:" + this.name + " no es una funcion, en");
         }
-    }
 
+
+    }
     info = () => {
         console.log("Neuron: " + this.name);
         console.log(" Input: " + this.Input);
+        console.log(" weight: " + this.weight);
         console.log(" Output: " + this.Output.length);
         console.log(" Activation function: " + this.Activationfunction.name);
         console.log(" result bruto: " + this.cal());
         console.log(" result: " + this.Activationfunction(this.cal()));
     }
+
 
 }
 
@@ -332,151 +331,163 @@ class Neuralnetwork {
                 weight.push(Math.random())
 
             }
-            this.LayerOutput[i].weight = weight
+            this.LayerInput[i].weight = weight
         }
     }
-        MSE = (expectedOutput, obtainedOutput) => {
-            if (typeof expectedOutput === "object" && typeof obtainedOutput === "object") {
-                let error = 0
+    MSE = (yPred, yTrue) => {
+        let error = 0;
+        for (let i = 0; i < yPred.length; i++) {
+            error += (yPred[i] - yTrue[i]) ** 2;
+        }
+        return error / yPred.length;
+    }
 
-                for (let i = 0; i < expectedOutput.length; i++) {
-                    error += (expectedOutput[i] - obtainedOutput[i]) ** 2
-                }
-                return error / expectedOutput.length
-            } if (typeof expectedOutput === "number" && typeof obtainedOutput === "number") {
-                let error = 0
-                error += (expectedOutput - obtainedOutput) ** 2
-                return error
-            } else if (typeof expectedOutput === "object") {
-                logError("Bidan error 004: error de configuracion en MSE en expectedOutput");
-            } else if (typeof obtainedOutput === "object") {
-                logError("Bidan error 004: error de configuracion en MSE en obtainedOutput");
-            } else logError("Bidan error 004: error de configuracion en MSE");
+    DerivativeMSE = (yPred, yTrue, x = 1) => {
+        let error = 0
+        for (let i = 0; i < yPred.length; i++) {
+            error += -2 * ((yPred[i] - yTrue[i]) * x) / yPred.length;
+        }
+        return error
+    }
 
+    weightadjustmentMSE = (derivativeMSE, weight, learningRate) => {
+        let newweight = weight - learningRate * derivativeMSE;
+        return newweight
+    }
+
+    CrossEntropy = (yTrue, yPred) => {
+        console.log(yTrue, yPred);
+        let loss = 0;
+        for (let i = 0; i < yTrue.length; i++) {
+            loss += -(yTrue[i] * Math.log(yPred[i]) + (1 - yTrue[i]) * Math.log(1 - yPred[i]));
+        }
+        return loss;
+    }
+
+    StartPrediction = (ArrayInput, bool = true) => {
+        if (typeof ArrayInput === "object") {
+            for (let i = 0; i < ArrayInput.length; i++) {
+                this.LayerInput[i].addInput(ArrayInput[i])
+                this.LayerInput[i].activation()
+            }
+
+            if (bool === true) {
+                console.log(colors.initC("Start Prediction"));
+            }
+        } else if (typeof ArrayInput === "number" && this.LayerInput.length === 1) {
+            this.LayerInput[0].addInput(ArrayInput)
+            this.LayerInput[0].activation()
+
+            if (bool === true) {
+                console.log(colors.initC("Start Prediction"));
+            }
+        } else logError("error 005: en StartPrediction los datos no son ni array ni numeros")
+    }
+
+    //funcion para guardar una configuracion
+    saveWeight = (name) => {
+        let data = {
+            config: this.data,
+            weight: {
+                LayerInput: [],
+                Layer: [],
+                LayerOutput: []
+            }
         }
 
-        DerivativeMSE = (expectedOutput, obtainedOutput, weight, n) => {
-            if (typeof expectedOutput === "number" && typeof obtainedOutput === "number") {
-                return (2 / n) * (obtainedOutput - expectedOutput) * weight;
-            } else if (typeof expectedOutput === "number") {
-                logError("Bidan error 004: error de configuracion en DerivativeMSE en expectedOutput");
-            } else if (typeof obtainedOutput === "number") {
-                logError("Bidan error 004: error de configuracion en DerivativeMSE en obtainedOutput");
-            } else logError("Bidan error 004: error de configuracion en DerivativeMSE");
-
+        for (let i = 0; i < this.LayerInput.length; i++) {
+            data.weight.LayerInput.push(this.LayerInput[i].weight)
+        }
+        for (let i = 0; i < this.LayerOutput.length; i++) {
+            data.weight.LayerOutput.push(this.LayerOutput[i].weight)
+        }
+        for (let o = 0; o < this.Layer.length; o++) {
+            let layer = []
+            for (let u = 0; u < this.Layer[o].length; u++) {
+                let a = []
+                for (let i = 0; i < this.Layer[o][u].weight.length; i++) {
+                    a.push(this.Layer[o][u].weight[i])
+                }
+                layer.push(a)
+            }
+            data.weight.Layer.push(layer)
         }
 
-        weightadjustmentMSE = (expectedOutput, obtainedOutput, weight, n, learningRate) => {
-            let derivativeMSE = (2 / n) * (obtainedOutput - expectedOutput) * weight;
-            let newweight = weight - learningRate * derivativeMSE;
-            return newweight
+        const json = JSON.stringify(data)
+        fs.writeFileSync(name + ".json", json)
+    }
+
+    useWeights = (direction) => {
+        const data = JSON.parse(fs.readFileSync(direction, "utf-8"))
+
+        for (let i = 0; i < this.LayerInput.length; i++) {
+
+            this.LayerInput[i].weight = data.weight.LayerInput[i]
         }
+        for (let i = 0; i < this.LayerOutput.length; i++) {
 
-        CrossEntropy = (expectedOutput, obtainedOutput) => {
-            let error = 0;
-            for (let i = 0; i < expectedOutput.length; i++) {
-                error += expectedOutput[i] * Math.log(obtainedOutput[i]) + (1 - expectedOutput[i]) * Math.log(1 - obtainedOutput[i]);
-            }
-            return -error;
+            this.LayerOutput[i].weight = data.weight.LayerOutput[i]
         }
-
-        StartPrediction = (ArrayInput, bool = true) => {
-            if (typeof ArrayInput === "object") {
-                for (let i = 0; i < ArrayInput.length; i++) {
-                    this.LayerInput[i].addInput(ArrayInput[i])
-                    this.LayerInput[i].activation()
-                }
-
-                if (bool === true) {
-                    console.log(colors.initC("Start Prediction"));
-                }
-            } else if (typeof ArrayInput === "number" && this.LayerInput.length === 1) {
-                this.LayerInput[0].addInput(ArrayInput)
-                this.LayerInput[0].activation()
-                
-                if (bool === true) {
-                    console.log(colors.initC("Start Prediction"));
-                }
-            } else logError("error 005: en StartPrediction los datos no son ni array ni numeros")
-        }
-
-        //funcion para guardar una configuracion
-        saveWeight = (name) => {
-            let data = {
-                config: this.data,
-                weight: {
-                    LayerInput: [],
-                    Layer: [],
-                    LayerOutput: []
-                }
-            }
-
-            for (let i = 0; i < this.LayerInput.length; i++) {
-                data.weight.LayerInput.push(this.LayerInput[i].weight)
-            }
-            for (let i = 0; i < this.LayerOutput.length; i++) {
-                data.weight.LayerOutput.push(this.LayerOutput[i].weight)
-            }
-            for (let o = 0; o < this.Layer.length; o++) {
-                let layer = []
-                for (let u = 0; u < this.Layer[o].length; u++) {
-                    layer.push(this.Layer[o][u].weight)
-                }
-                data.weight.Layer.push(layer)
-            }
-
-            const json = JSON.stringify(data)
-            fs.writeFileSync(name + ".json", json)
-        }
-
-        useWeights = (direction) => {
-            const data = JSON.parse(fs.readFileSync(direction, "utf-8"))
-
-            for (let i = 0; i < this.LayerInput.length; i++) {
-
-                this.LayerInput[i].weight = data.weight.LayerInput[i]
-            }
-            for (let i = 0; i < this.LayerInput.length; i++) {
-
-                this.LayerOutput[i].weight = data.weight.LayerOutput[i]
-            }
-            for (let o = 0; o < this.Layer.length; o++) {
-                for (let u = 0; u < this.Layer[o].length; u++) {
-                    this.Layer[o][u].weight = data.weight.Layer[o][u]
-                }
+        for (let o = 0; o < this.Layer.length; o++) {
+            for (let u = 0; u < this.Layer[o].length; u++) {
+                this.Layer[o][u].weight = data.weight.Layer[o][u]
             }
         }
-        Backpropagation = (expectedOutput, learningRate) => {
-            for (let i = 0; i < this.LayerOutput.length; i++) {
-                for (let o = 0; o < this.LayerOutput[i].weight.length; o++) {
-                    this.LayerOutput[i].weight[o] = this.weightadjustmentMSE(expectedOutput, this.LayerOutput[i].Activationfunction(this.LayerOutput[i].cal())
-                    , this.LayerOutput[i].weight[o], this.LayerOutput.length, learningRate)
-                }
+    }
+
+    Output = () => {
+        let r = []
+        for (let i = 0; i < this.LayerOutput.length; i++) {
+            r.push(this.LayerOutput[i].Activationfunction(this.LayerOutput[i].cal()))
+        }
+        return r
+    }
+
+    Backpropagation = (expectedOutput, learningRate) => {
+        for (let i = 0; i < this.LayerOutput.length; i++) {
+            let derivativeMSE = this.DerivativeMSE(this.Output(), expectedOutput)
+            for (let o = 0; o < this.LayerOutput[i].weight.length; o++) {
+                this.LayerOutput[i].weight[o] = this.weightadjustmentMSE(derivativeMSE, this.LayerOutput[i].weight[o], learningRate)
             }
-            for (let i = 0; i < this.Layer.length; i++) {
-                for (let o = 0; o < this.Layer[i].length; o++) {
-                    for (let u = 0; u < this.Layer[i][o].weight.length; u++) {
-                        let hiddenError = this.CrossEntropy(this.Layer[i][o].Activationfunction(this.Layer[i][o].cal()))
+        }
+        for (let i = 0; i < this.Layer.length; i++) {
+            for (let o = 0; o < this.Layer[i].length; o++) {
+                let out = []
+                for (let y = 0; y < this.Layer[i].length; y++) {
+                    let r = this.Layer[i][y].Activationfunction(this.Layer[i][y].cal())
+                    out.push(r)
+                }
+                //let hiddenError = this.CrossEntropy(expectedOutput, out)
+                let derivativeMSE = this.DerivativeMSE(out, expectedOutput)
+                for (let u = 0; u < this.Layer[i][o].weight.length; u++) {
+
+                    this.Layer[i][o].weight[u] = this.weightadjustmentMSE(derivativeMSE, this.Layer[i][o].weight[u], learningRate)
+                    /* //?
+                    
                     let dLdw = hiddenError * this.Layer[i][o].Input[u];
-                    this.Layer[i][o].weight[u] = this.Layer[i][o].weight[u] - learningRate * dLdw;
-                    }
+                    this.Layer[i][o].weight[u] = this.Layer[i][o].weight[u] - learningRate * dLdw; */
                 }
             }
-            /*  for (let i = 0; i < this.LayerInput.length; i++) {
-                 let hiddenError = this.CrossEntropy(this.LayerInput[i].Activationfunction(this.LayerInput[i].cal()))
-                 let dLdw = hiddenError * this.LayerInput[i].Input;
-                 this.LayerInput[i].weight[i] = this.LayerInput[i].weight[i] - learningRate * dLdw;
-             } */
         }
+        /*  for (let i = 0; i < this.LayerInput.length; i++) {
+             let hiddenError = this.CrossEntropy(this.LayerInput[i].Activationfunction(this.LayerInput[i].cal()))
+             let dLdw = hiddenError * this.LayerInput[i].Input;
+             this.LayerInput[i].weight[i] = this.LayerInput[i].weight[i] - learningRate * dLdw;
+         } */
+    }
 
-        Output = () => {
-            for (let i = 0; i < this.LayerOutput.length; i++) {
-                console.log("r: " + this.LayerOutput[i].Activationfunction(this.LayerOutput[i].cal()));
-            }
+    OutputLog = () => {
+        let r = []
+        for (let i = 0; i < this.LayerOutput.length; i++) {
+            r.push(this.LayerOutput[i].Activationfunction(this.LayerOutput[i].cal()))
         }
+        console.log(colors.resu("r: " + r));
+        return r
+    }
 
 }
 module.exports = {
     Neuralnetwork,
     perceptron
 }
+
