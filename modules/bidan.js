@@ -484,6 +484,23 @@ class Neuralnetwork {
         console.log(colors.resu("r: " + r));
         return r
     }
+    reset = ()=>{
+        for (let o = 0; o < this.Layer.length; o++) {
+
+            for (let u = 0; u < this.Layer[o].length; u++) {
+
+                this.Layer[o][u].Input = []
+            }
+        }
+
+        for (let i = 0; i < this.LayerOutput.length; i++) {
+            this.LayerOutput[i].Input = []
+        }
+
+        for (let i = 0; i < this.LayerInput.length; i++) {
+            this.LayerInput[i].Input = []
+        }
+    }
 
 }
 module.exports = {
