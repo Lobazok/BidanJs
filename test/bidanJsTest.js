@@ -1,6 +1,5 @@
 const colors = require("colors/safe")
 const { error } = require("console")
-const { perceptron } =  require("./neuron")
 const fs = require("fs")
 const { funcions } = require("./func/Activationfunctions")
 
@@ -25,6 +24,68 @@ function logError(error) {
     console.log(colors.error(error))
 }
 
+class perceptron {
+    constructor(name, Activationfunction) {
+        this.name = name
+        this.Activationfunction = Activationfunction
+        this.Input = []
+        this.ActivationInput = 0
+        this.weight = []
+        this.Output = []
+    }
+
+    addInput = (num) => {
+        if (typeof num === "number") {
+            this.Input.push(num)
+        }
+    }
+    cal = () => {
+        if (typeof this.Input == "object") {
+            let r = 0;
+            for (let i = 0; i < this.Input.length; i++) {
+                r += (this.Input[i] * this.weight[i])
+            }
+            return r;
+        } else logError("Bidan error 004: la neurona: " + this.name + " no risivio un array de numeros como input");
+    }
+    activation = () => {
+        if (typeof this.Activationfunction == "function") {
+            if (this.ActivationInput === this.Input.length) {
+                let r = this.cal()
+
+                let result = this.Activationfunction(r);
+
+                for (let index = 0; index < this.Output.length; index++) {
+                    this.Output[index].addInput(result);
+                    this.Output[index].activation()
+                }
+            }
+        } else {
+            logError("Bidan error 002: la funcion de activacion de la nueronas:" + this.name + " no es una funcion, en");
+        }
+    }
+    prome = () => {
+        let ar = []
+        for (let i = 0; i < this.Output.length; i++) {
+            ar .push(this.activation(this.cal()) / this.Output.length)
+        }
+        return ar
+    }
+    test = ()=>{
+        let ar = []
+        
+    }
+    info = () => {
+        console.log("Neuron: " + this.name);
+        console.log(" Input: " + this.Input);
+        console.log(" weight: " + this.weight);
+        console.log(" Output: " + this.Output.length);
+        console.log(" Activation function: " + this.Activationfunction.name);
+        console.log(" result bruto: " + this.cal());
+        console.log(" result: " + this.Activationfunction(this.cal()));
+    }
+
+}
 
 class Neuralnetwork {
     constructor() {
@@ -219,15 +280,6 @@ class Neuralnetwork {
                     }
                 }
             }
-
-            for (let i = 0; i < this.LayerOutput.length; i++) {
-                //this.LayerOutput[i].info()
-                let weight = []
-                for (let index = 0; index < this.Layer[this.Layer.length - 1].length; index++) {
-                    weight.push(Math.random())
-                }
-                this.LayerOutput[i].weight = weight
-            }
             console.log(colors.initC("init Connections of Neuralnetwork"));
 
         } else if (this.Layer.length != 0 && this.LayerOutput.length != 0) {
@@ -241,7 +293,7 @@ class Neuralnetwork {
     }
 
 
-    initWeights = () => {
+    initWeights = (n = 0.1) => {
         for (let o = 0; o < this.Layer.length; o++) {
 
             for (let u = 0; u < this.Layer[o].length; u++) {
@@ -249,13 +301,13 @@ class Neuralnetwork {
                 if (this.Layer[o - 1]) {
                     let weight = []
                     for (let index = 0; index < this.Layer[o - 1].length; index++) {
-                        weight.push(Math.random())
+                        weight.push(n)//weight.push(Math.random()) 
                     }
                     this.Layer[o][u].weight = weight
                 } else {
                     let weight = []
                     for (let index = 0; index < this.LayerInput.length; index++) {
-                        weight.push(Math.random())
+                        weight.push(n)//weight.push(Math.random())
                     }
                     this.Layer[o][u].weight = weight
                 }
@@ -266,7 +318,7 @@ class Neuralnetwork {
             //this.LayerOutput[i].info()
             let weight = []
             for (let index = 0; index < this.Layer[this.Layer.length - 1].length; index++) {
-                weight.push(Math.random())
+                weight.push(n)//weight.push(Math.random())
             }
             this.LayerOutput[i].weight = weight
         }
@@ -275,11 +327,39 @@ class Neuralnetwork {
             //this.LayerOutput[i].info()
             let weight = []
             for (let index = 0; index < this.Layer[this.Layer.length - 1].length; index++) {
-                weight.push(Math.random())
+                weight.push(n)//weight.push(Math.random())
 
             }
             this.LayerInput[i].weight = weight
         }
+    }
+    MSE = (yPred, yTrue) => {
+        let error = 0;
+        for (let i = 0; i < yPred.length; i++) {
+            error += (yPred[i] - yTrue[i]) ** 2;
+        }
+        return error / yPred.length;
+    }
+
+    DerivativeMSE = (yPred, yTrue, x = 1) => {
+        let error = 0
+        for (let i = 0; i < yPred.length; i++) {
+            error += -2 * ((yPred[i] - yTrue[i]) * x) / yPred.length;
+        }
+        return error
+    }
+
+    weightadjustmentMSE = (derivativeMSE, weight, learningRate) => {
+        let newweight = weight - learningRate * derivativeMSE;
+        return newweight
+    }
+
+    CrossEntropy = (yPred, yTrue) => {
+        let loss = 0;
+        for (let i = 0; i < yTrue.length; i++) {
+            loss += -(yTrue[i] * Math.log(yPred[i]) + (1 - yTrue[i]) * Math.log(1 - yPred[i]));
+        }
+        return loss;
     }
 
     StartPrediction = (ArrayInput, bool = true) => {
@@ -342,12 +422,10 @@ class Neuralnetwork {
 
             this.LayerInput[i].weight = data.weight.LayerInput[i]
         }
-        
         for (let i = 0; i < this.LayerOutput.length; i++) {
 
             this.LayerOutput[i].weight = data.weight.LayerOutput[i]
         }
-
         for (let o = 0; o < this.Layer.length; o++) {
             for (let u = 0; u < this.Layer[o].length; u++) {
                 this.Layer[o][u].weight = data.weight.Layer[o][u]
@@ -363,6 +441,64 @@ class Neuralnetwork {
         return r
     }
 
+    Backpropagation = (expectedOutput, learningRate) => {
+
+        //* calculo de errores
+        // error capa de entrada
+        let hiddenErrorLayerInputAr = { yPred: [], yTrue: [] }
+        for (let i = 0; i < this.LayerInput.length; i++) {
+            hiddenErrorLayerInputAr.yPred.push(this.LayerInput[i].Activationfunction(this.LayerInput[i].cal()))
+            hiddenErrorLayerInputAr.yTrue.push(this.LayerInput[i].prome())
+        }
+        let hiddenErrorLayerInput = this.CrossEntropy(hiddenErrorLayerInputAr.yPred, hiddenErrorLayerInputAr.yTrue);
+
+        //error capas ocultas
+        let hiddenErrorLayersAr = []
+        let hiddenErrorLayers = []
+        for (let i = 0; i < this.Layer.length; i++) {
+            let hiddenErrorLayerArLocal = { yPred: [], yTrue: [] }
+            for (let o = 0; o < this.Layer[i].length; o++) {
+                hiddenErrorLayerArLocal.yPred.push(this.Layer[i][o].Activationfunction(this.Layer[i][o].cal()))
+                hiddenErrorLayerArLocal.yTrue.push(this.Layer[i][o].prome())
+                console.log({prome: this.Layer[i][o].prome()});
+            }
+            hiddenErrorLayersAr.push(hiddenErrorLayerArLocal)
+            hiddenErrorLayers.push(this.CrossEntropy(hiddenErrorLayerArLocal.yPred, hiddenErrorLayerArLocal.yTrue))
+        }
+
+        //* ajuste
+        //ajuste capa de salida
+        for (let i = 0; i < this.LayerOutput.length; i++) {
+            let derivativeMSE = this.DerivativeMSE(this.Output(), expectedOutput)
+            for (let o = 0; o < this.LayerOutput[i].weight.length; o++) {
+                this.LayerOutput[i].weight[o] = this.weightadjustmentMSE(derivativeMSE, this.LayerOutput[i].weight[o], learningRate)
+            }
+        }
+
+        //ajuste capas ocultas
+        for (let i = 0; i < this.Layer.length; i++) {
+            for (let o = 0; o < this.Layer[i].length; o++) {
+                 let derivativeMSE = this.DerivativeMSE(this.Layer[i][o].Activationfunction(this.Layer[i][o].cal()), this.Layer[i][o].prome())
+                for (let u = 0; u < this.Layer[i][o].weight.length; u++) {
+                    this.Layer[i][o].weight[u] = this.weightadjustmentMSE(derivativeMSE, this.Layer[i][o].weight[o], learningRate)
+                } 
+                /* for (let u = 0; u < this.Layer[i][o].weight.length; u++) {
+                    console.log({error: hiddenErrorLayersAr[i]});
+                    let dLdw = hiddenErrorLayers[i] * this.Layer[i][o].Input[u];
+                    this.Layer[i][o].weight[u] = this.Layer[i][o].weight[u] - learningRate * dLdw;
+                } */
+            }
+        }
+
+        //ajuste capa de entrada
+        for (let i = 0; i < this.LayerInput.length; i++) {
+            for (let u = 0; u < this.LayerInput[i].weight.length; u++) {
+                let dLdw = hiddenErrorLayerInput * this.LayerInput[i].Input[u];
+                this.LayerInput[i].weight[u] = this.LayerInput[i].weight[u] - learningRate * dLdw;
+            }
+        }
+    }
+
     OutputLog = () => {
         let r = []
         for (let i = 0; i < this.LayerOutput.length; i++) {
@@ -371,10 +507,11 @@ class Neuralnetwork {
         console.log(colors.resu("r: " + r));
         return r
     }
-
-    reset = ()=>{
+    reset = () => {
         for (let o = 0; o < this.Layer.length; o++) {
+
             for (let u = 0; u < this.Layer[o].length; u++) {
+
                 this.Layer[o][u].Input = []
             }
         }
@@ -389,5 +526,6 @@ class Neuralnetwork {
     }
 }
 module.exports = {
-    Neuralnetwork
+    Neuralnetwork,
+    perceptron
 }
