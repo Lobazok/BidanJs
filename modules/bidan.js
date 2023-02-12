@@ -371,10 +371,11 @@ class Neuralnetwork {
         console.log(colors.resu("r: " + r));
         return r
     }
-
     reset = ()=>{
         for (let o = 0; o < this.Layer.length; o++) {
+
             for (let u = 0; u < this.Layer[o].length; u++) {
+
                 this.Layer[o][u].Input = []
             }
         }
