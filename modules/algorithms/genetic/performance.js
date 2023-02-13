@@ -5,18 +5,8 @@ const fs = require("fs")
 colors.setTheme({
     error: ["red", "italic", "bold"],
     warn: "red",
-    LyInputTitle: ["blue", "bold"],
-    LyInput: "blue",
-    Ly: "cyan",
-    Lymin: ["cyan", "dim", "reset"],
-    LyTitle: ["cyan", "bold"],
-    LyOutput: "green",
-    LyTitleOutput: ["green", "bold"],
-    save: ["bgGreen", "bold"],
-    mirror: ["bgCyan", "bold"],
-    initC: ["bgBlue"],
-    resu: ["brightMagenta", "italic"],
-    expe: ["brightYellow", "italic"]
+    new: ["green", "italic"],
+    update: ["green"]
 })
 
 function logError(error) {
@@ -32,22 +22,20 @@ class PerformanceLogger {
 
         //Current Generation
         this.GenerationCurrent = 0
+        this.CurrentAgrentTotal = 0
         this.PerformanceCurrent = []
-        this.PerformanceAverageCurrent = 0
 
 
         //Current Agent
         this.CurrentAgentName = ""
-        this.cambiaEsteNombrePor = 0
+        this.PerformaceAgentCurrent = 0
         this.CurrentAgentPerformance = []
         this.CurrentAgentExperienced = []
 
-        this.data = {
-
-        }
     }
 
-    config = (print) => {
+    config = (routeData, print = true) => {
+        this.routeData = routeData + ".json"
         this.print = print
     }
 
@@ -57,10 +45,10 @@ class PerformanceLogger {
         this.CurrentAgentExperienced = []
     }
 
-    addGeneraction = (Generation) => {
+    initGeneraction = (Generation) => {
         if (typeof Generation == "number") {
-            if (Generation >= 0) {
-                this.GenerationTotal += 1
+            if (Generation >= 0 & Generation >= this.GenerationTotal) {
+                this.GenerationTotal = 0
                 this.GenerationCurrent = Generation
             } else logError("Bidan Genetic Error 000: addGeneraction did not receive a valid numeric value")
         } else logError("Bidan Genetic Error 000: addGeneraction did not receive a valid numeric value")
@@ -68,7 +56,7 @@ class PerformanceLogger {
 
     initAgent = (Generation, name) => {
         this.reset()
-
+        this.CurrentAgrentTotal += 1
         if (typeof Generation == "number" & typeof name == "number") {
             this.CurrentAgentName = "Generation_" + Generation + "_Agent_" + name
         } else if (typeof Generation == "number") {
@@ -108,27 +96,66 @@ class PerformanceLogger {
     analyzeResult = (margin = 0) => {
         if (typeof margin == "number") {
             for (let i = 0; i < this.CurrentAgentPerformance.length; i++) {
-                if (JSON.stringify(this.CurrentAgentPerformance[i]) == JSON.stringify(this.CurrentAgentExperienced[i])) this.cambiaEsteNombrePor += 1
+                if (JSON.stringify(this.CurrentAgentPerformance[i]) == JSON.stringify(this.CurrentAgentExperienced[i])) this.PerformaceAgentCurrent += 1
 
             }
-            this.cambiaEsteNombrePor = this.cambiaEsteNombrePor / this.CurrentAgentPerformance.length
-            if (this.cambiaEsteNombrePor < 0.09) {
-                console.log(colors.bgRed("Rendimiento: " + this.cambiaEsteNombrePor + "%"));
-            } else if (this.cambiaEsteNombrePor < 0.2) {
-                console.log(colors.red("Rendimiento: " + this.cambiaEsteNombrePor + "%"));
-            } else if (this.cambiaEsteNombrePor < 0.3) {
-                console.log(colors.yellow("Rendimiento: " + this.cambiaEsteNombrePor + "%"));
-            } else if (this.cambiaEsteNombrePor < 0.4) {
-                console.log(colors.magenta("Rendimiento: " + this.cambiaEsteNombrePor + "%"));
-            } else if (this.cambiaEsteNombrePor < 0.6) {
-                console.log(colors.cyan("Rendimiento: " + this.cambiaEsteNombrePor + "%"));
-            } else if (this.cambiaEsteNombrePor < 0.8) {
-                console.log(colors.blue("Rendimiento: " + this.cambiaEsteNombrePor + "%"));
-            } else if (this.cambiaEsteNombrePor < 0.95) {
-                console.log(colors.green("Rendimiento: " + this.cambiaEsteNombrePor + "%"));
-            } else console.log(colors.bgGreen("Rendimiento: " + this.cambiaEsteNombrePor + "%"));
+            this.PerformaceAgentCurrent = this.PerformaceAgentCurrent / this.CurrentAgentPerformance.length
+            if (this.PerformaceAgentCurrent < 0.09) {
+                console.log(colors.bgRed("Performace: " + this.PerformaceAgentCurrent + "%"));
+
+            } else if (this.PerformaceAgentCurrent < 0.2) {
+                console.log(colors.red("Performace: " + this.PerformaceAgentCurrent + "%"));
+
+            } else if (this.PerformaceAgentCurrent < 0.3) {
+                console.log(colors.yellow("Performace: " + this.PerformaceAgentCurrent + "%"));
+
+            } else if (this.PerformaceAgentCurrent < 0.4) {
+                console.log(colors.magenta("Performace: " + this.PerformaceAgentCurrent + "%"));
+
+            } else if (this.PerformaceAgentCurrent < 0.6) {
+                console.log(colors.cyan("Performace: " + this.PerformaceAgentCurrent + "%"));
+
+            } else if (this.PerformaceAgentCurrent < 0.8) {
+                console.log(colors.blue("Performace: " + this.PerformaceAgentCurrent + "%"));
+
+            } else if (this.PerformaceAgentCurrent < 0.95) {
+                console.log(colors.green("Performace: " + this.PerformaceAgentCurrent + "%"));
+
+            } else console.log(colors.bgGreen("Rendimiento: " + this.PerformaceAgentCurrent + "%"));
+
+            this.PerformanceCurrent.push(this.PerformaceAgentCurrent)
+        } else logError("Bidan Genetic Error 002: Margin is not a number")
+    }
+
+    saveData = () => {
+
+        
+
+        if (fs.existsSync(this.routeData)) {
             
-        } else logError("Bidan Genetic Error 002: [Insterte data]")
+            let file = JSON.parse(fs.readFileSync(this.routeData, "utf-8"))
+
+            let data = file
+            data.numGenerations = this.GenerationTotal
+            data.numAgentGenerations.push(this.CurrentAgrentTotal)
+            data.performanceGenerations.push(this.PerformanceCurrent)
+
+            const json = JSON.stringify(data, null, 2)
+            fs.writeFileSync(this.routeData, json)
+            console.log(colors.update("updated performance file"));
+        } else {
+
+            let data = {
+                numGenerations         : this.GenerationTotal,
+                numAgentGenerations    : [this.CurrentAgrentTotal],
+                performanceGenerations : [this.PerformanceCurrent],
+            } 
+
+            const json = JSON.stringify(data, null, 2)
+            fs.writeFileSync(this.routeData, json)
+
+            console.log(colors.new("performance file created"));
+        }
     }
 }
 

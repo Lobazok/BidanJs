@@ -1,6 +1,6 @@
 const colors = require("colors/safe")
 const { error } = require("console")
-const { perceptron } =  require("./neuron")
+const { perceptron } = require("./neuron")
 const fs = require("fs")
 const { funcions } = require("./func/Activationfunctions")
 
@@ -282,18 +282,18 @@ class Neuralnetwork {
         }
     }
 
-    StartPrediction = (ArrayInput, bool = true) => {
-        if (typeof ArrayInput === "object") {
-            for (let i = 0; i < ArrayInput.length; i++) {
-                this.LayerInput[i].addInput(ArrayInput[i])
+    StartPrediction = (DataSet, bool = true) => {
+        if (typeof DataSet === "object") {
+            for (let i = 0; i < DataSet.length; i++) {
+                this.LayerInput[i].addInput(DataSet[i])
                 this.LayerInput[i].activation()
             }
 
             if (bool === true) {
                 console.log(colors.initC("Start Prediction"));
             }
-        } else if (typeof ArrayInput === "number" && this.LayerInput.length === 1) {
-            this.LayerInput[0].addInput(ArrayInput)
+        } else if (typeof DataSet === "number" && this.LayerInput.length === 1) {
+            this.LayerInput[0].addInput(DataSet)
             this.LayerInput[0].activation()
 
             if (bool === true) {
@@ -342,7 +342,7 @@ class Neuralnetwork {
 
             this.LayerInput[i].weight = data.weight.LayerInput[i]
         }
-        
+
         for (let i = 0; i < this.LayerOutput.length; i++) {
 
             this.LayerOutput[i].weight = data.weight.LayerOutput[i]
@@ -371,7 +371,7 @@ class Neuralnetwork {
         console.log(colors.resu("r: " + r));
         return r
     }
-    reset = ()=>{
+    reset = () => {
         for (let o = 0; o < this.Layer.length; o++) {
 
             for (let u = 0; u < this.Layer[o].length; u++) {

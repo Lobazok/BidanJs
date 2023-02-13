@@ -12,7 +12,7 @@ lian.LayerInputConfig(4, relu)
 lian.LayersConfig([3, 2, 3], relu)
 lian.LayerOutputConfig(3, sigmoid)
 
-//lian.info()
+
 
 lian.initConnections()
 const data = JSON.parse(fs.readFileSync("dataset.json", "utf-8"))
@@ -21,9 +21,10 @@ const data = JSON.parse(fs.readFileSync("dataset.json", "utf-8"))
 
 let Logger = new PerformanceLogger()
 
-Logger.addGeneraction(1)
+Logger.config("lianPerformace")
+Logger.initGeneraction(0)
 
-for (let o = 0; o < 2000; o++) {
+for (let o = 0; o < 50; o++) {
     lian.initWeights()
     Logger.initAgent(1, o)
 
@@ -51,6 +52,9 @@ for (let o = 0; o < 2000; o++) {
         Logger.addResult(ar, re, MaxValue)
     }
 
+   // lian.saveWeight("src/PesosLian_G" + 1 + "_A_" + o)
     Logger.analyzeResult(0.001)
+    
 }
-lian.saveWeight("PesosLian")
+lian.info()
+Logger.saveData()
