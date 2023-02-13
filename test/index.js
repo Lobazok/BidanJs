@@ -24,7 +24,7 @@ let Logger = new PerformanceLogger()
 Logger.config("lianPerformace")
 Logger.initGeneraction(0)
 
-for (let o = 0; o < 50; o++) {
+for (let o = 0; o < 500; o++) {
     lian.initWeights()
     Logger.initAgent(1, o)
 
