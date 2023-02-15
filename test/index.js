@@ -1,3 +1,4 @@
+
 const bidan = require("../modules/bidan")
 const { relu, sigmoid } = require("../modules/func/Activationfunctions.js")
 
@@ -52,7 +53,7 @@ for (let o = 0; o < 500; o++) {
         Logger.addResult(ar, re, MaxValue)
     }
 
-   // lian.saveWeight("src/PesosLian_G" + 1 + "_A_" + o)
+   //lian.saveWeight("src/PesosLian_G" + 1 + "_A_" + o)
     Logger.analyzeResult(0.001)
     
 }

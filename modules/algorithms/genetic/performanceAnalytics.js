@@ -56,6 +56,18 @@ class analytic {
         } else logError(`Bidan Genetic Analytic Error 000: in the configuration the specified file(${this.route}) does not exist`)
     }
 
+    orderBy = (Generation, type = true, limit = 25) => {
+        if (this.data[Generation]) {
+            let agents = this.data[Generation]
+            if (type) {
+                agents.sort((a, b) => b - a);
+            } else agents.sort((a, b) => b + a);
+
+            return agents.slice(0, limit)
+        }
+
+    }
+
     max = (Generation = this.GenerationDefault) => {
         let max = Math.max.apply(null, this.data[Generation]);
         this.result.max = max
@@ -156,8 +168,8 @@ class analytic {
         },
         average: (generation, bool = false) => {
             if (bool) {
-                console.log(colors.black("  > average: " + this.average(generation)))
-            } else console.log(colors.black("  > average: " + this.average(generation) + " Number of agents: " + this.data[generation].length))
+                console.log(colors.grey("  > average: " + this.average(generation)))
+            } else console.log(colors.grey("  > average: " + this.average(generation) + " Number of agents: " + this.data[generation].length))
 
         },
         range: (generation, bool = false) => {
@@ -175,7 +187,33 @@ class analytic {
             this.print.Q1(generation)
             this.print.Q3(generation)
         },
+        orderBy: (generation, type = true, limit = 25) => {
+            let array = this.orderBy(generation, type, limit)
+            for (let i = 0; i < array.length; i++) {
+                if (array < 0.09) {
+                    console.log("  > " + colors.bgRed(array[i] + "%"));
 
+                } else if (array[i] < 0.2) {
+                    console.log("  > " + colors.red(array[i] + "%"));
+
+                } else if (array[i] < 0.3) {
+                    console.log("  > " + colors.yellow(array[i] + "%"));
+
+                } else if (array[i] < 0.4) {
+                    console.log("  > " + colors.magenta(array[i] + "%"));
+
+                } else if (array[i] < 0.6) {
+                    console.log("  > " + colors.cyan(array[i] + "%"));
+
+                } else if (array[i] < 0.8) {
+                    console.log("  > " + colors.blue(array[i] + "%"));
+
+                } else if (array[i] < 0.95) {
+                    console.log("  > " + colors.green(array[i] + "%"));
+
+                } else console.log("  > " + colors.bgGreen(array[i] + "%"));
+            }
+        },
 
 
         minComparation: (G1, G2) => {
@@ -223,6 +261,97 @@ class analytic {
     }
 
     Terminal = {
+        orderBy: (t, generation, type, limit) => {
+            if (typeof generation == "number") {
+                if (typeof type == "boolean") {
+                    if (limit > 0) {
+                        this.print.orderBy(generation, type, limit)
+                        this.Terminal.index(t)
+                    } else {
+                        t.question(colors.italic(" ^ limit: "), (g) => {
+                            let limite = parseInt(g)
+                            this.print.orderBy(generation, type, limit)
+                            this.Terminal.index(t)
+                        })
+                    }
+                } else {
+                    t.question(colors.italic(" ^ type (desc or asc): "), (g) => {
+                        if (g == "desc" | g == "d" | g == "Desc" | g == "D") {
+                            if (limit > 0) {
+                                this.print.orderBy(generation, false, limit)
+                                this.Terminal.index(t)
+                            } else {
+                                t.question(colors.italic(" ^ limit: "), (g) => {
+                                    let limite = parseInt(g)
+                                    if (limite > 0) {
+                                        this.print.orderBy(generation, false, limit)
+                                        this.Terminal.index(t)
+                                    } else console.log(colors.red(colors.bold("  > null")));
+                                })
+                            }
+                        } else if (g == "asc" | g == "a" | g == "Asc" | g == "A") {
+                            if (limit > 0) {
+                                this.print.orderBy(generation, true, limit)
+                                this.Terminal.index(t)
+                            } else {
+                                t.question(colors.italic(" ^ limit: "), (g) => {
+                                    let limite = parseInt(g)
+                                    if (limite > 0) {
+                                        this.print.orderBy(generation, true, limit)
+                                        this.Terminal.index(t)
+                                    } else console.log(colors.red(colors.bold("  > null")));
+                                })
+                            }
+                        } else {
+
+                        }
+                    })
+                }
+            } else {
+                t.question(colors.italic(" ^ generation: "), (g) => {
+                    let ge = parseInt(g)
+                    if (typeof type == "boolean") {
+                        if (limit > 0) {
+                            this.print.orderBy(ge, type, limit)
+                            this.Terminal.index(t)
+                        } else {
+                            t.question(colors.italic(" ^ limit: "), (g) => {
+                                let limite = parseInt(g)
+                                this.print.orderBy(ge, type, limit)
+                                this.Terminal.index(t)
+                            })
+                        }
+                    } else {
+                        t.question(colors.italic(" ^ type (desc or asc): "), (g) => {
+                           if (g == "asc") {
+                            if (limit > 0) {
+                                this.print.orderBy(ge, true, limit)
+                                this.Terminal.index(t)
+                            } else {
+                                t.question(colors.italic(" ^ limit: "), (g) => {
+                                    let limite = parseInt(g)
+                                    this.print.orderBy(ge, true, limit)
+                                    this.Terminal.index(t)
+                                })
+                            }
+                           }else {
+                            if (limit > 0) {
+                                this.print.orderBy(ge, false, limit)
+                                this.Terminal.index(t)
+                            } else {
+                                t.question(colors.italic(" ^ limit: "), (g) => {
+                                    let limite = parseInt(g)
+                                    this.print.orderBy(ge, false, limit)
+                                    this.Terminal.index(t)
+                                })
+                            }
+                           }
+                        })
+                    }
+                })
+                
+            }
+        },
         min: (t, generation, bool = true) => {
             if (typeof generation == "number") {
                 this.print.min(generation)
@@ -577,26 +706,26 @@ class analytic {
 
             }
         },
-        indexComparation: (t, type)=>{
+        indexComparation: (t, type) => {
             if (type == "all") {
                 this.Terminal.allComparation(t)
-            }else if (type == "min") {
+            } else if (type == "min") {
                 this.Terminal.minComparation(t)
-            }else if (type == "max") {
+            } else if (type == "max") {
                 this.Terminal.maxComparation(t)
-            }else if (type == "Q1" | type == "q1") {
+            } else if (type == "Q1" | type == "q1") {
                 this.Terminal.Q1Comparation(t)
-            }else if (type == "Q3" | type == "q3") {
+            } else if (type == "Q3" | type == "q3") {
                 this.Terminal.Q3Comparation(t)
-            }else if (type == "average") {
+            } else if (type == "average") {
                 this.Terminal.averageComparation(t)
-            }else if (type == "range") {
+            } else if (type == "range") {
                 this.Terminal.rangeComparation(t)
-            }else if (type == "median" | type == "Q2" | type == "q2") {
+            } else if (type == "median" | type == "Q2" | type == "q2") {
                 this.Terminal.medianComparation(t)
-            }else if (type == "exit") {
+            } else if (type == "exit") {
                 this.Terminal.index(t)
-            }else {
+            } else {
                 console.log(colors.red(colors.bold("Invalid data type")));
                 this.Terminal.index(t)
             }
@@ -605,7 +734,7 @@ class analytic {
             if (type) {
                 this.Terminal.indexComparation(t, type)
             } else {
-                t.question("type: ", (answer) =>{
+                t.question("type: ", (answer) => {
                     this.Terminal.indexComparation(t, answer)
                 })
             }
@@ -613,7 +742,10 @@ class analytic {
         },
         index: (t) => {
             t.question('~ ', (answer) => {
-                if (answer == "min") {
+                if (answer == "order") {
+                    this.Terminal.orderBy(t)
+                    this.Terminal.index(t)
+                } else if (answer == "min") {
                     this.Terminal.min(t)
                 } else if (answer == "max") {
                     this.Terminal.max(t)
