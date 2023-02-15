@@ -309,6 +309,7 @@ class analytic {
 			console.log(colors.magenta("  ~> Q1          : Quartile 1, 1 parameter, the generation to be analyzed, can be entered with: -g generation"));
 			console.log(colors.magenta("  ~> Q3          : Quartile 3, 1 parameter, the generation to be analyzed, can be entered with: -g generation"));
 			console.log(colors.magenta("  ~> all         : It shows all the available information, 1 parameters, the generation to be analyzed, can be entered with: -g generation"));
+			console.log(colors.magenta("  ~> order       : Orders the performance of the agents, 3 parameters, the generation, -g , the limit of agents, -l and the type of order desc or asc, -t"));
 			console.log();
 			console.log(colors.yellow(colors.bold("  Performance Comparation")));
 			console.log(colors.yellow("  ~> comparation : Start a comparison between two generations, 1 parameter, the type of comparison, can be entered with: -type & -t, | equivalent with com"));
@@ -324,96 +325,60 @@ class analytic {
 		}
 	}
 
+
 	Terminal = {
-		orderBy: (t, generation, type, limit) => {
-			if (typeof generation == "number") {
+		orderByExtras: {
+			questionLimit: (t, ge, bool) => {
+				t.question(colors.italic(" ^ limit: "), (l) => {
+					let limite = parseInt(l)
+					this.print.orderBy(ge, bool, limite)
+					this.Terminal.index(t)
+				})
+			},
+
+			orderByFlujo: (t, ge, type, limit)=>{
 				if (typeof type == "boolean") {
 					if (limit > 0) {
-						this.print.orderBy(generation, type, limit)
+						this.print.orderBy(ge, type, limit)
 						this.Terminal.index(t)
-					} else {
-						t.question(colors.italic(" ^ limit: "), (g) => {
-							let limite = parseInt(g)
-							this.print.orderBy(generation, type, limit)
-							this.Terminal.index(t)
-						})
-					}
+					} else this.Terminal.orderByExtras.questionLimit(t, ge, type)
 				} else {
-					t.question(colors.italic(" ^ type (desc or asc): "), (g) => {
-						if (g == "desc" | g == "d" | g == "Desc" | g == "D") {
+					t.question(colors.italic(" ^ type (desc or asc): "), (ty) => {
+						if (ty == "asc" | ty == "a" | ty == "Asc" | ty == "A") {
 							if (limit > 0) {
-								this.print.orderBy(generation, false, limit)
+								this.print.orderBy(ge, true, limit)
 								this.Terminal.index(t)
-							} else {
-								t.question(colors.italic(" ^ limit: "), (g) => {
-									let limite = parseInt(g)
-									if (limite > 0) {
-										this.print.orderBy(generation, false, limit)
-										this.Terminal.index(t)
-									} else console.log(colors.red(colors.bold("  > null")));
-								})
-							}
-						} else if (g == "asc" | g == "a" | g == "Asc" | g == "A") {
+							} else this.Terminal.orderByExtras.questionLimit(t, ge, true)
+						} else if(ty == "desc" | ty == "d" | ty == "Desc" | ty == "D") {
 							if (limit > 0) {
-								this.print.orderBy(generation, true, limit)
+								this.print.orderBy(ge, false, limit)
 								this.Terminal.index(t)
-							} else {
-								t.question(colors.italic(" ^ limit: "), (g) => {
-									let limite = parseInt(g)
-									if (limite > 0) {
-										this.print.orderBy(generation, true, limit)
-										this.Terminal.index(t)
-									} else console.log(colors.red(colors.bold("  > null")));
-								})
-							}
-						} else {
-
-						}
+							} else this.Terminal.orderByExtras.questionLimit(t, ge, false)
+						}else if (ty == "exit") {
+								this.Terminal.index(t)
+						} else console.log(colors.red(`the selected option ${ty}is not valid in this situation`));
 					})
 				}
+			}
+		},
+
+		orderBy: (t, generation, type, limit) => {
+			if (typeof generation == "number") {
+				this.Terminal.orderByExtras.orderByFlujo(t, generation,type, limit )
 			} else {
 				t.question(colors.italic(" ^ generation: "), (g) => {
 					let ge = parseInt(g)
-					if (typeof type == "boolean") {
-						if (limit > 0) {
-							this.print.orderBy(ge, type, limit)
-							this.Terminal.index(t)
-						} else {
-							t.question(colors.italic(" ^ limit: "), (g) => {
-								let limite = parseInt(g)
-								this.print.orderBy(ge, type, limit)
-								this.Terminal.index(t)
-							})
-						}
+					if (ge > -1) {
+						this.Terminal.orderByExtras.orderByFlujo(t, ge,type, limit )
+					} else if (g == "exit") {
+						this.Terminal.index(t)
 					} else {
-						t.question(colors.italic(" ^ type (desc or asc): "), (g) => {
-							if (g == "asc") {
-								if (limit > 0) {
-									this.print.orderBy(ge, true, limit)
-									this.Terminal.index(t)
-								} else {
-									t.question(colors.italic(" ^ limit: "), (g) => {
-										let limite = parseInt(g)
-										this.print.orderBy(ge, true, limit)
-										this.Terminal.index(t)
-									})
-								}
-							} else {
-								if (limit > 0) {
-									this.print.orderBy(ge, false, limit)
-									this.Terminal.index(t)
-								} else {
-									t.question(colors.italic(" ^ limit: "), (g) => {
-										let limite = parseInt(g)
-										this.print.orderBy(ge, false, limit)
-										this.Terminal.index(t)
-									})
-								}
-							}
-						})
+						this.Terminal.index(t)
+						console.log(colors.red(colors.bold("  > null")));
 					}
+					
 				})
-
+				
 			}
 		},
 
@@ -605,7 +570,7 @@ class analytic {
 							} else console.log(colors.red(colors.bold(" null")))
 							this.Terminal.index(t)
 						})
-					} else console.log(colors.red(colors.bold(" null")))	
+					} else console.log(colors.red(colors.bold(" null")))
 				})
 			}
 		},
@@ -863,8 +828,15 @@ class analytic {
 					let type = answer.substring(answer.lastIndexOf(" ") + 1)
 					this.Terminal.Comparation(t, type)
 
-				} else {
-					console.log(colors.red(`  the "${answer}" command is not a recognized or valid command use the`) + colors.green(" help command") + colors.red(" to get information about available commands"));
+				} else if (answer == "order -t desc" |answer == "order -t d") {
+					this.Terminal.orderBy(t, false)
+
+				} else if (answer == "order -t asc" |answer == "order -t a") {
+					this.Terminal.orderBy(t, true)
+
+				} else  {
+					console.log(colors.red(`  the "${answer}" command is not a recognized or valid command use the`)
+					 + colors.green(" help command") + colors.red(" to get information about available commands"));
 					this.Terminal.index(t)
 				}
 
