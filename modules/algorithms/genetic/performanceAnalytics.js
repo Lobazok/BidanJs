@@ -300,6 +300,7 @@ class analytic {
 			console.log(colors.blue("  ~> cls         : Clean the panel | equivalent with clear"));
 			console.log(colors.blue("  ~> help        : Gives information about available commands"));
 			console.log(colors.blue("  ~> exit        : Finishes running the dashboard"));
+			console.log(colors.blue("  ~> length      : Gets the number of generations saved"));
 			console.log();
 			console.log(colors.magenta(colors.bold("  Performance Analysis")));
 			console.log(colors.magenta("  ~> min         : Minimum value, 1 parameter, the generation to be analyzed, can be entered with: -g generation"));
@@ -767,6 +768,10 @@ class analytic {
 
 				} else if (answer == "comparation" | answer == "com") {
 					this.Terminal.Comparation(t)
+
+				} else if (answer == "length") {
+					console.log(colors.blue("  > Number of generations: " + this.data.length));
+					this.Terminal.index(t)
 
 				} else if (answer == "all") {
 					this.Terminal.all(t)

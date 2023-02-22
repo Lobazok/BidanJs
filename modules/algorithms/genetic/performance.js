@@ -5,8 +5,8 @@ const fs = require("fs")
 colors.setTheme({
     error: ["red", "italic", "bold"],
     warn: "red",
-    new: ["green", "italic"],
-    update: ["green"]
+    new: ["green", "italic", "inverse", "bold"],
+    update: ["green", "inverse"]
 })
 
 function logError(error) {

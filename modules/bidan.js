@@ -3,6 +3,7 @@ const { error } = require("console")
 const { perceptron } = require("./neuron")
 const fs = require("fs")
 const { funcions } = require("./func/Activationfunctions")
+const Cilan = require("../colors/colors")
 
 colors.setTheme({
     error: ["red", "italic", "bold"],
