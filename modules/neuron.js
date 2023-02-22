@@ -41,7 +41,6 @@ class perceptron {
             logError("Bidan error 002: la funcion de activacion de la nueronas:" + this.name + " no es una funcion, en");
         }
 
-
     }
     
     info = () => {

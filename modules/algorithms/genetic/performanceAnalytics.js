@@ -59,10 +59,11 @@ class analytic {
 	orderBy = (Generation, type = true, limit = 25) => {
 		if (this.data[Generation]) {
 			let agents = this.data[Generation]
-			if (type) {
+			if (type == true) {
 				agents.sort((a, b) => b - a);
-			} else agents.sort((a, b) => b + a);
-
+			} else{
+				agents.sort((a, b) => b + a);
+			}
 			return agents.slice(0, limit)
 		}
 
@@ -336,7 +337,7 @@ class analytic {
 				})
 			},
 
-			orderByFlujo: (t, ge, type, limit)=>{
+			orderByFlujo: (t, ge, type, limit) => {
 				if (typeof type == "boolean") {
 					if (limit > 0) {
 						this.print.orderBy(ge, type, limit)
@@ -349,36 +350,39 @@ class analytic {
 								this.print.orderBy(ge, true, limit)
 								this.Terminal.index(t)
 							} else this.Terminal.orderByExtras.questionLimit(t, ge, true)
-						} else if(ty == "desc" | ty == "d" | ty == "Desc" | ty == "D") {
+						} else if (ty == "desc" | ty == "d" | ty == "Desc" | ty == "D") {
 							if (limit > 0) {
 								this.print.orderBy(ge, false, limit)
 								this.Terminal.index(t)
 							} else this.Terminal.orderByExtras.questionLimit(t, ge, false)
-						}else if (ty == "exit") {
-								this.Terminal.index(t)
-						} else console.log(colors.red(`the selected option ${ty}is not valid in this situation`));
+						} else if (ty == "exit") {
+							this.Terminal.index(t)
+						} else {
+							console.log(colors.red(`the selected option ${ty}is not valid in this situation`));
+							this.Terminal.index(t)
+						}
 					})
 				}
 			}
 		},
 
-		orderBy: (t, generation, type, limit) => {
+		orderBy: (t, type, limit,generation) => {
 			if (typeof generation == "number") {
-				this.Terminal.orderByExtras.orderByFlujo(t, generation,type, limit )
+				this.Terminal.orderByExtras.orderByFlujo(t, generation, type, limit)
 			} else {
 				t.question(colors.italic(" ^ generation: "), (g) => {
 					let ge = parseInt(g)
 					if (ge > -1) {
-						this.Terminal.orderByExtras.orderByFlujo(t, ge,type, limit )
+						this.Terminal.orderByExtras.orderByFlujo(t, ge, type, limit)
 					} else if (g == "exit") {
 						this.Terminal.index(t)
 					} else {
 						this.Terminal.index(t)
 						console.log(colors.red(colors.bold("  > null")));
 					}
-					
+
 				})
-				
+
 			}
 		},
 
@@ -723,7 +727,7 @@ class analytic {
 				this.Terminal.indexComparation(t, type)
 				this.Terminal.index(t)
 			} else {
-				t.question("type: ", (answer) => {
+				t.question(" ^ type: ", (answer) => {
 					this.Terminal.indexComparation(t, answer)
 					this.Terminal.index(t)
 				})
@@ -828,15 +832,15 @@ class analytic {
 					let type = answer.substring(answer.lastIndexOf(" ") + 1)
 					this.Terminal.Comparation(t, type)
 
-				} else if (answer == "order -t desc" |answer == "order -t d") {
+				} else if (answer == "order -t desc" | answer == "order -t d") {
 					this.Terminal.orderBy(t, false)
 
-				} else if (answer == "order -t asc" |answer == "order -t a") {
+				} else if (answer == "order -t asc" | answer == "order -t a") {
 					this.Terminal.orderBy(t, true)
 
-				} else  {
+				} else {
 					console.log(colors.red(`  the "${answer}" command is not a recognized or valid command use the`)
-					 + colors.green(" help command") + colors.red(" to get information about available commands"));
+						+ colors.green(" help command") + colors.red(" to get information about available commands"));
 					this.Terminal.index(t)
 				}
 
@@ -849,9 +853,9 @@ class analytic {
 			input: process.stdin,
 			output: process.stdout
 		});
-
 		console.log(colors.green("  Welcome to the BidanJs Genetic analysis panel!"));
 		console.log(colors.green("  use the help command to get information about available commands"));
+		console.log(colors.green("  Bidan Genetic Panel                                      v:0.2.1"));
 		this.Terminal.index(terminal)
 	}
 }
