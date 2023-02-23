@@ -86,46 +86,54 @@ class genetic {
         }
     }
 
-    findRoutes = (Generation = this.Generation, agents = [], estandar)=>{
-        
+    findRoutes = (Generation = this.Generation, agents = [], estandar) => {
+        let routes = []
         if (this.status == true) {
             if (agents.length > 0) {
                 for (let i = 0; i < agents.length; i++) {
                     if (agents[i].index) {
-                        console.log(estandar(Generation, agents[i].index));
+                        routes.push(estandar(Generation, agents[i].index));
                     } else {
-                        console.log(estandar(Generation, agents[i]));
+                        routes.push(estandar(Generation, agents[i]));
                     }
                 }
             } else {
-                logError(`Bidan genetic error 001: in findRoutes files were not specific`)
+                logError(`Bidan genetic error 001: in findRoutes files were not specific`);
                 this.status = false;
             }
+
         }
+        return routes;
     }
 
     findAgent = (routes = [],) => {
         if (this.status == true) {
             if (routes.length > 0) {
                 for (let i = 0; i < routes.length; i++) {
-                    let file = JSON.parse(fs.readFileSync(routes[i], "utf-8"));
-                    if (file) {
+                    
+                    if (fs.existsSync(routes[i] + ".json", "utf-8")) {
+                        let file = JSON.parse(fs.readFileSync(routes[i] + ".json", "utf-8"));
                         if (file.weight) {
                             this.weights.push(file.weight)
-                        }else {
+                        } else {
                             logError(`Bidan genetic error 002: findAgent error in management for files, the file went manipulated inapropiety`)
-                        this.status = false;
+                            this.status = false;
                         }
                     } else {
                         logError(`Bidan genetic error 001: in findAgent file ${routes[i]} does exist`)
                         this.status = false;
                     }
                 }
+
             } else {
                 logError(`Bidan genetic error 001: in findAgent files were not specific`)
                 this.status = false;
             }
         }
+    }
+
+    newWights = (learnigRate, spontaneity)=>{
+
     }
 
 }
