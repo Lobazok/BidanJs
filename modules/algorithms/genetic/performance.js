@@ -1,17 +1,9 @@
-const colors = require("colors/safe")
+const { logError } = require("../../../colors/bidanColors")
+const colors = require("../../../colors/bidanColors")
+const cilan = require("../../../colors/colors")
+
 const fs = require("fs")
 
-
-colors.setTheme({
-    error: ["red", "italic", "bold"],
-    warn: "red",
-    new: ["green", "italic", "inverse", "bold"],
-    update: ["green", "inverse"]
-})
-
-function logError(error) {
-    console.log(colors.error(error))
-}
 
 class PerformanceLogger {
     constructor() {
@@ -100,39 +92,18 @@ class PerformanceLogger {
 
             }
             this.PerformaceAgentCurrent = this.PerformaceAgentCurrent / this.CurrentAgentPerformance.length
-            if (this.PerformaceAgentCurrent < 0.09) {
-                console.log(colors.bgRed("Performace: " + this.PerformaceAgentCurrent + "%"));
 
-            } else if (this.PerformaceAgentCurrent < 0.2) {
-                console.log(colors.red("Performace: " + this.PerformaceAgentCurrent + "%"));
-
-            } else if (this.PerformaceAgentCurrent < 0.3) {
-                console.log(colors.yellow("Performace: " + this.PerformaceAgentCurrent + "%"));
-
-            } else if (this.PerformaceAgentCurrent < 0.4) {
-                console.log(colors.magenta("Performace: " + this.PerformaceAgentCurrent + "%"));
-
-            } else if (this.PerformaceAgentCurrent < 0.6) {
-                console.log(colors.cyan("Performace: " + this.PerformaceAgentCurrent + "%"));
-
-            } else if (this.PerformaceAgentCurrent < 0.8) {
-                console.log(colors.blue("Performace: " + this.PerformaceAgentCurrent + "%"));
-
-            } else if (this.PerformaceAgentCurrent < 0.95) {
-                console.log(colors.green("Performace: " + this.PerformaceAgentCurrent + "%"));
-
-            } else console.log(colors.bgGreen("Rendimiento: " + this.PerformaceAgentCurrent + "%"));
-
+            console.log(colors.performance(this.PerformaceAgentCurrent))
             this.PerformanceCurrent.push(this.PerformaceAgentCurrent)
         } else logError("Bidan Genetic Error 002: Margin is not a number")
     }
 
     saveData = () => {
 
-        
+
 
         if (fs.existsSync(this.routeData)) {
-            
+
             let file = JSON.parse(fs.readFileSync(this.routeData, "utf-8"))
 
             let data = file
@@ -146,10 +117,10 @@ class PerformanceLogger {
         } else {
 
             let data = {
-                numGenerations         : this.GenerationTotal,
-                numAgentGenerations    : [this.CurrentAgrentTotal],
-                performanceGenerations : [this.PerformanceCurrent],
-            } 
+                numGenerations: this.GenerationTotal,
+                numAgentGenerations: [this.CurrentAgrentTotal],
+                performanceGenerations: [this.PerformanceCurrent],
+            }
 
             const json = JSON.stringify(data, null, 2)
             fs.writeFileSync(this.routeData, json)

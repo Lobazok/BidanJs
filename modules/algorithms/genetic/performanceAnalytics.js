@@ -1,17 +1,9 @@
-const colors = require("colors/safe")
+const {logError, performance} = require("../../../colors/bidanColors")
+const colors = require("../../../colors/colors")
+
 const fs = require("fs")
 const readline = require('readline');
 
-colors.setTheme({
-	error: ["red", "italic", "bold"],
-	warn: "red",
-	new: ["green", "italic"],
-	update: ["green"]
-})
-
-function logError(error) {
-	console.log(colors.error(error))
-}
 
 class analytic {
 	constructor(routeData, Generation) {
@@ -197,31 +189,7 @@ class analytic {
 		orderBy: (generation, type = true, limit = 25) => {
 			let array = this.orderBy(generation, type, limit)
 			for (let i = 0; i < array.length; i++) {
-				switch (true) {
-					case array[i] < 0.09:
-						console.log(" > " + colors.bgRed(array[i] + "%"));
-						break;
-					case array[i] < 0.2:
-						console.log(" > " + colors.red(array[i] + "%"));
-						break;
-					case array[i] < 0.3:
-						console.log(" > " + colors.yellow(array[i] + "%"));
-						break;
-					case array[i] < 0.4:
-						console.log(" > " + colors.magenta(array[i] + "%"));
-						break;
-					case array[i] < 0.6:
-						console.log(" > " + colors.cyan(array[i] + "%"));
-						break;
-					case array[i] < 0.8:
-						console.log(" > " + colors.blue(array[i] + "%"));
-						break;
-					case array[i] < 0.95:
-						console.log(" > " + colors.green(array[i] + "%"));
-						break;
-					default:
-						console.log(" > " + array[i] + "%");
-				}
+				console.log(performance(array[i]));
 			}
 		},
 

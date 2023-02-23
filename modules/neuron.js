@@ -1,8 +1,5 @@
-const colors = require("../colors/colors")
-
-function logError(error) {
-    console.log(colors.red(colors.italic(colors.bold(error))))
-}
+const {logError} = require("../colors/bidanColors")
+const colors = require("../colors/bidanColors")
 
 class perceptron {
     constructor(name, Activationfunction) {

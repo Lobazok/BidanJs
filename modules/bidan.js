@@ -1,30 +1,12 @@
-const colors = require("colors/safe")
-const { error } = require("console")
+const {logError} = require("../colors/bidanColors")
+const colors = require("../colors/bidanColors")
+
+
 const { perceptron } = require("./neuron")
 const fs = require("fs")
 const { funcions } = require("./func/Activationfunctions")
-const Cilan = require("../colors/colors")
 
-colors.setTheme({
-    error: ["red", "italic", "bold"],
-    warn: "red",
-    LyInputTitle: ["blue", "bold"],
-    LyInput: "blue",
-    Ly: "cyan",
-    Lymin: ["cyan", "dim", "reset"],
-    LyTitle: ["cyan", "bold"],
-    LyOutput: "green",
-    LyTitleOutput: ["green", "bold"],
-    save: ["bgGreen", "bold"],
-    mirror: ["bgCyan", "bold"],
-    initC: ["bgBlue"],
-    resu: ["brightMagenta", "italic"],
-    expe: ["brightYellow", "italic"]
-})
 
-function logError(error) {
-    console.log(colors.error(error))
-}
 
 
 class Neuralnetwork {

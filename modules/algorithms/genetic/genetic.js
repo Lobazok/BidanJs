@@ -1,36 +1,48 @@
-const colors = require("colors/safe")
+const { logError } = require("../../../colors/bidanColors")
+const colors = require("../../../colors/bidanColors")
+
 const fs = require("fs")
 const readline = require('readline');
-
-colors.setTheme({
-    error: ["red", "italic", "bold"],
-    warn: "red",
-    new: ["green", "italic"],
-    update: ["green"]
-})
-
-function logError(error) {
-    console.log(colors.error(error))
-}
 
 
 class genetic {
     constructor(routeData, Generation) {
-        this.data,
-            this.Generation = 0
+        this.data
+        this.weights = []
+        this.Generation = 0
         this.route;
 
         this.route = routeData + ".json"
+        this.status;
 
         if (fs.existsSync(this.route)) {
 
             if (typeof Generation == "number") {
                 let file = JSON.parse(fs.readFileSync(this.route, "utf-8"));
-                this.data = file.performanceGenerations;
-                this.Generation = Generation;
+                if (file.performanceGenerations) {
+                    if (file.performanceGenerations[Generation]) {
+                        this.data = file.performanceGenerations;
+                        this.Generation = Generation;
+                        this.status = true;
+                    } else {
+                        logError(`Bidan Genetic Error 000: in the configuration the generation ${Generation} does not exist`)
+                        this.status = false;
+                    }
+
+                } else {
+                    logError(`Bidan Genetic Error 000: in the configuration the specified file(${this.route}) does not exist`);
+                    this.status = false;
+                }
+
+            } else {
+                logError(`Bidan Genetic Error 000: in the configuration the parameter ${Generation} no is a number`);
+                this.status = false;
             }
 
-        } else logError(`Bidan Genetic Analytic Error 000: in the configuration the specified file(${this.route}) does not exist`);
+        } else {
+            logError(`Bidan Genetic Error 000: in the configuration the specified file(${this.route}) does not exist`);
+            this.status = false;
+        }
     }
     config = (routeData, Generation) => {
         this.route = routeData + ".json";
@@ -39,22 +51,81 @@ class genetic {
 
             if (typeof Generation == "number") {
                 let file = JSON.parse(fs.readFileSync(this.route, "utf-8"));
-                this.data = file.performanceGenerations;
-                this.Generation = Generation;
-            };
+                if (file.performanceGenerations) {
+                    if (file.performanceGenerations[Generation]) {
+                        this.data = file.performanceGenerations;
+                        this.Generation = Generation;
+                        this.status = true;
+                    } else {
+                        logError(`Bidan Genetic Error 000: in the configuration the generation ${Generation} does not exist`)
+                        this.status = false;
+                    }
 
-        } else logError(`Bidan Genetic Analytic Error 000: in the configuration the specified file(${this.route}) does not exist`);
+                } else {
+                    logError(`Bidan Genetic Error 000: in the configuration the specified file(${this.route}) does not exist`);
+                    this.status = false;
+                }
+
+            } else {
+                logError(`Bidan Genetic Error 000: in the configuration the parameter ${Generation} no is a number`);
+                this.status = false;
+            }
+
+        } else {
+            logError(`Bidan Genetic Error 000: in the configuration the specified file(${this.route}) does not exist`);
+            this.status = false;
+        }
     }
 
-    orderBy = ( limit = 25, Generation = this.Generation) => {
-        const agents = this.data[Generation];
-        const sortedAgents = agents
-            .map((value, index) => ({ value, index }))
-            .sort((a, b) => b.value - a.value);
-        const maxAgents = sortedAgents
-            .slice(0, limit)
-            .map(({ index, value }) => ({ index, value }));
-        return maxAgents;
+    orderBy = (limit = 25, Generation = this.Generation) => {
+        if (this.status == true) {
+            const agents = this.data[Generation];
+            const sortedAgents = agents.map((value, index) => ({ value, index })).sort((a, b) => b.value - a.value);
+            const maxAgents = sortedAgents.slice(0, limit).map(({ index, value }) => ({ index, value }));
+            return maxAgents;
+        }
+    }
+
+    findRoutes = (Generation = this.Generation, agents = [], estandar)=>{
+        
+        if (this.status == true) {
+            if (agents.length > 0) {
+                for (let i = 0; i < agents.length; i++) {
+                    if (agents[i].index) {
+                        console.log(estandar(Generation, agents[i].index));
+                    } else {
+                        console.log(estandar(Generation, agents[i]));
+                    }
+                }
+            } else {
+                logError(`Bidan genetic error 001: in findRoutes files were not specific`)
+                this.status = false;
+            }
+        }
+    }
+
+    findAgent = (routes = [],) => {
+        if (this.status == true) {
+            if (routes.length > 0) {
+                for (let i = 0; i < routes.length; i++) {
+                    let file = JSON.parse(fs.readFileSync(routes[i], "utf-8"));
+                    if (file) {
+                        if (file.weight) {
+                            this.weights.push(file.weight)
+                        }else {
+                            logError(`Bidan genetic error 002: findAgent error in management for files, the file went manipulated inapropiety`)
+                        this.status = false;
+                        }
+                    } else {
+                        logError(`Bidan genetic error 001: in findAgent file ${routes[i]} does exist`)
+                        this.status = false;
+                    }
+                }
+            } else {
+                logError(`Bidan genetic error 001: in findAgent files were not specific`)
+                this.status = false;
+            }
+        }
     }
 
 }
