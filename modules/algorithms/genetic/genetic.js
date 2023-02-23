@@ -11,6 +11,7 @@ class genetic {
         this.weights = []
         this.Generation = 0
         this.route;
+        this.agentsCofig
 
         this.route = routeData + ".json"
         this.status;
@@ -109,8 +110,21 @@ class genetic {
     findAgent = (routes = [],) => {
         if (this.status == true) {
             if (routes.length > 0) {
+
+                if (fs.existsSync(routes[0] + ".json", "utf-8")) {
+                    let fileAgentZero = JSON.parse(fs.readFileSync(routes[0] + ".json", "utf-8"));
+                    if (fileAgentZero.config) {
+                        this.agentsCofig = fileAgentZero.config
+                    } else {
+                        logError(`Bidan genetic error 002: findAgent error in management for files, the file went manipulated inapropiety`)
+                        this.status = false;
+                    }
+                } else {
+                    logError(`Bidan genetic error 001: in findAgent file ${routes[i]} does exist`)
+                    this.status = false;
+                }
                 for (let i = 0; i < routes.length; i++) {
-                    
+
                     if (fs.existsSync(routes[i] + ".json", "utf-8")) {
                         let file = JSON.parse(fs.readFileSync(routes[i] + ".json", "utf-8"));
                         if (file.weight) {
@@ -132,10 +146,46 @@ class genetic {
         }
     }
 
-    newWights = (learnigRate, spontaneity)=>{
+    newWights = (learnigRate, spontaneity) => {
+        let newWight = {
+            LayerInput  : [],
+            Layer       : [],
+            LayerOutput : []
+        }
+        console.log(this.agentsCofig);
+        for (let i = 0; i < this.agentsCofig.LayerInputConfig[0]; i++) {
+            let tem = []
+            for (let o = 0; o < this.agentsCofig.LayersConfig[0][0]; o++) {
+                tem.push(0)
+            }
+            newWight.LayerInput.push(tem)
+        }
 
+        for (let i = 0; i < this.agentsCofig.LayersConfig[0].length; i++) {
+            let tamLayer = []
+            for (let o = 0; o < this.agentsCofig.LayersConfig[0][i]; o++) {
+                let tem = []
+                if (this.agentsCofig.LayersConfig[0][i + 1]) {
+                    for (let u = 0; u < this.agentsCofig.LayersConfig[0][i + 1]; u++) {
+                        tem.push(0)
+                    }
+                } else {
+                    for (let u = 0; u < this.agentsCofig.LayerOutputConfig[0]; u++) {
+                        tem.push(0)
+                    }
+                }
+                
+                tamLayer.push(tem)
+            }
+            newWight.Layer.push(tamLayer)
+        }
+
+        for (let i = 0; i < this.agentsCofig.LayerInputConfig[0]; i++) {
+            newWight.LayerOutput.push([0])
+        }
+
+        return newWight
     }
-
 }
 
 module.exports = genetic

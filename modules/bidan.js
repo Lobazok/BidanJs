@@ -1,4 +1,4 @@
-const {logError} = require("../colors/bidanColors")
+const { logError } = require("../colors/bidanColors")
 const colors = require("../colors/bidanColors")
 
 
@@ -319,7 +319,12 @@ class Neuralnetwork {
     }
 
     useWeights = (direction) => {
-        const data = JSON.parse(fs.readFileSync(direction, "utf-8"))
+
+        if (typeof direction == "string") {
+            let data = JSON.parse(fs.readFileSync(direction + ".json", "utf-8"))
+        } else {
+            let data = direction
+        }
 
         for (let i = 0; i < this.LayerInput.length; i++) {
 
