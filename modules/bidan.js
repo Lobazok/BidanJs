@@ -320,11 +320,11 @@ class Neuralnetwork {
 
     useWeights = (direction) => {
 
-        if (typeof direction == "string") {
+        //if (typeof direction == "string") {
             let data = JSON.parse(fs.readFileSync(direction + ".json", "utf-8"))
-        } else {
+        /* } else {
             let data = direction
-        }
+        } */
 
         for (let i = 0; i < this.LayerInput.length; i++) {
 

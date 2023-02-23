@@ -120,7 +120,7 @@ class genetic {
                         this.status = false;
                     }
                 } else {
-                    logError(`Bidan genetic error 001: in findAgent file ${routes[i]} does exist`)
+                    logError(`Bidan genetic error 001: in findAgent file ${routes[0]} does exist`)
                     this.status = false;
                 }
                 for (let i = 0; i < routes.length; i++) {
@@ -148,15 +148,18 @@ class genetic {
 
     newWights = (learnigRate, spontaneity) => {
         let newWight = {
-            LayerInput  : [],
-            Layer       : [],
-            LayerOutput : []
+            LayerInput: [],
+            Layer: [],
+            LayerOutput: []
         }
-        console.log(this.agentsCofig);
         for (let i = 0; i < this.agentsCofig.LayerInputConfig[0]; i++) {
             let tem = []
             for (let o = 0; o < this.agentsCofig.LayersConfig[0][0]; o++) {
-                tem.push(0)
+                let w = this.weights[Math.floor(Math.random() * this.weights.length)].LayerInput[i][o]
+                if (Math.random() > spontaneity) {
+                    w += Math.floor(Math.random() * (learnigRate - -learnigRate + 1)) - learnigRate
+                }
+                tem.push(w)
             }
             newWight.LayerInput.push(tem)
         }
@@ -167,24 +170,47 @@ class genetic {
                 let tem = []
                 if (this.agentsCofig.LayersConfig[0][i + 1]) {
                     for (let u = 0; u < this.agentsCofig.LayersConfig[0][i + 1]; u++) {
-                        tem.push(0)
+                        let w = this.weights[Math.floor(Math.random() * this.weights.length)].Layer[i][o][0]
+                        if (Math.random() > spontaneity) {
+                            w += Math.floor(Math.random() * (learnigRate - -learnigRate + 1)) - learnigRate
+                        }
+
+                        tem.push(w)
                     }
                 } else {
                     for (let u = 0; u < this.agentsCofig.LayerOutputConfig[0]; u++) {
-                        tem.push(0)
+                        let w = this.weights[Math.floor(Math.random() * this.weights.length)].Layer[i][o][0]
+                        if (Math.random() > spontaneity) {
+                            w += Math.floor(Math.random() * (learnigRate - -learnigRate + 1)) - learnigRate
+                        }
+
+                        tem.push(w)
                     }
                 }
-                
+
                 tamLayer.push(tem)
             }
             newWight.Layer.push(tamLayer)
         }
 
-        for (let i = 0; i < this.agentsCofig.LayerInputConfig[0]; i++) {
-            newWight.LayerOutput.push([0])
+        for (let i = 0; i < this.agentsCofig.LayerOutputConfig[0]; i++) {
+            let w = this.weights[Math.floor(Math.random() * this.weights.length)].LayerOutput[i]
+            if (Math.random() > spontaneity) {
+                w += Math.floor(Math.random() * (learnigRate - -learnigRate + 1)) - learnigRate
+            }
+
+             newWight.LayerOutput.push(w)
+        }
+        return newWight
+    }
+    saveWeight = (name, weights) => {
+        let data = {
+            config: this.agentsCofig,
+            weight: weights
         }
 
-        return newWight
+        const json = JSON.stringify(data)
+        fs.writeFileSync(name + ".json", json)
     }
 }
 
