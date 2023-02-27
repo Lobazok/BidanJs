@@ -1,19 +1,4 @@
-const colors = require("colors/safe")
-colors.setTheme({
-    error: ["red", "italic", "bold"],
-    warn: "red",
-    LyInputTitle: ["blue", "bold"],
-    LyInput: "blue",
-    Ly: "cyan",
-    Lymin: ["cyan", "dim", "reset"],
-    LyTitle: ["cyan", "bold"],
-    LyOutput: "green",
-    LyTitleOutput: ["green", "bold"],
-})
-
-function logError(error) {
-    console.log(colors.error(error))
-}
+const {logError} = require("../../colors/bidanColors")
 
 const step = (Input) => {
     var name = "step"
