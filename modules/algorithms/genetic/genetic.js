@@ -233,31 +233,35 @@ class genetic {
             LayerOutput: []
         }
         for (let i = 0; i < this.agentsConfig.LayerInputConfig[0]; i++) {
-                let w = this.weights[Math.floor(Math.random() * this.weights.length)].LayerInput[i]
-                let random = Math.random()
-                if (random > spontaneity) {
-                    w += Math.floor(Math.random() * (learnigRate - -learnigRate + 1)) - learnigRate
+            let w = this.weights[Math.floor(Math.random() * this.weights.length)].LayerInput[i]
+            let random = Math.random()
+            if (random > spontaneity) {
+
+                for (let o = 0; o < w.length; o++) {
+                    let r = Math.floor(Math.random() * (learnigRate - -learnigRate + 1)) - learnigRate
+                    w[o] += r
                 }
-                weights.LayerInput.push(w)
+            }
+            weights.LayerInput.push(w)
         }
         for (let o = 0; o < this.agentsConfig.LayersConfig[0].length; o++) {
             let tem = []
             for (let u = 0; u < this.agentsConfig.LayersConfig[0][o]; u++) {
 
                 if (this.agentsConfig.LayersConfig[0][o - 1]) {
-                        let w = this.weights[Math.floor(Math.random() * this.weights.length)].Layer[o][u]
-                        let random = Math.random()
-                        if (random > spontaneity) {
-                            w += Math.floor(Math.random() * (learnigRate - -learnigRate + 1)) - learnigRate
-                        }
-                        tem.push(w)
+                    let w = this.weights[Math.floor(Math.random() * this.weights.length)].Layer[o][u]
+                    for (let u = 0; u < w.length; u++) {
+                        let r = Math.floor(Math.random() * (learnigRate - -learnigRate + 1)) - learnigRate
+                        w[u] += r
+                    }
+                    tem.push(w)
                 } else {
-                        let w = this.weights[Math.floor(Math.random() * this.weights.length)].Layer[o][u]
-                        let random = Math.random()
-                        if (random > spontaneity) {
-                            w += Math.floor(Math.random() * (learnigRate - -learnigRate + 1)) - learnigRate
-                        }
-                        tem.push(w)
+                    let w = this.weights[Math.floor(Math.random() * this.weights.length)].Layer[o][u]
+                    for (let u = 0; u < w.length; u++) {
+                        let r = Math.floor(Math.random() * (learnigRate - -learnigRate + 1)) - learnigRate
+                        w[u] += r
+                    }
+                    tem.push(w)
 
                 }
 
@@ -266,12 +270,12 @@ class genetic {
         }
 
         for (let i = 0; i < this.agentsConfig.LayerOutputConfig[0]; i++) {
-                let w = this.weights[Math.floor(Math.random() * this.weights.length)].LayerOutput[i]
-                let random = Math.random()
-                if (random > spontaneity) {
-                    w += Math.floor(Math.random() * (learnigRate - -learnigRate + 1)) - learnigRate
-                }
-                weights.LayerOutput.push(w)
+            let w = this.weights[Math.floor(Math.random() * this.weights.length)].LayerOutput[i]
+            for (let u = 0; u < w.length; u++) {
+                let r = Math.floor(Math.random() * (learnigRate - -learnigRate + 1)) - learnigRate
+                w[u] += r
+            }
+            weights.LayerOutput.push(w)
         }
 
 
