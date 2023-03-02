@@ -179,7 +179,7 @@ class Neuralnetwork {
     }
 
     //funcion para iniciar las conexiones entre neuronas
-    initConnections = () => {
+    initConnections = (bool = true) => {
         if (this.LayerInput.length != 0 && this.Layer.length != 0 && this.LayerOutput.length != 0) {
             for (let i = 0; i < this.LayerInput.length; i++) {
                 this.LayerInput[i].Output = this.Layer[0]
@@ -211,7 +211,7 @@ class Neuralnetwork {
                 }
                 this.LayerOutput[i].weight = weight
             }
-            console.log(colors.initC("init Connections of Neuralnetwork"));
+            if (bool) console.log(colors.initC("init Connections of Neuralnetwork"));
 
         } else if (this.Layer.length != 0 && this.LayerOutput.length != 0) {
             console.log(colors.warn("Bidan error 000: error de configuracion en capa de entrada"));

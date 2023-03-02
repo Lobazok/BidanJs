@@ -158,7 +158,7 @@ class genetic {
             let tem = []
             let w = this.weights[Math.floor(Math.random() * this.weights.length)].LayerInput[i][0]
             let random = Math.random()
-            if (random > spontaneity) {
+            if (random < spontaneity) {
                 w += Math.floor(Math.random() * (learnigRate - -learnigRate + 1)) - learnigRate
             }
             tem.push(w)
@@ -175,7 +175,7 @@ class genetic {
                         for (let y = 0; y < this.weights[Math.floor(Math.random() * this.weights.length)].Layer[i][o].length; y++) {
                             let w = this.weights[Math.floor(Math.random() * this.weights.length)].Layer[i][o][y]
                             let random = Math.random()
-                            if (random > spontaneity) {
+                            if (random < spontaneity) {
                                 w += Math.floor(Math.random() * (learnigRate - -learnigRate + 1)) - learnigRate
                             }
                             tem1.push(w)
@@ -190,7 +190,7 @@ class genetic {
                         for (let y = 0; y < this.weights[Math.floor(Math.random() * this.weights.length)].Layer[i][o].length; y++) {
                             let w = this.weights[Math.floor(Math.random() * this.weights.length)].Layer[i][o][y]
                             let random = Math.random()
-                            if (random > spontaneity) {
+                            if (random < spontaneity) {
                                 w += Math.floor(Math.random() * (learnigRate - -learnigRate + 1)) - learnigRate
                             }
                             tem1.push(w)
@@ -213,7 +213,7 @@ class genetic {
             for (let o = 0; o < this.weights[Math.floor(Math.random() * this.weights.length)].LayerOutput[i].length; o++) {
                 let w = this.weights[Math.floor(Math.random() * this.weights.length)].LayerOutput[i][o]
                 let random = Math.random()
-                if (random > spontaneity) {
+                if (random < spontaneity) {
 
                     w += Math.floor(Math.random() * (learnigRate - -learnigRate + 1)) - learnigRate
                 }
