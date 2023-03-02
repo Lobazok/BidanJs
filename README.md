@@ -4,16 +4,43 @@
 **JavaScript module** for the development of **artificial intelligences**
 Focused on **simplicity** of use
 ~~~ JavaScript
-const bidan = require("../modules/bidan.js")
-const { relu, logistica } = require("../modules/func/Activationfunctions.js")
+const bidan = require("../../modules/bidan")
+const { relu, sigmoid } = require("../../modules/func/Activationfunctions.js")
+const { MaxValue } = require("../../modules/func/InterpretFunctions")
 
-var lian = new bidan.Neuralnetwork()
-lian.LayerInputConfig(2, logistica)
-lian.LayersConfig([3,4,2], relu)
-lian.LayerOutputConfig(4, logistica)
+var lian = new bidan.Neuralnetwork() // Lian is a new IA
 
-lian.saveCofig("jinnData")
-lian.info()
+//Config
+lian.LayerInputConfig(4, relu) 
+lian.LayersConfig([3, 2, 3], relu)
+lian.LayerOutputConfig(3, sigmoid)
+
+lian.initConnections()
+lian.useWeights(`./PesosLian_A_0`)
+
+//DataSet
+const data = JSON.parse(fs.readFileSync("dataset.json", "utf-8"))
+
+for (let i = 0; i < 100; i++) {
+    lian.reset() //reset the previous value
+
+    if (data[i][4] === "versicolor") {
+        let re = [1, 0, 0]
+    } else if (data[i][4] === "virginica") {
+        let re = [0, 1, 0]
+    } else if (data[i][4] === "setosa") {
+        let re = [0, 0, 1]
+    }
+
+
+    let d = [data[i][0], data[i][1], data[i][2], data[i][3]] //Data is
+    lian.StartPrediction(d)
+
+    console.log((MaxValue(re)));
+    let ar = lian.Output()
+    console.log(MaxValue(ar));
+}
+
 ~~~
 
 ## Use cases
@@ -31,16 +58,44 @@ We are willing to all collaboration, if you have a contribution contact us
 **módulo de JavaScript** para el desarrollo de **inteligencias artificiales**
 enfocado en la **simplicidad** de uso
 ~~~ JavaScript
-const bidan = require("../modules/bidan.js")
-const { relu, logistica } = require("../modules/func/Activationfunctions.js")
+const bidan = require("../../modules/bidan")
+const { relu, sigmoid } = require("../../modules/func/Activationfunctions.js")
+const { MaxValue } = require("../../modules/func/InterpretFunctions")
 
-var lian = new bidan.Neuralnetwork()
-lian.LayerInputConfig(2, logistica)
-lian.LayersConfig([3,4,2], relu)
-lian.LayerOutputConfig(4, logistica)
+var lian = new bidan.Neuralnetwork() // Lian is a new IA
 
-lian.saveCofig("jinnData")
-lian.info()
+//Config
+lian.LayerInputConfig(4, relu) 
+lian.LayersConfig([3, 2, 3], relu)
+lian.LayerOutputConfig(3, sigmoid)
+
+lian.initConnections()
+lian.useWeights(`./PesosLian_A_0`)
+
+//DataSet
+const data = JSON.parse(fs.readFileSync("dataset.json", "utf-8"))
+
+for (let i = 0; i < 100; i++) {
+    lian.reset() //reset the previous value
+
+    if (data[i][4] === "versicolor") {
+        let re = [1, 0, 0]
+    } else if (data[i][4] === "virginica") {
+        let re = [0, 1, 0]
+    } else if (data[i][4] === "setosa") {
+        let re = [0, 0, 1]
+    }
+
+
+    let d = [data[i][0], data[i][1], data[i][2], data[i][3]] //Data is
+    lian.StartPrediction(d)
+
+    console.log((MaxValue(re)));
+    let ar = lian.Output()
+    console.log(MaxValue(ar));
+}
+
+lian.info() //Print info
 ~~~
 
 ## casos de uso
