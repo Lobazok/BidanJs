@@ -1,5 +1,5 @@
-const { logError } = require("../../../colors/bidanColors")
-const colors = require("../../../colors/bidanColors")
+const { logError } = require("../../colors/bidanColors")
+const colors = require("../../colors/bidanColors")
 
 const fs = require("fs")
 const readline = require('readline');
@@ -135,7 +135,7 @@ class genetic {
                             this.status = false;
                         }
                     } else {
-                        logError(`Bidan genetic error 001: in findAgent file ${routes[i]} does exist`)
+                        logError(`Bidan genetic error 001: in findAgent file ${routes} does exist`)
                         this.status = false;
                     }
                 }
