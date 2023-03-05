@@ -1,5 +1,5 @@
-const {logError, performance} = require("../../../colors/bidanColors")
-const colors = require("../../../colors/colors")
+const { logError, performance } = require("../../colors/bidanColors")
+const colors = require("../../colors/colors")
 
 const fs = require("fs")
 const readline = require('readline');
@@ -53,7 +53,7 @@ class analytic {
 			let agents = this.data[Generation]
 			if (type == true) {
 				agents.sort((a, b) => b - a);
-			} else{
+			} else {
 				agents.sort((a, b) => b + a);
 			}
 			return agents.slice(0, limit)
@@ -335,7 +335,7 @@ class analytic {
 			}
 		},
 
-		orderBy: (t, type, limit,generation) => {
+		orderBy: (t, type, limit, generation) => {
 			if (typeof generation == "number") {
 				this.Terminal.orderByExtras.orderByFlujo(t, generation, type, limit)
 			} else {
@@ -822,13 +822,31 @@ class analytic {
 	}
 
 	openTerminal = () => {
+		//	______ _     _               ___         _____                 _   _      
+		//	| ___ (_)   | |             |_  |       |  __ \               | | (_)     
+		//	| |_/ /_  __| | __ _ _ __     | | ___   | |  \/ ___ _ __   ___| |_ _  ___ 
+		//	| ___ \ |/ _` |/ _` | '_ \    | |/ __|  | | __ / _ \ '_ \ / _ \ __| |/ __|
+		//	| |_/ / | (_| | (_| | | | /\__/ /\__ \  | |_\ \  __/ | | |  __/ |_| | (__ 
+		//	\____/|_|\__,_|\__,_|_| |_\____/ |___/   \____/\___|_| |_|\___|\__|_|\___|
+
+
+
+
 		const terminal = readline.createInterface({
 			input: process.stdin,
 			output: process.stdout
 		});
-		console.log(colors.green("  Welcome to the BidanJs Genetic analysis panel!"));
-		console.log(colors.green("  use the help command to get information about available commands"));
-		console.log(colors.green("  Bidan Genetic Panel                                      v:0.5.1"));
+		console.log(colors.green(" ______ _     _               ___         _____                 _   _"));
+		console.log(colors.green("| ___ \\| |   | |             |_  |       |  __ \\               | | (_)"));
+		console.log(colors.green("| |_/ /| | __| | __ _ _ __     | | ___   | |  \\/ ___ _ __   ___| |_ _  ___"));
+		console.log(colors.green("| ___ \\| |/ _` |/ _` | '_ \\    | |/ __|  | | __ / _ \\ '_ \\ / _ \\ __| |/ ___|"));
+		console.log(colors.green("| |_/ /| | (_| | (_| | | | |\\__/ /\\__ \\  | |_\\ \\  __/ | | |  __/ |_| | |__"));
+		console.log(colors.green("\|____/ |_|\\__,_|\\__,_|_| |_|\\____/|___/  \|____/\\___||_| |_|\\___|\\__|_|\\___|"));
+
+		console.log();
+		console.log(colors.green("  Welcome to the BidanJs Genetic analysis panel!                          "));
+		console.log(colors.green("  use the help command to get information about available commands        "));
+		console.log(colors.green("  Bidan Genetic Panel                                      v:0.6        "));
 		this.Terminal.index(terminal)
 	}
 }

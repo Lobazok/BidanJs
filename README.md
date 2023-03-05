@@ -3,45 +3,7 @@
 ## introduction
 **JavaScript module** for the development of **artificial intelligences**
 Focused on **simplicity** of use
-~~~ JavaScript
-const bidan = require("../../modules/bidan")
-const { relu, sigmoid } = require("../../modules/func/Activationfunctions.js")
-const { MaxValue } = require("../../modules/func/InterpretFunctions")
 
-var lian = new bidan.Neuralnetwork() // Lian is a new IA
-
-//Config
-lian.LayerInputConfig(4, relu) 
-lian.LayersConfig([3, 2, 3], relu)
-lian.LayerOutputConfig(3, sigmoid)
-
-lian.initConnections()
-lian.useWeights(`./PesosLian_A_0`)
-
-//DataSet
-const data = JSON.parse(fs.readFileSync("dataset.json", "utf-8"))
-
-for (let i = 0; i < 100; i++) {
-    lian.reset() //reset the previous value
-
-    if (data[i][4] === "versicolor") {
-        let re = [1, 0, 0]
-    } else if (data[i][4] === "virginica") {
-        let re = [0, 1, 0]
-    } else if (data[i][4] === "setosa") {
-        let re = [0, 0, 1]
-    }
-
-
-    let d = [data[i][0], data[i][1], data[i][2], data[i][3]] //Data is
-    lian.StartPrediction(d)
-
-    console.log((MaxValue(re)));
-    let ar = lian.Output()
-    console.log(MaxValue(ar));
-}
-
-~~~
 
 ## Use cases
 **BidanJs** is focused on the **ease** of use for **novice** developers and on providing **functionalities** for the most **advanced**, uses **JavaScript** technologies **recommended** in services that use JavaScript and can be used with **TypeScript**
@@ -52,11 +14,6 @@ in the folder **Documentation** is encorded **all the necessary documentation** 
 ## collaboration
 We are willing to all collaboration, if you have a contribution contact us
 
-# BidanJs
-**[EN DESARROLLO]** 
-## introducion
-**módulo de JavaScript** para el desarrollo de **inteligencias artificiales**
-enfocado en la **simplicidad** de uso
 ~~~ JavaScript
 const bidan = require("../../modules/bidan")
 const { relu, sigmoid } = require("../../modules/func/Activationfunctions.js")
@@ -95,8 +52,12 @@ for (let i = 0; i < 100; i++) {
     console.log(MaxValue(ar));
 }
 
-lian.info() //Print info
 ~~~
+
+**[EN DESARROLLO]** 
+## introducion
+**módulo de JavaScript** para el desarrollo de **inteligencias artificiales**
+enfocado en la **simplicidad** de uso
 
 ## casos de uso
 **BidanJs** está enfocada en la **facilidad** de uso para desarrolladores **novatos** y en brindar **funcionalidades** para los más **avanzados**, utiliza tecnologías **JavaScript** se **recomienda** en servicios que usan JavaScript y puede ser usado con **TypeScript**
@@ -106,3 +67,42 @@ en la carpeta **Documentation** se encuertra **toda la documentacion** necesaria
 
 ## colaboracion
 estamos dispuestos a toda colaboración, si tienes un aporte contacte con nosotros
+~~~ JavaScript
+const bidan = require("../../modules/bidan")
+const { relu, sigmoid } = require("../../modules/func/Activationfunctions.js")
+const { MaxValue } = require("../../modules/func/InterpretFunctions")
+
+var lian = new bidan.Neuralnetwork() // Lian is a new IA
+
+//Config
+lian.LayerInputConfig(4, relu) 
+lian.LayersConfig([3, 2, 3], relu)
+lian.LayerOutputConfig(3, sigmoid)
+
+lian.initConnections()
+lian.useWeights(`./PesosLian_A_0`)
+
+//DataSet
+const data = JSON.parse(fs.readFileSync("dataset.json", "utf-8"))
+
+for (let i = 0; i < 100; i++) {
+    lian.reset() //reset the previous value
+
+    if (data[i][4] === "versicolor") {
+        let re = [1, 0, 0]
+    } else if (data[i][4] === "virginica") {
+        let re = [0, 1, 0]
+    } else if (data[i][4] === "setosa") {
+        let re = [0, 0, 1]
+    }
+
+
+    let d = [data[i][0], data[i][1], data[i][2], data[i][3]] //Data is
+    lian.StartPrediction(d)
+
+    console.log((MaxValue(re)));
+    let ar = lian.Output()
+    console.log(MaxValue(ar));
+}
+
+~~~

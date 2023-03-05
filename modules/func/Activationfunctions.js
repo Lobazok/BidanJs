@@ -3,7 +3,7 @@ const {logError} = require("../../colors/bidanColors")
 const step = (Input) => {
     var name = "step"
     if (typeof Input == "number") {
-        if (Input > 0) {
+        if (Input >= 0) {
             return 1
         } else return 0
     } else logError("Bidan error 003: la funcion de activacion <<Step>> no obtuvo un valor numerico")
