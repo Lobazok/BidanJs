@@ -14,9 +14,9 @@ It is also divided into articles, for functions, learning algorithms, file handl
 
 ~~~ JavaScript
 
-const midwife = require(".. /modules/midwife.js")
+const bidan = require("../modules/midwife.js")
 
-const { relu, sigmoid } = require(".. /modules/func/Activationfunctions.js")
+const { relu, sigmoid } = require("../modules/func/Activationfunctions.js")
 
 ~~~
 
@@ -24,7 +24,7 @@ const { relu, sigmoid } = require(".. /modules/func/Activationfunctions.js")
 
 ~~~ JavaScript
 
-var lian = new midwife. neuralnetwork()
+var lian = new bidan.neuralnetwork()
 
 ~~~
 
@@ -38,11 +38,11 @@ in BidanJs two ways are used with the config function of each layer or the gener
 
 ~~~ JavaScript
 
-lian. LayerInputConfig(2, sigmoid)
+lian.LayerInputConfig(2, sigmoid)
 
-Lian. LayersConfig([)3,4,2], proofread
+Lian.LayersConfig([3,4,2], relu)
 
-lian. LayerOutputConfig(4, sigmoid)
+lian.LayerOutputConfig(4, sigmoid)
 
 ~~~
 
@@ -58,7 +58,7 @@ This is how the functions are used
 
 ~~~ JavaScript
 
-lian. config(2, sigmoid, [3,4,2], relu, 4, sigmoid)
+lian.config(2, sigmoid, [3,4,2], relu, 4, sigmoid)
 
 ~~~
 
@@ -68,7 +68,7 @@ This function **groups together** all the parameters of the **previous functions
 
 ~~~ JavaScript
 
-Lian. info()
+lian.info()
 
 ~~~
 
@@ -80,7 +80,7 @@ function is used The ***info*** to display the information in the terminal
 
 ~~~ JavaScript
 
-lian. saveCofig("jinnData")
+lian.saveCofig("jinnData")
 
 ~~~
 
@@ -90,7 +90,7 @@ lian. saveCofig("jinnData")
 
 ~~~ JavaScript
 
-lian. mirror("jinnData")
+lian.mirror("jinnData")
 
 ~~~
 
@@ -102,7 +102,7 @@ lian. mirror("jinnData")
 
 ~~~ JavaScript
 
-lian. initConnections()
+lian.initConnections()
 
 ~~~
 
@@ -110,7 +110,7 @@ This function is used to generate connections between neurons, you can specify t
 
 ~~~ JavaScript
 
-lian. initConnections(false)
+lian.initConnections(false)
 
 ~~~
 
@@ -118,7 +118,7 @@ lian. initConnections(false)
 
 ~~~ JavaScript
 
-lian. reset()
+lian.reset()
 
 ~~~
 
@@ -130,7 +130,7 @@ resets the AI of the previous values, it is mandatory if the AI is used multiple
 
 ~~~ JavaScript
 
-lian. initWeights()
+lian.initWeights()
 
 ~~~
 
@@ -140,7 +140,7 @@ This function randomly initializes the network
 
 ~~~ JavaScript
 
-lian. saveWeigths(`./data/lianPesos${agent}`)
+lian.saveWeigths(`./data/lianPesos${agent}`)
 
 ~~~
 
@@ -150,7 +150,7 @@ It is used to save the current weight, the parameter is the address and the name
 
 ~~~ JavaScript
 
-lian. useWeights(`./data/lianPesos0`)
+lian.useWeights(`./data/lianPesos0`)
 
 ~~~
 
@@ -160,13 +160,13 @@ is used to load a weight, the parameter is the address and the name of the json 
 
 ~~~ JavaScript
 
-lian. StartPrediction(dataSet)
+lian.StartPrediction(dataSet)
 
 ~~~
 
 ~~~ JavaScript
 
-lian. StartPrediction(dataSet, false)
+lian.StartPrediction(dataSet, false)
 
 ~~~
 
@@ -178,7 +178,7 @@ is used to indicate the prediction of the network, the first parameter is the da
 
 ~~~ JavaScript
 
-lian. Output()
+lian.Output()
 
 ~~~
 
@@ -188,7 +188,7 @@ This function returns the output of the neural network, does not require any par
 
 ~~~ JavaScript
 
-lian. OutputLog()
+lian.OutputLog()
 
 ~~~
 
