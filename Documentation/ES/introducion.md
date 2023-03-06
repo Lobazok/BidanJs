@@ -252,15 +252,19 @@ esta funcion devuelve la salida de la red neuronal y imprime en consola la salid
 se proporcionan **5 funciones de activación** 
 
 + relu (Rectified Linear Unit), da 0 si el resultado es negativo, si no es negativo devuelve el input  
+
 $$
 r(x) = max(0,x)
 $$
 
 + leaky relu, a relu se le aplicara un sesgo de 0.01 en caso de que la entrada sea negativa 
+
 $$
 l(x) = max(0.01x,x)
 $$
+
 + step si el número es positivo devuelve 1, sí no 0, es binario 
+
 $$
 s(x) =
 \begin{cases}
@@ -268,9 +272,11 @@ s(x) =
 1 & \text{si } x \geq 0
 \end{cases}
 $$
+
 + sidmoid
+
 $$
-s(x) = 1 / (1 + e^-x)
+s(x) = 1 / (1 + e^{-x})
 $$ 
 
 + Tangente hiperbólica (TAHN) 
