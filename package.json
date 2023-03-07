@@ -1,7 +1,15 @@
 {
   "name": "bidanjs",
-  "version": "0.6",
-  "description": "javascript module for the development of artificial intelligences focused on simplicity of use",
+  "version": "0.7.0",
+  "description": "[IN DEVELOPMEN] JavaScript AI engine Focused on simplicity of use (only genetic algorithm currently available)",
   "author": "Lobazok",
-  "license": "MIT"
+  "license": "MIT",
+  "main": "bidan.js",
+  "repository": "https://github.com/Lobazok/BidanJs",
+  "files": [
+    "colors/",
+    "neuron.js",
+    "func/",
+    "genetic/"
+  ]
 }

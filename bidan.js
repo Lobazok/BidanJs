@@ -1,5 +1,5 @@
-const { logError } = require("../colors/bidanColors")
-const colors = require("../colors/bidanColors")
+const { logError } = require("./colors/bidanColors")
+const colors = require("./colors/bidanColors")
 
 
 const { perceptron } = require("./neuron")
@@ -7,6 +7,8 @@ const fs = require("fs")
 const { funcions } = require("./func/Activationfunctions")
 
 
+//? todos los archivos
+const neuron = require("./neuron")
 
 
 class Neuralnetwork {

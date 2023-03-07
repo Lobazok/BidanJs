@@ -1,4 +1,4 @@
-const {logError} = require("../../colors/bidanColors")
+const {logError} = require("../colors/bidanColors")
 
 const step = (Input) => {
     var name = "step"
