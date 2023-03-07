@@ -201,13 +201,21 @@ are provided **5 activation features**
 + relu (Rectified Linear Unit), gives 0 if the result is negative, if it is not negative returns the input
 
 $$
-r(x) = max(0,x)
+r(x) = 
+\begin{cases}
+0 & \text{if } x < 0 \\
+x & \text{if } x > 0
+\end{cases}
 $$
 
 + leaky relu, a relu will be applied a bias of 0.01 in case the entry is negative
 
 $$
-l(x) = max(0.01x,x)
+l(x) = 
+\begin{cases}
+0.01x & \text{if } x < 0 \\
+x & \text{if } x > 0
+\end{cases}
 $$
 
 + step if the number is positive returns 1, yes not 0, is binary
@@ -215,15 +223,15 @@ $$
 $$
 s(x) =
 \begin{cases}
-0 & \text{si } x < 0 \\
-1 & \text{si } x \geq 0
+0 & \text{if } x < 0 \\
+1 & \text{if } x \geq 0
 \end{cases}
 $$
 
 + sidmoid
 
 $$
-s(x) = 1 / (1 + e^{-x})
+s(x) = \frac{1}{1 + e^{-x}}
 $$
 
 + Hyperbolic tangent (HHN)

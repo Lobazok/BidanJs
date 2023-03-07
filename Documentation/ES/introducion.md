@@ -254,13 +254,21 @@ se proporcionan **5 funciones de activación**
 + relu (Rectified Linear Unit), da 0 si el resultado es negativo, si no es negativo devuelve el input  
 
 $$
-r(x) = max(0,x)
+r(x) = 
+\begin{cases}
+0 & \text{si } x < 0 \\
+x & \text{si } x > 0
+\end{cases}
 $$
 
 + leaky relu, a relu se le aplicara un sesgo de 0.01 en caso de que la entrada sea negativa 
 
 $$
-l(x) = max(0.01x,x)
+l(x) = 
+\begin{cases}
+0.01x & \text{si } x < 0 \\
+x & \text{si } x > 0
+\end{cases}
 $$
 
 + step si el número es positivo devuelve 1, sí no 0, es binario 
@@ -276,7 +284,7 @@ $$
 + sidmoid
 
 $$
-s(x) = 1 / (1 + e^{-x})
+s(x) =\frac{1}{1 + e^{-x}}
 $$ 
 
 + Tangente hiperbólica (TAHN) 
