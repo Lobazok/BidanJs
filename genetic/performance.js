@@ -85,13 +85,13 @@ class PerformanceLogger {
         } else logError("Bidan Genetic Error 001: the addResult function did not receive any valid parameters")
     }
 
-    analyzeResult = (margin = 0) => {
-        if (typeof margin == "number") {
+    analyzeResult = (fun = (a, b) => { return a / b.length }) => {
+        if (typeof fun == "function") {
             for (let i = 0; i < this.CurrentAgentPerformance.length; i++) {
                 if (JSON.stringify(this.CurrentAgentPerformance[i]) == JSON.stringify(this.CurrentAgentExperienced[i])) this.PerformaceAgentCurrent += 1
 
             }
-            this.PerformaceAgentCurrent = this.PerformaceAgentCurrent / this.CurrentAgentPerformance.length
+            this.PerformaceAgentCurrent = fun(this.PerformaceAgentCurrent, this.CurrentAgentPerformance.length)
 
             console.log(colors.performance(this.PerformaceAgentCurrent))
             this.PerformanceCurrent.push(this.PerformaceAgentCurrent)

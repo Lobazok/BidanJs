@@ -13,13 +13,19 @@ la documentación se divide en secciones, Junior para entender cómo usar el mó
 
 también se divide en artículos, para funciones, algoritmos de aprendizaje, manejo de archivos, entre otros 
 
+## instalación
+esta el modulo en npm, se ínstala con
+
+`npm i bidanjs`
+
+
 ## inicialización  
 
 ~~~ JavaScript 
 
-const bidan = require("../modules/bidan.js") 
+const bidan = require("bidanjs") 
 
-const { relu, sigmoid } = require("../modules/func/Activationfunctions.js") 
+const { relu, sigmoid } = require("bidanjs/Activationfunctions.js") 
 
 ~~~ 
 
@@ -111,7 +117,7 @@ se utiliza la función ***info*** para mostrar la información en la terminal
 
 ~~~ JavaScript 
 
-lian.saveCofig("jinnData") 
+lian.saveCofig("lianConfig") 
 
 ~~~ 
 
@@ -125,7 +131,7 @@ lian.saveCofig("jinnData")
 
 ~~~ JavaScript 
 
-lian.mirror("jinnData") 
+lian.mirror("lianConfig") 
 
 ~~~ 
 
@@ -242,7 +248,7 @@ esta funcion devuelve la salida de la red neuronal, no requiere ningun parametro
 lian.OutputLog() 
 
 ~~~
-esta funcion devuelve la salida de la red neuronal y imprime en consola la salida, no requiere ningun parametro y se usa en la etapa de **Dev**
+esta funcion devuelve la salida de la red neuronal y imprime en consola la salida, no requiere ningun parametro y se usa principalmente en la etapa de **Dev**
 
  
  
@@ -292,3 +298,19 @@ $$
 $$
 t(x) = \tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
 $$
+
+
+## algoritmos de entrenamiento
+los *algoritmos de entrenamiento* disponibles actualmente(v0.8.0) en bidanjs es el algoritmo genetico
+
+## algoritmo genetico
+el **algoritmo genetico en bidanjs** se implementa usando el ***performace Logger Genetic***, el ***BidanJs Genetic analysis panel*** y el ***Genetic composer***
+
+### performace Logger Genetic
+registra el rendimiento de los agentes, lo procesa y lo guarda
+
+### BidanJs Genetic analysis panel
+aplicacion de terminal para analizar el rendimiento de los agentes, usa estadistica descriptiva
+
+### Genetic composer
+el componente que se encarga de crear los archivos de pesos de las redes, mezcla los mejores genes y le agrega mutacion

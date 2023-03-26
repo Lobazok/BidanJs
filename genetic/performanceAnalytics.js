@@ -846,7 +846,7 @@ class analytic {
 		console.log();
 		console.log(colors.green("  Welcome to the BidanJs Genetic analysis panel!                          "));
 		console.log(colors.green("  use the help command to get information about available commands        "));
-		console.log(colors.green("  Bidan Genetic Panel                                      v:0.6        "));
+		console.log(colors.green("  Bidan Genetic Panel                                      v:0.8.0      "));
 		this.Terminal.index(terminal)
 	}
 }

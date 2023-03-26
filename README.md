@@ -14,6 +14,14 @@ in the folder **Documentation** is encorded **all the necessary documentation** 
 ## collaboration
 We are willing to all collaboration, if you have a contribution contact us
 
+
+## installation
+This module in npm, is instala with
+
+~~~shell
+npm i bidanjs
+~~~
+
 ~~~ JavaScript
 const bidan = require("../../modules/bidan")
 const { relu, sigmoid } = require("../../modules/func/Activationfunctions.js")
@@ -66,7 +74,15 @@ enfocado en la **simplicidad** de uso
 en la carpeta **Documentation** se encuertra **toda la documentacion** necesaria **ordenada por complejidad**, es en dos idiomas **Español** e **Ingles**
 
 ## colaboracion
-estamos dispuestos a toda colaboración, si tienes un aporte contacte con nosotros
+estamos dispuestos a toda colaboración, si tienes un aporte contacte con nosotros.
+
+## instalación
+esta el modulo en npm, se ínstala con
+
+~~~ shell
+npm i bidanjs
+~~~
+
 ~~~ JavaScript
 const bidan = require("../../modules/bidan")
 const { relu, sigmoid } = require("../../modules/func/Activationfunctions.js")

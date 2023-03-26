@@ -10,13 +10,19 @@ the documentation is divided into sections, Junior to understand how to use the 
 
 It is also divided into articles, for functions, learning algorithms, file handling, among others
 
+## installation
+
+This module in NPM, it is installed with
+
+`npm i bidanjs`
+
 ## initialization
 
 ~~~ JavaScript
 
-const bidan = require("../modules/midwife.js")
+const bidan = require("bidanjs")
 
-const { relu, sigmoid } = require("../modules/func/Activationfunctions.js")
+const { relu, sigmoid } = require("bidanjs/Activationfunctions.js")
 
 ~~~
 
@@ -24,7 +30,7 @@ const { relu, sigmoid } = require("../modules/func/Activationfunctions.js")
 
 ~~~ JavaScript
 
-var lian = new bidan.neuralnetwork()
+var lian = new bidan.Neuralnetwork()
 
 ~~~
 
@@ -80,7 +86,7 @@ function is used The ***info*** to display the information in the terminal
 
 ~~~ JavaScript
 
-lian.saveCofig("jinnData")
+lian.saveCofig("lianConfig")
 
 ~~~
 
@@ -90,7 +96,7 @@ lian.saveCofig("jinnData")
 
 ~~~ JavaScript
 
-lian.mirror("jinnData")
+lian.mirror("lianConfig")
 
 ~~~
 
@@ -124,7 +130,7 @@ lian.reset()
 
 resets the AI of the previous values, it is mandatory if the AI is used multiple times in the same execution
 
-### pesos
+### Weights
 
 #### start weights randomly
 
@@ -136,7 +142,7 @@ lian.initWeights()
 
 This function randomly initializes the network
 
-#### save pesos
+#### saveWeigths
 
 ~~~ JavaScript
 
@@ -146,7 +152,7 @@ lian.saveWeigths(`./data/lianPesos${agent}`)
 
 It is used to save the current weight, the parameter is the address and the name in which the weight will be saved, if the file already exists will be replaced, the address and name should not include the ending *".json"*, because internally you already add it
 
-#### use weights
+#### useweights
 
 ~~~ JavaScript
 
@@ -156,7 +162,7 @@ lian.useWeights(`./data/lianPesos0`)
 
 is used to load a weight, the parameter is the address and the name of the json file with the weight and name should not include the ending *".json"*, because internally it already adds it, it is used in **Dev** and in **Produce**
 
-### tickets
+### inputs
 
 ~~~ JavaScript
 
@@ -165,14 +171,13 @@ lian.StartPrediction(dataSet)
 ~~~
 
 ~~~ JavaScript
-
 lian.StartPrediction(dataSet, false)
 
 ~~~
 
 is used to indicate the prediction of the network, the first parameter is the data (information) the inputs, it must be an array of equal length to the number of input neurons, the second parameter is optional, indicates if it is printed in console "Start Prediction"
 
-### Departures
+### Output
 
 #### Output function
 
@@ -182,7 +187,7 @@ lian.Output()
 
 ~~~
 
-This function returns the output of the neural network, does not require any parameter
+This function returns the output of the neural network, does not require any parameters
 
 #### OutputLog function
 
@@ -192,7 +197,7 @@ lian.OutputLog()
 
 ~~~
 
-this function returns the output of the neural network and prints the output to console, does not require any parameter and is used in the **Dev** stage
+this function returns the output of the neural network and prints the output to console, does not require any parameters and is mainly used in the **Dev** stage
 
 ## activation functions
 
@@ -201,41 +206,77 @@ are provided **5 activation features**
 + relu (Rectified Linear Unit), gives 0 if the result is negative, if it is not negative returns the input
 
 $$
-r(x) = 
-\begin{cases}
-0 & \text{if } x < 0 \\
-x & \text{if } x > 0
+
+r(x) =
+
+\begin{cases} 0 & \text{si } x < 0 \\
+
+x & \text{si } x > 0
+
 \end{cases}
+
 $$
 
 + leaky relu, a relu will be applied a bias of 0.01 in case the entry is negative
 
 $$
-l(x) = 
-\begin{cases}
-0.01x & \text{if } x < 0 \\
-x & \text{if } x > 0
+
+l(x) =
+
+\begin{cases} 0.01x & \text{si } x < 0 \\
+
+x & \text{si } x > 0
+
 \end{cases}
+
 $$
 
 + step if the number is positive returns 1, yes not 0, is binary
 
 $$
+
 s(x) =
-\begin{cases}
-0 & \text{if } x < 0 \\
-1 & \text{if } x \geq 0
+
+\begin{cases} 0 & \text{si } x < 0 \\
+
+1 & \text{si } x \geq 0
+
 \end{cases}
+
 $$
 
 + sidmoid
 
++ sidmoid
+
 $$
-s(x) = \frac{1}{1 + e^{-x}}
-$$
+s(x) =\frac{1}{1 + e^{-x}}
+$$ 
 
 + Hyperbolic tangent (HHN)
 
 $$
+
 t(x) = \tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
+
 $$
+
+## Training algorithms
+
+The *training algorithms* currently available (v0.8.0) in BidanJS is the genetic algorithm
+
+## genetic algorithm
+
+the **genetic algorithm in bidanjs** is implemented using the ***performace Logger Genetic***, ** the ***BidanJs Genetic analysis panel*** and the ***Genetic composer***
+
+### performace Logger Genetic
+
+Logs agent performance, processes it, and saves it
+
+### BidanJs Genetic analysis panel
+
+Terminal application to analyze agent performance, uses descriptive statistics
+
+### Genetic composer
+
+The component that is responsible for creating the weight files of the networks mixes the best genes and adds mutation
