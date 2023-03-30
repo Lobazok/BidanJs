@@ -1,6 +1,6 @@
-const { logError } = require("../../colors/bidanColors")
-const colors = require("../../colors/bidanColors")
-const cilan = require("../../colors/colors")
+const { logError } = require("../colors/bidanColors")
+const colors = require("../colors/bidanColors")
+const cilan = require("../colors/colors")
 
 const fs = require("fs")
 

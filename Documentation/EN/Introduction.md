@@ -14,7 +14,10 @@ It is also divided into articles, for functions, learning algorithms, file handl
 
 This module in NPM, it is installed with
 
-`npm i bidanjs`
+~~~
+npm i bidanjs
+~~~
+
 
 ## initialization
 
@@ -257,7 +260,7 @@ $$
 
 $$
 
-t(x) = \tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
+t(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
 
 $$
 

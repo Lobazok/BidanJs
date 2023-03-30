@@ -16,8 +16,9 @@ también se divide en artículos, para funciones, algoritmos de aprendizaje, man
 ## instalación
 esta el modulo en npm, se ínstala con
 
-`npm i bidanjs`
-
+~~~
+npm i bidanjs
+~~~
 
 ## inicialización  
 
@@ -296,7 +297,7 @@ $$
 + Tangente hiperbólica (TAHN) 
 
 $$
-t(x) = \tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
+t(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
 $$
 
 

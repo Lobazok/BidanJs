@@ -1,5 +1,5 @@
-const { logError } = require("../../colors/bidanColors")
-const colors = require("../../colors/bidanColors")
+const { logError } = require("../colors/bidanColors")
+const colors = require("../colors/bidanColors")
 
 const fs = require("fs")
 const readline = require('readline');

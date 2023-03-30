@@ -133,7 +133,7 @@ class Neuralnetwork {
     //funcion que replica la configuracion de una red
     mirror = (direction) => {
         //obtenemos la configuracion y la transformamos en un array
-        const data = Object.values(JSON.parse(fs.readFileSync(direction, "utf-8")))
+        const data = Object.values(JSON.parse(fs.readFileSync(direction + ".json", "utf-8")))
         let configuration = [];
         for (var i = 0; i < data.length; i++) {
             configuration.push(data[i][0], data[i][1])
