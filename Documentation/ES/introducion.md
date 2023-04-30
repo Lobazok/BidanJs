@@ -1,284 +1,370 @@
-# introducción 
+# introducción
 
-**módulo de JavaScript** para el desarrollo de **inteligencias artificiales** 
 
-enfocado en la **simplicidad** de uso, usa Programación Orientada a Object (POO) y empaqueta todas las funcionalidades necesarias para su uso 
+**módulo de JavaScript** para el desarrollo de **inteligencias artificiales**
 
-## estructura de la documentación 
 
-la documentación se divide en secciones, Junior para entender cómo usar el módulo, SemiSenior para especializarse, mejorar en el uso del módulo y Senior para entender cómo funciona internamente el módulo. 
+enfocado en la **simplicidad** de uso, usa **Programación Orientada a Object (POO)** y empaqueta todas las funcionalidades necesarias para su uso
+
+
+se **requiere de nodeJs** para ejecutarlo
+
+
+---
+## índice
++ estructura de la documentación
++ instalación y NPM
++ inicialización
+   - configuración
++ guardar información de la red y replicar otra red
+   - guardar información de la red
+   - replicar otra red
++ pesos, conexiones, entradas y salidas
+   - conexiones
+      * reset
+   - pesos
+      * iniciar pesos de manera aleatoria
+      * guardar pesos
+      * usar pesos
+   - entradas
+   - Salidas
+      * función Output
+      * función OutputLog
+   - funciones de activación
+   - algoritmos de entrenamiento
+      * algoritmo genético
+        - performace Logger Genetic
+        - BidanJs Genetic analysis panel
+        - Genetic composer
+
+
+
+
+---
+## estructura de la documentación
+
+
+La documentación se divide en secciones, Junior para entender cómo usar el módulo, SemiSenior para especializarse, mejorar en el uso del módulo y Senior para entender cómo funciona internamente el módulo.
+
 
  
  
 
-también se divide en artículos, para funciones, algoritmos de aprendizaje, manejo de archivos, entre otros 
 
-## instalación
-esta el modulo en npm, se ínstala con
+también se divide en artículos, para funciones, algoritmos de aprendizaje, manejo de archivos, entre otros
+
+
+---
+
+
+## instalación y NPM
+está el módulo en npm, se instala con
+
 
 ~~~
 npm i bidanjs
 ~~~
 
+
+---
+
+
 ## inicialización  
 
-~~~ JavaScript 
 
-const bidan = require("bidanjs") 
+~~~ JavaScript
+const bidan = require("bidanjs")
 
-const { relu, sigmoid } = require("bidanjs/Activationfunctions.js") 
+const { relu, sigmoid } = require("bidanjs/Activationfunctions.js")
+~~~
 
-~~~ 
 
-se **importa** ***BidanJs*** y las ***funciones de activación*** que se usaran 
+se **importa** ***BidanJs*** y las ***funciones de activación*** que se usarán
 
-~~~ JavaScript 
 
-var lian = new bidan.Neuralnetwork() 
+~~~ JavaScript
+var lian = new bidan.Neuralnetwork()
+~~~
 
-~~~ 
-
- 
- 
-
-se crea un nuevo objecto de tipo Neuralnetwork y se configura 
 
  
  
 
-### configuración 
 
-en BidanJs se utilizan dos maneras con la función config de cada capa o la función general config 
+se crea un nuevo objecto de tipo Neuralnetwork y se configura
 
- 
- 
-
-#### función config de cada capa 
-
-~~~ JavaScript 
-
-lian.LayerInputConfig(2, sigmoid) 
-
-lian.LayersConfig([3,4,2], relu) 
-
-lian.LayerOutputConfig(4, sigmoid) 
-
-~~~ 
-
-de esta manera se usan las funciones 
-
-+ LayerInputConfig para la configuración de capa de entrada, el primer parámetro es la cantidad de neuronas en forma de número y el segundo la función de activación que usa la capa. 
 
  
  
 
-+ LayersConfig para la configuración de las capas ocultas, el primer parámetro si es un array es la cantidad de neuronas de cada capa, cada elemento del array es una capa y si se recibe como numero será una sola capa con la cantidad de neuronas especificadas, el segundo la función de activación que usa la capa. 
+
+### configuración
+
+
+en BidanJs se utilizan dos maneras con la función config de cada capa o la función general config
+
 
  
  
 
-+ LayerOutputConfig para la configuración de capa de salida, el primer parámetro es la cantidad de neuronas en forma de número y el segundo la función de activación que usa la capa. 
+
+#### función config de cada capa
+
+
+~~~ JavaScript
+lian.LayerInputConfig(2, sigmoid)
+lian.LayersConfig([3,4,2], relu)
+lian.LayerOutputConfig(4, sigmoid)
+~~~
+
+
+de esta manera se usan las funciones
+
+
++ LayerInputConfig para la configuración de capa de entrada, el primer parámetro es la cantidad de neuronas en forma de número y el segundo la función de activación que usa la capa.
+
 
  
  
 
-#### función config  general 
 
-~~~ JavaScript 
++ LayersConfig para la configuración de las capas ocultas, el primer parámetro si es un array es la cantidad de neuronas de cada capa, cada elemento del array es una capa y si se recibe como número será una sola capa con la cantidad de neuronas específicas, el segundo la función de activación que usa la capa.
 
-lian.config(2, sigmoid, [3,4,2], relu, 4, sigmoid) 
-
-~~~ 
-
-esta función **agrupa** todos los parámetros de las **funciones anteriores** 
-
- 
- 
- 
-
-#### obtener información de la red 
 
  
  
 
-~~~ JavaScript 
 
-lian.info() 
++ LayerOutputConfig para la configuración de capa de salida, el primer parámetro es la cantidad de neuronas en forma de número y el segundo la función de activación que usa la capa.
 
-~~~ 
-
-se utiliza la función ***info*** para mostrar la información en la terminal 
 
  
  
 
-## guardar información de la red y replicar otra red 
 
-### guardar información de la red 
+#### función config  general
 
-~~~ JavaScript 
 
-lian.saveCofig("lianConfig") 
+~~~ JavaScript
+lian.config(2, sigmoid, [3,4,2], relu, 4, sigmoid)
+~~~
 
-~~~ 
 
-***saveCofig*** se usa para guardar la información de la red, el primer parámetro es nombre del archivo **(sin la terminación en .json)** 
+esta función **agrupa** todos los parámetros de las **funciones anteriores**
+
 
  
  
  
 
-### replicar otra red 
 
-~~~ JavaScript 
+#### obtener información de la red
 
-lian.mirror("lianConfig") 
-
-~~~ 
-
-***mirror*** se usa para replicar la configuración de otra red, el primer parámetro es nombre del archivo **(sin la terminación en .json)** 
-
-
-## pesos, conexiones, entradas y salidas 
 
  
  
 
-### conexiones 
 
-~~~ JavaScript 
+~~~ JavaScript
+lian.info()
+~~~
 
-lian.initConnections() 
 
-~~~ 
+se utiliza la función ***info*** para mostrar la información en la terminal
 
-esta función se utiliza para generar las conexiones entre las neuronas, se puede especificar que no imprima ningún mensaje en consola 
 
-~~~ JavaScript 
+ 
+ 
+---
 
-lian.initConnections(false) 
 
-~~~ 
+## guardar información de la red y replicar otra red
+
+
+### guardar información de la red
+
+
+~~~ JavaScript
+lian.saveCofig("lianConfig")
+~~~
+
+
+***saveCofig*** se usa para guardar la información de la red, el primer parámetro es nombre del archivo **(sin la terminación en .json)**
+
+
+ 
+ 
+ 
+
+
+### replicar otra red
+
+
+~~~ JavaScript
+lian.mirror("lianConfig")
+~~~
+
+
+***mirror*** se usa para replicar la configuración de otra red, el primer parámetro es nombre del archivo **(sin la terminación en .json)**
+
+
+
+
+## pesos, conexiones, entradas y salidas
+
 
  
  
 
-#### reset 
 
-~~~ JavaScript 
+### conexiones
 
-lian.reset() 
 
-~~~ 
+~~~ JavaScript
+lian.initConnections()
+~~~
 
-resetea la IA de los valores anteriores, es obligatorio si la IA se usa múltiples veces en una misma ejecución 
 
- 
- 
+esta función se utiliza para generar las conexiones entre las neuronas, se puede especificar que no imprima ningún mensaje en consola
 
-### pesos 
 
-#### iniciar pesos de manera aleatoria 
+~~~ JavaScript
+lian.initConnections(false)
+~~~
 
-~~~ JavaScript 
-
-lian.initWeights() 
-
-~~~ 
-
-esta función inicializa la red de manera aleatoria 
 
  
  
 
-#### guardar pesos 
 
-~~~ JavaScript 
+#### reset
 
-lian.saveWeigths(`./data/lianPesos${agent}`) 
 
-~~~ 
+~~~ JavaScript
+lian.reset()
+~~~
 
-se usa para guardar el peso actual, el parámetro es la dirección y el nombre en el que el peso se guardara, sí ya existe el archivo se remplazara, la dirección y nombre no deben incluir la terminación *".json"*, porque internamente ya lo agrega 
 
- 
- 
+resetea la IA de los valores anteriores, es obligatorio si la IA se usa múltiples veces en una misma ejecución
 
-#### usar pesos 
-
-~~~ JavaScript 
-
-lian.useWeights(`./data/lianPesos0`) 
-
-~~~ 
-
-se usa para cargar un peso, el parámetro es la dirección y el nombre del archivo json con el peso y nombre no deben incluir la terminación *".json"*, porque internamente ya lo agrega, se usa en **Dev** y en **Produc** 
 
  
  
 
-### entradas 
 
-~~~ JavaScript 
+### pesos
 
-lian.StartPrediction(dataSet) 
+#### iniciar pesos de manera aleatoria
 
-~~~ 
 
-~~~ JavaScript 
+~~~ JavaScript
+lian.initWeights()
+~~~
 
-lian.StartPrediction(dataSet, false) 
 
-~~~ 
+esta función inicializa la red de manera aleatoria
 
-se usa para indicar la predicción de la red, el primer parámetro es la data(información) las entradas, debe ser un array de igual longitud que el número de neuronas de entrada, el segundo parámetro es opcional, indica si se imprime en consola "Start Prediction" 
+
+
+#### guardar pesos
+
+
+~~~ JavaScript
+lian.saveWeigths(`./data/lianPesos${agent}`)
+~~~
+
+
+se usa para guardar el peso actual, el parámetro es la dirección y el nombre en el que el peso se guardará, sí ya existe el archivo se reemplazará, la dirección y nombre no deben incluir la terminación *".json"*, porque internamente ya lo agrega
+
+
+ 
+ 
+
+
+#### usar pesos
+
+
+~~~ JavaScript
+lian.useWeights(`./data/lianPesos0`)
+~~~
+
+
+se usa para cargar un peso, el parámetro es la dirección y el nombre del archivo json con el peso y nombre no deben incluir la terminación *".json"*, porque internamente ya lo agrega, se usa en **Dev** y en **Produc**
+
+
+ 
+ 
+
+
+### entradas
+
+
+~~~ JavaScript
+lian.StartPrediction(dataSet)
+~~~
+
+
+~~~ JavaScript
+lian.StartPrediction(dataSet, false)
+~~~
+
+
+se usa para indicar la predicción de la red, el primer parámetro es la data(información) las entradas, debe ser un array de igual longitud que el número de neuronas de entrada, el segundo parámetro es opcional, indica si se imprime en consola "Start Prediction"
+
 
 ### Salidas
 
-#### funcion Output
-~~~ JavaScript 
 
-lian.Output() 
-
+#### función Output
+~~~ JavaScript
+lian.Output()
 ~~~
-esta funcion devuelve la salida de la red neuronal, no requiere ningun parametro
+esta función devuelve la salida de la red neuronal, no requiere ningún parámetro
 
-#### funcion OutputLog
-~~~ JavaScript 
 
-lian.OutputLog() 
-
+#### función OutputLog
+~~~ JavaScript
+lian.OutputLog()
 ~~~
-esta funcion devuelve la salida de la red neuronal y imprime en consola la salida, no requiere ningun parametro y se usa principalmente en la etapa de **Dev**
+esta función devuelve la salida de la red neuronal y imprime en consola la salida, no requiere ningún parámetro y se usa principalmente en la etapa de **Dev**
+
 
  
- 
+---
 
-## funciones de activación 
 
-se proporcionan **5 funciones de activación** 
+## funciones de activación
+
+
+se proporcionan **5 funciones de activación**
+
 
 + relu (Rectified Linear Unit), da 0 si el resultado es negativo, si no es negativo devuelve el input  
 
+
 $$
-r(x) = 
+r(x) =
 \begin{cases}
 0 & \text{si } x < 0 \\
 x & \text{si } x > 0
 \end{cases}
 $$
 
-+ leaky relu, a relu se le aplicara un sesgo de 0.01 en caso de que la entrada sea negativa 
+
++ leaky relu, a relu se le aplicará un sesgo de 0.01 en caso de que la entrada sea negativa
+
 
 $$
-l(x) = 
+l(x) =
 \begin{cases}
 0.01x & \text{si } x < 0 \\
 x & \text{si } x > 0
 \end{cases}
 $$
 
-+ step si el número es positivo devuelve 1, sí no 0, es binario 
+
++ step si el número es positivo devuelve 1, sí no 0, es binario
+
 
 $$
 s(x) =
@@ -288,30 +374,42 @@ s(x) =
 \end{cases}
 $$
 
-+ sidmoid
+
++ sigmoid
+
 
 $$
 s(x) =\frac{1}{1 + e^{-x}}
-$$ 
+$$
 
-+ Tangente hiperbólica (TAHN) 
+
++ Tangente hiperbólica (TAHN)
+
 
 $$
 t(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
 $$
 
 
+
+
 ## algoritmos de entrenamiento
-los *algoritmos de entrenamiento* disponibles actualmente(v0.8.0) en bidanjs es el algoritmo genetico
+los *algoritmos de entrenamiento* disponibles actualmente(v0.8.0) en bidanjs es el algoritmo genético
 
-## algoritmo genetico
-el **algoritmo genetico en bidanjs** se implementa usando el ***performace Logger Genetic***, el ***BidanJs Genetic analysis panel*** y el ***Genetic composer***
 
-### performace Logger Genetic
-registra el rendimiento de los agentes, lo procesa y lo guarda
+### algoritmo genético
+el **algoritmo genético en bidanjs** se implementa usando el ***performace Logger Genetic***, el ***BidanJs Genetic analysis panel*** y el ***Genetic composer***
 
-### BidanJs Genetic analysis panel
-aplicacion de terminal para analizar el rendimiento de los agentes, usa estadistica descriptiva
 
-### Genetic composer
-el componente que se encarga de crear los archivos de pesos de las redes, mezcla los mejores genes y le agrega mutacion
+#### performace Logger Genetic
+registra el rendimiento de los agentes, lo procesa y lo guarda en archivos *json*
+
+
+#### BidanJs Genetic analysis panel
+aplicación  de terminal para analizar el rendimiento de los agentes, usa estadística  descriptiva
+
+
+#### Genetic composer
+el componente que se encarga de crear los archivos de pesos de las redes, mezcla los mejores genes y le agrega mutación
+
+
