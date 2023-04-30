@@ -1,4 +1,4 @@
-[![★](https://img.shields.io/github/stars/Lobazok/BidanJs/bidan](https://www.npmjs.com/package/bidanjs)
+
 # BidanJs
 **[UNDER DEVELOPMENT]** 
 ## introduction
