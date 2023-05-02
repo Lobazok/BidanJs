@@ -11,5 +11,15 @@
     "neuron.js",
     "func/",
     "genetic/"
-  ]
+  ],
+  "keywords": [
+    "ai",
+    "artificial-intelligence",
+    "neural network",
+    "machine-learning",
+    "deep-learning"
+  ],
+  "scripts": {
+    "geneticpanel" : "node genetic/geneticPanel.js"
+  }
 }
