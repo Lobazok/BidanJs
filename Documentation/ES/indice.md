@@ -27,7 +27,7 @@ rutas de todos los archivos y los contenidos dentro
       * función OutputLog
    - funciones de activación
    - algoritmos de entrenamiento
-      * algoritmo genético
+      * algoritmo evolutivo
         - performace Logger Genetic
         - BidanJs Genetic analysis panel
         - Genetic composer

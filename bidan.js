@@ -131,9 +131,24 @@ class Neuralnetwork {
     }
 
     //funcion que replica la configuracion de una red
-    mirror = (direction) => {
+    readMirror = (direction) => {
         //obtenemos la configuracion y la transformamos en un array
         const data = Object.values(JSON.parse(fs.readFileSync(direction + ".json", "utf-8")))
+        let configuration = [];
+        for (var i = 0; i < data.length; i++) {
+            configuration.push(data[i][0], data[i][1])
+        }
+        const findFunction = (functionName) => {
+            return funcions.find((f) => f.name === functionName)
+        }
+
+        this.config(configuration[0], findFunction(configuration[1]), configuration[2], findFunction(configuration[3]), configuration[4], findFunction(configuration[5]))
+        console.log(colors.mirror("mirror Neuralnetwork"));
+    }
+    //funcion que replica la configuracion de una red
+    mirror = (d) => {
+        //obtenemos la configuracion y la transformamos en un array
+        const data = Object.values(d)
         let configuration = [];
         for (var i = 0; i < data.length; i++) {
             configuration.push(data[i][0], data[i][1])
@@ -178,6 +193,10 @@ class Neuralnetwork {
         console.log(colors.save("Config of Neuralnetwork save"));
         const json = JSON.stringify(this.data)
         fs.writeFileSync(name + ".json", json)
+    }
+    //funcion para leer una configuracion
+    readCofig = () => {
+        return this.data
     }
 
     //funcion para iniciar las conexiones entre neuronas
@@ -319,15 +338,61 @@ class Neuralnetwork {
         const json = JSON.stringify(data)
         fs.writeFileSync(name + ".json", json)
     }
+    //funcion para guardar una configuracion
+    getWeight = (name) => {
+        let data = {
+            config: this.data,
+            weight: {
+                LayerInput: [],
+                Layer: [],
+                LayerOutput: []
+            }
+        }
 
-    useWeights = (direction) => {
+        for (let i = 0; i < this.LayerInput.length; i++) {
+            data.weight.LayerInput.push(this.LayerInput[i].weight)
+        }
+        for (let i = 0; i < this.LayerOutput.length; i++) {
+            data.weight.LayerOutput.push(this.LayerOutput[i].weight)
+        }
+        for (let o = 0; o < this.Layer.length; o++) {
+            let layer = []
+            for (let u = 0; u < this.Layer[o].length; u++) {
+                let a = []
+                for (let i = 0; i < this.Layer[o][u].weight.length; i++) {
+                    a.push(this.Layer[o][u].weight[i])
+                }
+                layer.push(a)
+            }
+            data.weight.Layer.push(layer)
+        }
 
-        //if (typeof direction == "string") {
-            let data = JSON.parse(fs.readFileSync(direction + ".json", "utf-8"))
-        /* } else {
-            let data = direction
-        } */
+        return data
+    }
 
+
+    readWeights = (direction) => {
+        let data = JSON.parse(fs.readFileSync(direction + ".json", "utf-8"))
+
+
+        for (let i = 0; i < this.LayerInput.length; i++) {
+
+            this.LayerInput[i].weight = data.weight.LayerInput[i]
+        }
+
+        for (let i = 0; i < this.LayerOutput.length; i++) {
+
+            this.LayerOutput[i].weight = data.weight.LayerOutput[i]
+        }
+
+        for (let o = 0; o < this.Layer.length; o++) {
+            for (let u = 0; u < this.Layer[o].length; u++) {
+                this.Layer[o][u].weight = data.weight.Layer[o][u]
+            }
+        }
+    }
+
+    useWeights = (data) => {
         for (let i = 0; i < this.LayerInput.length; i++) {
 
             this.LayerInput[i].weight = data.weight.LayerInput[i]

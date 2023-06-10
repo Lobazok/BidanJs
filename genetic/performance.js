@@ -99,9 +99,6 @@ class PerformanceLogger {
     }
 
     saveData = () => {
-
-
-
         if (fs.existsSync(this.routeData)) {
 
             let file = JSON.parse(fs.readFileSync(this.routeData, "utf-8"))

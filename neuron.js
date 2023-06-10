@@ -44,16 +44,6 @@ class perceptron {
         }
 
     }
-    
-    info = () => {
-        console.log("Neuron: " + this.name);
-        console.log(" Input: " + this.Input);
-        console.log(" weight: " + this.weight);
-        console.log(" Output: " + this.Output.length);
-        console.log(" Activation function: " + this.Activationfunction.name);
-        console.log(" result bruto: " + this.cal());
-        console.log(" result: " + this.Activationfunction(this.cal()));
-    }
 
 
 }

@@ -32,7 +32,7 @@ se **requiere de nodeJs** para ejecutarlo
       * función OutputLog
    - funciones de activación
    - algoritmos de entrenamiento
-      * algoritmo genético
+      * algoritmo evolutivo
         - performace Logger Genetic
         - BidanJs Genetic analysis panel
         - Genetic composer
@@ -111,19 +111,36 @@ se utiliza la función ***info*** para mostrar la información en la terminal
 
 ### guardar información de la red
 
+#### saveCofig
+
 ~~~ JavaScript
 lian.saveCofig("lianConfig")
 ~~~
 
 ***saveCofig*** se usa para guardar la información de la red, el primer parámetro es nombre del archivo **(sin la terminación en .json)**
 
-### replicar otra red
-
+#### readCofig
 ~~~ JavaScript
-lian.mirror("lianConfig")
+lian.readCofig()
 ~~~
 
-***mirror*** se usa para replicar la configuración de otra red, el primer parámetro es nombre del archivo **(sin la terminación en .json)**
+***readCofig*** se usa para leer la información de la red, no acepta parámetros, devuelve un JSON
+
+### replicar otra red
+
+#### readMirror
+~~~ JavaScript
+lian.readMirror("lianConfig")
+~~~
+
+***readMirror*** se usa para replicar la configuración de otra red,lee directamente el archivo, el primer parámetro es nombre del archivo **(sin la terminación en .json)**
+
+#### mirror
+~~~ JavaScript
+lian.mirror(data)
+~~~
+
+***mirror*** se usa para replicar la configuración de otra red, acepta directamente el archivo, el primer parámetro es la configuración
 
 ## pesos, conexiones, entradas y salidas
 
@@ -155,23 +172,39 @@ resetea la IA de los valores anteriores, es obligatorio si la IA se usa múltipl
 lian.initWeights()
 ~~~
 
-esta función inicializa la red de manera aleatoria
+esta función inicializa la red de manera aleatoria, no acepta parámetro
 
 #### guardar pesos
 
+##### saveWeigths
 ~~~ JavaScript
 lian.saveWeigths(`./data/lianPesos${agent}`)
 ~~~
 
 se usa para guardar el peso actual, el parámetro es la dirección y el nombre en el que el peso se guardará, sí ya existe el archivo se reemplazará, la dirección y nombre no deben incluir la terminación *".json"*, porque internamente ya lo agrega
 
+##### getWeigths
+~~~ JavaScript
+lian.getWeigths()
+~~~
+
+se usa para obtener los pesos actuales, no acepta parámetro
+
 #### usar pesos
 
+##### readWeights
 ~~~ JavaScript
-lian.useWeights(`./data/lianPesos0`)
+lian.readWeights(`./data/lianPesos0`)
 ~~~
 
 se usa para cargar un peso, el parámetro es la dirección y el nombre del archivo json con el peso y nombre no deben incluir la terminación *".json"*, porque internamente ya lo agrega, se usa en **Dev** y en **Produc**
+
+##### useWeights
+~~~ JavaScript
+lian.useWeights(data)
+~~~
+
+se usa para cargar un peso, el parámetro son los pesos, se usa en **Dev** y en **Produc**
 
 ### entradas
 
@@ -259,7 +292,7 @@ $$
 los *algoritmos de entrenamiento* disponibles actualmente(v0.8.0) en bidanjs es el algoritmo genético
 
 
-### algoritmo genético
+### algoritmo evolutivo
 el **algoritmo genético en bidanjs** se implementa usando el ***performace Logger Genetic***, el ***BidanJs Genetic analysis panel*** y el ***Genetic composer***
 
 #### performace Logger Genetic

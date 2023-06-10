@@ -1,6 +1,6 @@
 {
   "name": "bidanjs",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "[IN DEVELOPMEN] JavaScript AI engine Focused on simplicity of use (only genetic algorithm currently available)",
   "author": "Lobazok",
   "license": "MIT",
@@ -12,14 +12,15 @@
     "func/",
     "genetic/"
   ],
+  "scripts": {
+    "geneticpanel" : "node genetic/geneticPanel.js"
+  },
   "keywords": [
     "ai",
     "artificial-intelligence",
     "neural network",
     "machine-learning",
     "deep-learning"
-  ],
-  "scripts": {
-    "geneticpanel" : "node genetic/geneticPanel.js"
-  }
+  ]
+  
 }
