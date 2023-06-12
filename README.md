@@ -1,6 +1,9 @@
 
 # BidanJs
-**[UNDER DEVELOPMENT]** 
+![downlods](https://img.shields.io/npm/dt/bidanjs?style=for-the-badge)
+![](https://img.shields.io/bundlephobia/min/bidanjs?style=for-the-badge)
+![license](https://img.shields.io/npm/l/bidanjs?style=for-the-badge)
+![version](https://img.shields.io/npm/v/bidanjs?style=for-the-badge)**[UNDER DEVELOPMENT]** 
 ## introduction
 **JavaScript module** for the development of **artificial intelligences**
 Focused on **simplicity** of use
