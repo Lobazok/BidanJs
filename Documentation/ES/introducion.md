@@ -240,7 +240,7 @@ se proporcionan **5 funciones de activación**
 $$
 r(x) =
 \begin{cases}
-0 & \text{si } x < 0 \\
+0 & \text{si } x <= 0 \\
 x & \text{si } x > 0
 \end{cases}
 $$
@@ -252,7 +252,7 @@ $$
 $$
 l(x) =
 \begin{cases}
-0.01x & \text{si } x < 0 \\
+0.01x & \text{si } x <= 0 \\
 x & \text{si } x > 0
 \end{cases}
 $$
@@ -264,9 +264,8 @@ $$
 $$
 s(x) =
 \begin{cases}
-0 & \text{si } x < 0 \\
-
-1 & \text{si } x \geq 0
+0 & \text{si } x <= 0 \\
+1 & \text{si } x > 0
 \end{cases}
 $$
 
