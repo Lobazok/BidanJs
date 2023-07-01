@@ -1,39 +1,39 @@
 # introducción
 
 
-**módulo de JavaScript** para el desarrollo de **inteligencias artificiales**
+**Módulo de JavaScript** para el desarrollo de **inteligencias artificiales**.
 
 
-enfocado en la **simplicidad** de uso, usa **Programación Orientada a Object (POO)** y empaqueta todas las funcionalidades necesarias para su uso
+Enfocado en la **simplicidad** de uso, usa **Programación Orientada a Object (POO)** y empaqueta todas las funcionalidades necesarias para su uso.
 
 
-se **requiere de nodeJs** para ejecutarlo
-
+Se **requiere de nodeJs** para ejecutarlo
 
 ---
-## índice
-+ estructura de la documentación
-+ instalación y NPM
-+ inicialización
-   - configuración
-+ guardar información de la red y replicar otra red
-   - guardar información de la red
-   - replicar otra red
-+ pesos, conexiones, entradas y salidas
-   - conexiones
-      * reset
-   - pesos
-      * iniciar pesos de manera aleatoria
-      * guardar pesos
-      * usar pesos
-   - entradas
+
+## Índice
++ Estructura de la documentación
++ Instalación y NPM
++ Inicialización
+   - Configuración
++ Guardar información de la red y replicar otra red
+   - Guardar información de la red
+   - Replicar otra red
++ Pesos, conexiones, entradas y salidas
+   - Conexiones
+      * Reset
+   - Pesos
+      * Iniciar pesos de manera aleatoria
+      * Guardar pesos
+      * Usar pesos
+   - Entradas
    - Salidas
-      * función Output
-      * función OutputLog
-   - funciones de activación
-   - algoritmos de entrenamiento
-      * algoritmo evolutivo
-        - performace Logger Genetic
+      * Función Output
+      * Función OutputLog
+   - Funciones de activación
+   - Algoritmos de entrenamiento
+      * Algoritmo evolutivo
+        - Performace Logger Genetic
         - BidanJs Genetic analysis panel
         - Genetic composer
 
@@ -41,12 +41,12 @@ se **requiere de nodeJs** para ejecutarlo
 ## estructura de la documentación
 La documentación se divide en secciones, Junior para entender cómo usar el módulo, SemiSenior para especializarse, mejorar en el uso del módulo y Senior para entender cómo funciona internamente el módulo.
 
-también se divide en artículos, para funciones, algoritmos de aprendizaje, manejo de archivos, entre otros
+También se divide en artículos, para funciones, algoritmos de aprendizaje, manejo de archivos, entre otros
 
 ---
 
 ## instalación y NPM
-está el módulo en npm, se instala con
+Está el módulo en npm, se instala con
 
 ~~~
 npm i bidanjs
@@ -56,23 +56,26 @@ npm i bidanjs
 
 ## inicialización  
 
+Para inicializar el **archivo en el cual se trabajara**, se debe **importar** todos los **módulos y archivos necesarios**, **necesariamente se deben** importar el **modulo de NPM** y las funciones de activación que se usaran
 ~~~ JavaScript
 const bidan = require("bidanjs")
 
 const { relu, sigmoid } = require("bidanjs/Activationfunctions.js")
 ~~~
 
-se **importa** ***BidanJs*** y las ***funciones de activación*** que se usarán
+Se **importa** ***BidanJs*** y las ***funciones de activación*** que se usarán.
+
+
 
 ~~~ JavaScript
 var lian = new bidan.Neuralnetwork()
 ~~~
 
-se crea un nuevo objecto de tipo Neuralnetwork y se configura
+Se crea un nuevo objecto de tipo Neuralnetwork y se configura
 
-### configuración
-en BidanJs se utilizan dos maneras con la función config de cada capa o la función general config
+### configuración de capas
 
+En ***BidanJs*** se **configuran las capas** con **funciones**, se configura el **numero de neuronas** y las **funciones de activación**.
 #### función config de cada capa
 
 ~~~ JavaScript
@@ -81,7 +84,6 @@ lian.LayersConfig([3,4,2], relu)
 lian.LayerOutputConfig(4, sigmoid)
 ~~~
 
-de esta manera se usan las funciones
 
 + LayerInputConfig para la configuración de capa de entrada, el primer parámetro es la cantidad de neuronas en forma de número y el segundo la función de activación que usa la capa.
 
@@ -90,147 +92,142 @@ de esta manera se usan las funciones
 + LayerOutputConfig para la configuración de capa de salida, el primer parámetro es la cantidad de neuronas en forma de número y el segundo la función de activación que usa la capa.
 
 #### función config  general
+Alternativamente a configurar las capas con funciones por separado, se puede configurar todas las capas con una misma función llamada ***config***.
 
 ~~~ JavaScript
 lian.config(2, sigmoid, [3,4,2], relu, 4, sigmoid)
 ~~~
 
-esta función **agrupa** todos los parámetros de las **funciones anteriores**
 
 #### obtener información de la red
-
+Para obtener la información de la configuración de la red se utiliza ***info***, imprime la información en la terminal.
 ~~~ JavaScript
 lian.info()
 ~~~
 
-se utiliza la función ***info*** para mostrar la información en la terminal
-
 ---
 
 ## guardar información de la red y replicar otra red
+En esta sección se muestran las funciones relacionadas con guardar y leer configuración.
 
 ### guardar información de la red
 
 #### saveCofig
-
+Esta función se utiliza para guardar directamente la configuración de la red. necesita el nombre del archivo **(sin la terminación de .json)**.
+Un único parámetro
 ~~~ JavaScript
 lian.saveCofig("lianConfig")
 ~~~
 
-***saveCofig*** se usa para guardar la información de la red, el primer parámetro es nombre del archivo **(sin la terminación en .json)**
-
 #### readCofig
+Alternativamente se puede utilizar ***readConfig*** que devuelve un **JSON** no acepta parámetros, solo **devuelve la configuración**
 ~~~ JavaScript
 lian.readCofig()
 ~~~
 
-***readCofig*** se usa para leer la información de la red, no acepta parámetros, devuelve un JSON
 
 ### replicar otra red
 
 #### readMirror
+Para **leer directamente** una **configuración de otro red** y **replicarla** se utiliza ***readMirror***, requiere la ruta del archivo **(sin la terminación de .json)**.
 ~~~ JavaScript
 lian.readMirror("lianConfig")
 ~~~
 
-***readMirror*** se usa para replicar la configuración de otra red,lee directamente el archivo, el primer parámetro es nombre del archivo **(sin la terminación en .json)**
-
 #### mirror
+Alternativamente para replicar otra red sin leer el archivo directamente se utiliza ***mirror*** , requiere la información en **formato JSON**
 ~~~ JavaScript
 lian.mirror(data)
 ~~~
 
-***mirror*** se usa para replicar la configuración de otra red, acepta directamente el archivo, el primer parámetro es la configuración
 
 ## pesos, conexiones, entradas y salidas
 
 ### conexiones
-
+Para **trasar las conexiones entre neuronas** se **requiere** de usar una funcion.
+La función para **iniciar las conexiones** entre las neuronas es ***initConnections***. la función **puede aceptar un parámetro** para **imprimir o no** un mensaje que **informe de la inicialización** de las conexiones, **por defecto** se imprime.
 ~~~ JavaScript
 lian.initConnections()
+// Se imprime el mensaje
 ~~~
-
-esta función se utiliza para generar las conexiones entre las neuronas, se puede especificar que no imprima ningún mensaje en consola
 
 ~~~ JavaScript
 lian.initConnections(false)
+//No se imprime el mensaje
 ~~~
 
 #### reset
-
+Por la naturaleza de ***BidanJs*** se almacenan los valores que se fueron dados como Input, para poder recordar el OutPut conseguido, para eliminar esos remanentes de información se debe usar una función para limpiar la memoria interna. esta función es ***reset***.
 ~~~ JavaScript
 lian.reset()
 ~~~
 
-resetea la IA de los valores anteriores, es obligatorio si la IA se usa múltiples veces en una misma ejecución
-
 ### pesos
-
+Los pesos o parámetros son fundamentales para el funcionamiento del modelo
 #### iniciar pesos de manera aleatoria
+Para iniciar los pesos de manera aleatoria se utiliza la función ***initWeights***, esta función no requiere de ningún parámetro. esta función se usa en las primeras fases del entrenamiento, cuando se necesitan modelos aleatorios para perfeccionarlos.Para iniciar los pesos de manera aleatoria se utiliza la función ***initWeights***, esta función no requiere de ningún parámetro. esta función se usa en las primeras fases del entrenamiento, cuando se necesitan modelos aleatorios para perfeccionarlos.
 
 ~~~ JavaScript
 lian.initWeights()
 ~~~
 
-esta función inicializa la red de manera aleatoria, no acepta parámetro
 
 #### guardar pesos
 
 ##### saveWeigths
+Para guardar directamente la configuración de pesos del modelo se usa la función ***saveWeigths***, requiere la ruta donde se guardara, el nombre del archivo **no debe tener la terminación de .json**. si el archivo ya existe se remplaza el archivo.
 ~~~ JavaScript
-lian.saveWeigths(`./data/lianPesos${agent}`)
+lian.saveWeigths(`./data/lianPesos${0}`)
 ~~~
 
-se usa para guardar el peso actual, el parámetro es la dirección y el nombre en el que el peso se guardará, sí ya existe el archivo se reemplazará, la dirección y nombre no deben incluir la terminación *".json"*, porque internamente ya lo agrega
-
 ##### getWeigths
+Alterativamente se puede **obtener la configuración** en **formato JSON**, se usa para guardar los pesos sin la necesidad de necesariamente guardar un archivo, se usa la función ***getWeigths*** que no acepta ningún parámetro.
 ~~~ JavaScript
 lian.getWeigths()
 ~~~
 
-se usa para obtener los pesos actuales, no acepta parámetro
-
 #### usar pesos
-
+Estas funciones se usan para **leer la configuración de pesos**.
 ##### readWeights
+Para leer directamente la configuración de pesos se utiliza la función ***readWeights***, esta función **requiere de la ruta del archivo, sin la terminación .json**. es una función multifase se puede utilizar cuando se entrena y en producción.
 ~~~ JavaScript
 lian.readWeights(`./data/lianPesos0`)
 ~~~
 
-se usa para cargar un peso, el parámetro es la dirección y el nombre del archivo json con el peso y nombre no deben incluir la terminación *".json"*, porque internamente ya lo agrega, se usa en **Dev** y en **Produc**
 
 ##### useWeights
+Alternativamente se puede usar la función ***useWeights*** que requiere de la información en formato **JSON**
 ~~~ JavaScript
 lian.useWeights(data)
 ~~~
 
-se usa para cargar un peso, el parámetro son los pesos, se usa en **Dev** y en **Produc**
-
 ### entradas
-
+Para **iniciar la predicción** y dar el input se utiliza la función ***StartPrediction***, el **input debe ser un array**, **su longitud** debe ser igual a la cantidad de **neuronas de la capa de entrada**, **todos sus datos deben ser números**, ya que **cada parámetro del array** será la **entrada de una neurona**, también tiene un **segundo parámetro** que indica si se **imprime un mensaje avisando** que se **inicia la predicción**, **por defecto se imprime**.
 ~~~ JavaScript
-lian.StartPrediction(dataSet)
+lian.StartPrediction(input)
+// Se imprime el mensaje
 ~~~
 
 ~~~ JavaScript
-lian.StartPrediction(dataSet, false)
+lian.StartPrediction(input, false)
+//No se imprime el mensaje
 ~~~
 
-se usa para indicar la predicción de la red, el primer parámetro es la data(información) las entradas, debe ser un array de igual longitud que el número de neuronas de entrada, el segundo parámetro es opcional, indica si se imprime en consola "Start Prediction"
 
 ### Salidas
-
+Despues de la predicion se almacena el OutPut, para acceder u obtener el OutPut se debe usar funciones 
 #### función Output
+La función ***Output***  funciona para obtener el OutPut, devuelve un array que son las salidas de todas las neuronas de la capa de salida, no requiere de ningún parámetro.
 ~~~ JavaScript
 lian.Output()
 ~~~
-esta función devuelve la salida de la red neuronal, no requiere ningún parámetro
 
 #### función OutputLog
+La única diferencia de la función ***OutputLog*** con la función ***Output** es que la función ***OutputLog** imprime en la terminal el **Output**.
 ~~~ JavaScript
 lian.OutputLog()
+// Se imprime el Output
 ~~~
-esta función devuelve la salida de la red neuronal y imprime en consola la salida, no requiere ningún parámetro y se usa principalmente en la etapa de **Dev**
  
 ---
 
@@ -268,6 +265,7 @@ $$
 s(x) =
 \begin{cases}
 0 & \text{si } x < 0 \\
+
 1 & \text{si } x \geq 0
 \end{cases}
 $$
@@ -289,7 +287,7 @@ t(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
 $$
 
 ## algoritmos de entrenamiento
-los *algoritmos de entrenamiento* disponibles actualmente(v0.8.0) en bidanjs es el algoritmo genético
+los *algoritmos de entrenamiento* disponibles actualmente(v0.9.0) en bidanjs es el algoritmo genético, en futuras actualizaciones se añadirán  mas algoritmos de entrenamiento
 
 
 ### algoritmo evolutivo

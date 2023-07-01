@@ -1,5 +1,10 @@
 
 # BidanJs
+![downlods](https://img.shields.io/npm/dt/bidanjs?style=for-the-badge)
+![](https://img.shields.io/bundlephobia/min/bidanjs?style=for-the-badge)
+![license](https://img.shields.io/npm/l/bidanjs?style=for-the-badge)
+![version](https://img.shields.io/npm/v/bidanjs?style=for-the-badge)
+
 **[UNDER DEVELOPMENT]** 
 ## introduction
 **JavaScript module** for the development of **artificial intelligences**
@@ -23,45 +28,7 @@ This module in npm, is instala with
 npm i bidanjs
 ~~~
 
-~~~ JavaScript
-const bidan = require("../../modules/bidan")
-const { relu, sigmoid } = require("../../modules/func/Activationfunctions.js")
-const { MaxValue } = require("../../modules/func/InterpretFunctions")
 
-var lian = new bidan.Neuralnetwork() // Lian is a new IA
-
-//Config
-lian.LayerInputConfig(4, relu) 
-lian.LayersConfig([3, 2, 3], relu)
-lian.LayerOutputConfig(3, sigmoid)
-
-lian.initConnections()
-lian.useWeights(`./PesosLian_A_0`)
-
-//DataSet
-const data = JSON.parse(fs.readFileSync("dataset.json", "utf-8"))
-
-for (let i = 0; i < 100; i++) {
-    lian.reset() //reset the previous value
-
-    if (data[i][4] === "versicolor") {
-        let re = [1, 0, 0]
-    } else if (data[i][4] === "virginica") {
-        let re = [0, 1, 0]
-    } else if (data[i][4] === "setosa") {
-        let re = [0, 0, 1]
-    }
-
-
-    let d = [data[i][0], data[i][1], data[i][2], data[i][3]] //Data is
-    lian.StartPrediction(d)
-
-    console.log((MaxValue(re)));
-    let ar = lian.Output()
-    console.log(MaxValue(ar));
-}
-
-~~~
 
 **[EN DESARROLLO]** 
 ## introducion
@@ -84,42 +51,4 @@ esta el modulo en npm, se ínstala con
 npm i bidanjs
 ~~~
 
-~~~ JavaScript
-const bidan = require("../../modules/bidan")
-const { relu, sigmoid } = require("../../modules/func/Activationfunctions.js")
-const { MaxValue } = require("../../modules/func/InterpretFunctions")
 
-var lian = new bidan.Neuralnetwork() // Lian is a new IA
-
-//Config
-lian.LayerInputConfig(4, relu) 
-lian.LayersConfig([3, 2, 3], relu)
-lian.LayerOutputConfig(3, sigmoid)
-
-lian.initConnections()
-lian.useWeights(`./PesosLian_A_0`)
-
-//DataSet
-const data = JSON.parse(fs.readFileSync("dataset.json", "utf-8"))
-
-for (let i = 0; i < 100; i++) {
-    lian.reset() //reset the previous value
-
-    if (data[i][4] === "versicolor") {
-        let re = [1, 0, 0]
-    } else if (data[i][4] === "virginica") {
-        let re = [0, 1, 0]
-    } else if (data[i][4] === "setosa") {
-        let re = [0, 0, 1]
-    }
-
-
-    let d = [data[i][0], data[i][1], data[i][2], data[i][3]] //Data is
-    lian.StartPrediction(d)
-
-    console.log((MaxValue(re)));
-    let ar = lian.Output()
-    console.log(MaxValue(ar));
-}
-
-~~~
