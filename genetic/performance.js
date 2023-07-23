@@ -22,7 +22,6 @@ class PerformanceLogger {
         this.CurrentAgentName = ""
         this.PerformaceAgentCurrent = 0
         this.CurrentAgentPerformance = []
-        this.CurrentAgentExperienced = []
 
     }
 
@@ -34,7 +33,6 @@ class PerformanceLogger {
     reset = () => {
         this.CurrentAgentName = ""
         this.CurrentAgentPerformance = []
-        this.CurrentAgentExperienced = []
     }
 
     initGeneraction = (Generation) => {
@@ -61,7 +59,6 @@ class PerformanceLogger {
     addResult = (Array = [], Experienced = [], fun = (ar) => { return ar }) => {
         if (typeof Array == "object" & typeof Experienced == "object" & typeof fun == "function") {
             this.CurrentAgentPerformance.push(fun(Array))
-            this.CurrentAgentExperienced.push(Experienced)
 
         } else if (typeof Experienced == "object" & typeof fun == "function") {
 
@@ -85,13 +82,15 @@ class PerformanceLogger {
         } else logError("Bidan Genetic Error 001: the addResult function did not receive any valid parameters")
     }
 
-    analyzeResult = (fun = (a, b) => { return a / b.length }) => {
-        if (typeof fun == "function") {
-            for (let i = 0; i < this.CurrentAgentPerformance.length; i++) {
-                if (JSON.stringify(this.CurrentAgentPerformance[i]) == JSON.stringify(this.CurrentAgentExperienced[i])) this.PerformaceAgentCurrent += 1
+    analyzeResult = (fun = (a) => { let r = 0 
+        for (let i = 0; i < a.length; i++) {
+            r+ a[i];
+            
+        } return r;}) => {
 
-            }
-            this.PerformaceAgentCurrent = fun(this.PerformaceAgentCurrent, this.CurrentAgentPerformance.length)
+        if (typeof fun == "function") {
+
+            this.PerformaceAgentCurrent = fun(this.PerformaceAgentCurrent)
 
             console.log(colors.performance(this.PerformaceAgentCurrent))
             this.PerformanceCurrent.push(this.PerformaceAgentCurrent)

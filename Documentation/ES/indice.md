@@ -33,3 +33,4 @@ rutas de todos los archivos y los contenidos dentro
         - Genetic composer
 
 ## junior
+ + errores

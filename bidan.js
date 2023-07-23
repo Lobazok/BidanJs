@@ -7,8 +7,6 @@ const fs = require("fs")
 const { funcions } = require("./func/Activationfunctions")
 
 
-//? todos los archivos
-const neuron = require("./neuron")
 
 
 class Neuralnetwork {
@@ -42,15 +40,15 @@ class Neuralnetwork {
                         this.LayerInput.push(new perceptron("LayerInput" + index, Activationfunction))
                     }
                 } else if (Input == 0) {
-                    logError("Bidan error 003: una capa no puede tener cero neuronas")
-                } else logError("Bidan error 003: una capa no puede tener un numero negativo de neuronas")
-            } else {
+                    logError("Bidan error 003 LaInCo: The input layer is assigned zero neurons")
+                } else logError("Bidan error 003 LaInCo: The input layer is assigned a negative number of neurons")
+            } else if (typeof Input == "undefined") {
                 //Input no es un numero
-                logError("Bidan error 001: el valor de LayerInputConfig no es un numero")
-            }
+                logError("Bidan error 001 LaInCo: The input layer was not assigned a number of neurons")
+            } else logError("Bidan error 001 LaInCo: An invalid value was assigned to the number of neurons in the input layer")
         } else if (typeof Activationfunction == "undefined") {
-            logError("Bidan error 002: la funcion de activacion de la capa de entrada no fue espe")
-        } else logError("Bidan error 002: la funcion de activacion de la capa de entrada no es una funcion")
+            logError("Bidan error 002 LaInCo: The input layer activation function was not specified")
+        } else logError("Bidan error 002 LaInCo: The input layer activation function is not a function")
     }
 
     //funcion para configurar las capas
@@ -75,13 +73,15 @@ class Neuralnetwork {
                                     layer.push(new perceptron("Layer" + index + "Neuron" + o, Activationfunction[index]))
                                 }
                             } else if (typeof Activationfunction == "object") {
-                                logError("Bidan error 002: la funcion de activacion fue especifica como array pero no coinside con el ArrayInput")
-                            } else logError("Bidan error 002: la funcion de activacion de la capa no fue especificada")
+                                logError("Bidan error 002 LaHiCo: An array of activation functions was specified but it does not match the array of layers")
+                            } else logError("Bidan error 002 LaHiCo: The " + index + " layer activation function was not specified")
                             this.Layer.push(layer)
-                        } else if (Input == 0) {
-                            logError("Bidan error 003: una capa no puede tener cero neuronas")
-                        } else logError("Bidan error 003: una capa no puede tener un numero negativo de neuronas")
-                    } else logError("Bidan error 001: el valor de NewLayers no es un array")
+                        } else if (ArrayInput[index] == 0) {
+                            logError("Bidan error 003 LaHiCo: The " + index + " layer was assigned zero neurons")
+                        } else logError("Bidan error 003 LaHiCo: The " + index + " layer was assigned a negative number of neurons")
+                    } else if (typeof ArrayInput[index] == "undefined") {
+                        logError("Bidan error 001 LaHiCo: In the " + index + " layer is not assigned a number of neurons")
+                    } else logError("Bidan error 001 LaHiCo:An invalid value was assigned to the number of neurons in layer " + index)
                 }
 
             } else if (typeof ArrayInput == "number") {
@@ -94,13 +94,15 @@ class Neuralnetwork {
                     this.LayerActivationfunction[0] = Activationfunction
                     this.Layer.push(layer)
                 } else if (Input == 0) {
-                    logError("Bidan error 003: una capa no puede tener cero neuronas")
-                } else logError("Bidan error 003: una capa no puede tener un numero negativo de neuronas")
+                    logError("Bidan error 003 LaHiCo: The hidden layer was assigned zero neurons")
+                } else logError("Bidan error 003 LaHiCo: The hidden layer was assigned a negative number of neurons")
 
-            } else logError("Bidan error 001: el valor de NewLayers no es un array")
+            } else if (typeof ArrayInput == "undefined") {
+                logError("Bidan error 001 LaHiCo: No hidden layers were assigned")
+            } else logError("Bidan error 001 LaHiCo: An invalid value was assigned on hidden layers")
         } else if (typeof Activationfunction == "undefined") {
-            logError("Bidan error 002: la funcion de activacion de la capa no fue especificada")
-        } else logError("Bidan error 002: la funcion de activacion de la capa no es una funcion")
+            logError("Bidan error 002 LaHiCo: The function of activation of the hidden layers was not specified")
+        } else logError("Bidan error 002 LaHiCo: The hidden layer activation function was assigned an invalid value")
     }
 
     //funcion para configurar las capas de salida
@@ -108,20 +110,27 @@ class Neuralnetwork {
         if (typeof Activationfunction == "function") {
             //comprobamos si Input es un numero
             if (typeof Output == "number") {
-                this.data.LayerOutputConfig = [Output, Activationfunction.name]
                 //Input es un numero
-                this.LayerOutputActivationfunction = Activationfunction
-                //agregamos las neuronas a LayerInput
-                for (let index = 0; index < Output; index++) {
-                    this.LayerOutput.push(new perceptron("LayerOutput" + index, Activationfunction))
-                }
-            } else logError("Bidan error 001: el valor de LayerOutputConfig no es un numero")
+                this.data.LayerOutputConfig = [Output, Activationfunction.name]
+                //comprobamos si input es un numero valido(mayor a 0)
+                if (Output > 0) {
+                    //input es valido
+                    //agregamos las neuronas a LayerInput
+                    this.LayerOutputActivationfunction = Activationfunction
+                    for (let index = 0; index < Output; index++) {
+                        this.LayerOutput.push(new perceptron("LayerOutput" + index, Activationfunction))
+                    }
+                } else if (Output == 0) {
+                    logError("Bidan error 003 LaOuCo: The output layer is assigned zero neurons")
+                } else logError("Bidan error 003 LaOuCo: The output layer is assigned a negative number of neurons")
+            } else if (typeof Output == "undefined") {
+                //Input no es un numero
+                logError("Bidan error 001 LaOuCo: The output layer was not assigned a number of neurons")
+            } else logError("Bidan error 001 LaOuCo: An invalid value was assigned to the number of neurons in the output layer")
         } else if (typeof Activationfunction == "undefined") {
-            logError("Bidan error 002: la funcion de activacion de la capa de salida no fue especificada")
-        } else logError("Bidan error 002: la funcion de activacion de la capa de salida no es una funcion")
+            logError("Bidan error 002 LaOuCo: The output layer activation function was not specified")
+        } else logError("Bidan error 002 LaOuCo: The output layer activation function is not a function")
     }
-
-
 
     //funcion para configurar la red neuronal, llama a todas las funciones anteriores
     config = (LayerInputConfig, LayerInputActivationfunction, LayersConfig, LayersActivationfunction, LayerOutputConfig, LayerOutputActivationfunction) => {
@@ -132,33 +141,49 @@ class Neuralnetwork {
 
     //funcion que replica la configuracion de una red
     readMirror = (direction) => {
-        //obtenemos la configuracion y la transformamos en un array
-        const data = Object.values(JSON.parse(fs.readFileSync(direction + ".json", "utf-8")))
-        let configuration = [];
-        for (var i = 0; i < data.length; i++) {
-            configuration.push(data[i][0], data[i][1])
-        }
-        const findFunction = (functionName) => {
-            return funcions.find((f) => f.name === functionName)
-        }
+        if (typeof direction == "string") {
+            if (fs.existsSync(direction + ".json")) {
+                //obtenemos la configuracion y la transformamos en un array
+                const data = Object.values(JSON.parse(fs.readFileSync(direction + ".json", "utf-8")))
+                const keys = Object.keys(JSON.parse(fs.readFileSync(direction + ".json", "utf-8")))
+                if (keys[0] == 'LayerInputConfig' & keys[1] == 'LayersConfig' & keys[2] == 'LayerOutputConfig') {
+                    let configuration = [];
+                    for (var i = 0; i < data.length; i++) {
+                        configuration.push(data[i][0], data[i][1])
+                    }
+                    const findFunction = (functionName) => {
+                        return funcions.find((f) => f.name === functionName)
+                    }
 
-        this.config(configuration[0], findFunction(configuration[1]), configuration[2], findFunction(configuration[3]), configuration[4], findFunction(configuration[5]))
-        console.log(colors.mirror("mirror Neuralnetwork"));
+                    this.config(configuration[0], findFunction(configuration[1]), configuration[2], findFunction(configuration[3]), configuration[4], findFunction(configuration[5]))
+                    console.log(colors.mirror("mirror Neuralnetwork"));
+                } else logError("Bidan error 005 rM: The file on readmirror is corrupt")
+
+            } else logError("Bidan error 006 rM: In readmirror the file does not exist")
+
+        } else if (typeof direction == "undefined") {
+            logError("Bidan error 004 rM: In readMirror the file path was not specified")
+        } else logError("Bidan error 004 rM: In readmirror the file path is not a string")
+
     }
+
     //funcion que replica la configuracion de una red
     mirror = (d) => {
         //obtenemos la configuracion y la transformamos en un array
-        const data = Object.values(d)
-        let configuration = [];
-        for (var i = 0; i < data.length; i++) {
-            configuration.push(data[i][0], data[i][1])
-        }
-        const findFunction = (functionName) => {
-            return funcions.find((f) => f.name === functionName)
-        }
+        const data = Object.values(JSON.parse(fs.readFileSync(direction + ".json", "utf-8")))
+        const keys = Object.keys(JSON.parse(fs.readFileSync(direction + ".json", "utf-8")))
+        if (keys[0] == 'LayerInputConfig' & keys[1] == 'LayersConfig' & keys[2] == 'LayerOutputConfig') {
+            let configuration = [];
+            for (var i = 0; i < data.length; i++) {
+                configuration.push(data[i][0], data[i][1])
+            }
+            const findFunction = (functionName) => {
+                return funcions.find((f) => f.name === functionName)
+            }
 
-        this.config(configuration[0], findFunction(configuration[1]), configuration[2], findFunction(configuration[3]), configuration[4], findFunction(configuration[5]))
-        console.log(colors.mirror("mirror Neuralnetwork"));
+            this.config(configuration[0], findFunction(configuration[1]), configuration[2], findFunction(configuration[3]), configuration[4], findFunction(configuration[5]))
+            console.log(colors.mirror("mirror Neuralnetwork"));
+        } else logError("Bidan error 005 m: The data on readmirror is corrupt")
     }
 
     //funcion para obtener informacion de la red nueronal
@@ -167,7 +192,7 @@ class Neuralnetwork {
             console.log(colors.LyInputTitle("Number of neurons in the input layer: " + this.LayerInput.length))
             console.log(colors.LyInput(" Input layer activation function: " + this.LayerInputActivationfunction.name))
         } else {
-            console.log(colors.warn("Bidan error 000: error de configuracion en capa de entrada"))
+            console.log(colors.warn("Bidan error 000 in: Configuration error in input layer"))
         }
 
         if (this.Layer.length != 0) {
@@ -177,14 +202,14 @@ class Neuralnetwork {
                 console.log(colors.Lymin("  layer activation function: " + this.LayerActivationfunction[index].name))
             }
         } else {
-            console.log(colors.warn("Bidan error 000: error de configuracion de capas ocultas"))
+            console.log(colors.warn("Bidan error 000 in: Hidden layers configuration error"))
         }
 
         if (this.LayerOutput.length != 0) {
             console.log(colors.LyTitleOutput("Number of neurons in the output layer: " + this.LayerOutput.length))
             console.log(colors.LyOutput(" Input layer activation function: " + this.LayerOutputActivationfunction.name))
         } else {
-            console.log(colors.warn("Bidan error 000: error de configuracion en capa de salida"))
+            console.log(colors.warn("Bidan error 000 in: Configuration error in output layer"))
         }
     }
 
@@ -192,7 +217,9 @@ class Neuralnetwork {
     saveCofig = (name) => {
         console.log(colors.save("Config of Neuralnetwork save"));
         const json = JSON.stringify(this.data)
-        fs.writeFileSync(name + ".json", json)
+        if (name.substring(name.length - 5) == ".json") {
+            fs.writeFileSync(name, json)
+        } else fs.writeFileSync(name + ".json", json)
     }
     //funcion para leer una configuracion
     readCofig = () => {
@@ -235,67 +262,58 @@ class Neuralnetwork {
             if (bool) console.log(colors.initC("init Connections of Neuralnetwork"));
 
         } else if (this.Layer.length != 0 && this.LayerOutput.length != 0) {
-            console.log(colors.warn("Bidan error 000: error de configuracion en capa de entrada"));
+            console.log(colors.warn("Bidan error 000 iC: Configuration error in input layer"));
         } else if (this.LayerInput.length != 0 && this.LayerOutput.length != 0) {
-            console.log(colors.warn("Bidan error 000: error de configuracion de capas ocultas"))
+            console.log(colors.warn("Bidan error 000 iC: Hidden layers configuration error"))
         } else if (this.LayerInput.length != 0 && this.Layer.length != 0) {
-            console.log(colors.warn("Bidan error 000: error de configuracion en capa de salida"))
-        } else console.log(colors.warn("Bidan error 000: error de configuracion en multiples capas"))
+            console.log(colors.warn("Bidan error 000 iC: Configuration error in output layer"))
+        } else console.log(colors.warn("Bidan error 000 iC: Multi-layer configuration error"))
 
     }
 
 
     initWeights = () => {
+        // Initialize weights for hidden layers
         for (let o = 0; o < this.Layer.length; o++) {
-
+            const prevLayerLength = o > 0 ? this.Layer[o - 1].length : this.LayerInput.length;
+            const weight = Array.from({ length: prevLayerLength }, () => Math.random());
+            weight.push(Math.random());
+    
             for (let u = 0; u < this.Layer[o].length; u++) {
-
-                if (this.Layer[o - 1]) {
-                    let weight = []
-                    for (let index = 0; index < this.Layer[o - 1].length; index++) {
-                        weight.push(Math.random())
-                    }
-                    this.Layer[o][u].weight = weight
-                } else {
-                    let weight = []
-                    for (let index = 0; index < this.LayerInput.length; index++) {
-                        weight.push(Math.random())
-                    }
-                    this.Layer[o][u].weight = weight
-                }
+                this.Layer[o][u].weight = weight;
             }
         }
-
+    
+        // Initialize weights for output layer
+        const outputWeight = Array.from({ length: this.Layer[this.Layer.length - 1].length }, () => 0);
+        outputWeight.push(0);
+    
         for (let i = 0; i < this.LayerOutput.length; i++) {
-            //this.LayerOutput[i].info()
-            let weight = []
-            for (let index = 0; index < this.Layer[this.Layer.length - 1].length; index++) {
-                weight.push(Math.random())
-            }
-            this.LayerOutput[i].weight = weight
+            this.LayerOutput[i].weight = outputWeight;
         }
-
+    
+        // Initialize weights for input layer
+        const inputWeight = Array.from({ length: this.Layer[this.Layer.length - 1].length }, () => Math.random());
+        inputWeight.push(Math.random());
+    
         for (let i = 0; i < this.LayerInput.length; i++) {
-            //this.LayerOutput[i].info()
-            let weight = []
-            for (let index = 0; index < this.Layer[this.Layer.length - 1].length; index++) {
-                weight.push(Math.random())
-
-            }
-            this.LayerInput[i].weight = weight
+            this.LayerInput[i].weight = inputWeight;
         }
     }
+    
 
     StartPrediction = (DataSet, bool = true) => {
         if (typeof DataSet === "object") {
-            for (let i = 0; i < DataSet.length; i++) {
-                this.LayerInput[i].addInput(DataSet[i])
-                this.LayerInput[i].activation()
-            }
-
-            if (bool === true) {
-                console.log(colors.initC("Start Prediction"));
-            }
+            if(DataSet.length === this.LayerInput.length){
+                for (let i = 0; i < DataSet.length; i++) {
+                    this.LayerInput[i].addInput(DataSet[i])
+                    this.LayerInput[i].activation()
+                }
+    
+                if (bool === true) {
+                    console.log(colors.initC("Start Prediction"));
+                }
+            }else  logError("Bidan error 007 SP: in StartPrediction the data is an array but does not match the number of input layer neurons")
         } else if (typeof DataSet === "number" && this.LayerInput.length === 1) {
             this.LayerInput[0].addInput(DataSet)
             this.LayerInput[0].activation()
@@ -303,7 +321,11 @@ class Neuralnetwork {
             if (bool === true) {
                 console.log(colors.initC("Start Prediction"));
             }
-        } else logError("error 005: en StartPrediction los datos no son ni array ni numeros")
+        }else if (typeof DataSet === "number" && this.LayerInput.length != 1) {
+            logError("Bidan error 007 SP: in StartPrediction the data is a number but does not fit with the number of input neurons")
+        } else if (typeof DataSet === "undefined") {
+            logError("Bidan error 007 SP: in StartPrediction the data is not assigned")
+        } else logError("Bidan error 007 SP: in StartPrediction the data is neither array nor numbers")
     }
 
     //funcion para guardar una configuracion
@@ -336,10 +358,14 @@ class Neuralnetwork {
         }
 
         const json = JSON.stringify(data)
-        fs.writeFileSync(name + ".json", json)
+        if (name.substring(name.length - 5) == ".json") {
+            fs.writeFileSync(name, json)
+        } else fs.writeFileSync(name + ".json", json)
+
     }
+
     //funcion para guardar una configuracion
-    getWeight = (name) => {
+    getWeight = () => {
         let data = {
             config: this.data,
             weight: {
@@ -372,24 +398,35 @@ class Neuralnetwork {
 
 
     readWeights = (direction) => {
-        let data = JSON.parse(fs.readFileSync(direction + ".json", "utf-8"))
+        let ruta = ""
+        if (direction.substring(direction.length - 5) == ".json") {
+            ruta = direction
+        } else ruta = direction + ".json"
+        if (typeof direction == "string") {
+            if (fs.existsSync(ruta)) {
+                let data = JSON.parse(fs.readFileSync(direction + ".json", "utf-8"))
+    
+    
+                for (let i = 0; i < this.LayerInput.length; i++) {
+    
+                    this.LayerInput[i].weight = data.weight.LayerInput[i]
+                }
+    
+                for (let i = 0; i < this.LayerOutput.length; i++) {
+    
+                    this.LayerOutput[i].weight = data.weight.LayerOutput[i]
+                }
+    
+                for (let o = 0; o < this.Layer.length; o++) {
+                    for (let u = 0; u < this.Layer[o].length; u++) {
+                        this.Layer[o][u].weight = data.weight.Layer[o][u]
+                    }
+                }
+            }else logError("Bidan error 006 rW: In readWeights the file does not exist")
+        } else if (typeof direction == "undefined") {
+            logError("Bidan error 004 rW: In readWeights the file path was not specified")
+        } else logError("Bidan error 004 rW: In readWeights the file path is not a string")
 
-
-        for (let i = 0; i < this.LayerInput.length; i++) {
-
-            this.LayerInput[i].weight = data.weight.LayerInput[i]
-        }
-
-        for (let i = 0; i < this.LayerOutput.length; i++) {
-
-            this.LayerOutput[i].weight = data.weight.LayerOutput[i]
-        }
-
-        for (let o = 0; o < this.Layer.length; o++) {
-            for (let u = 0; u < this.Layer[o].length; u++) {
-                this.Layer[o][u].weight = data.weight.Layer[o][u]
-            }
-        }
     }
 
     useWeights = (data) => {

@@ -23,6 +23,7 @@ class perceptron {
             for (let i = 0; i < this.Input.length; i++) {
                 r += (this.Input[i] * this.weight[i])
             }
+            r += this.weight[this.weight.length - 1 ] ;
             return r;
         } else logError("Bidan error 004: la neurona: " + this.name + " no risivio un array de numeros como input");
     }
@@ -44,7 +45,14 @@ class perceptron {
         }
 
     }
-
+    info = ()=>{
+        console.log(this.name);
+        console.log(this.Activationfunction);
+        console.log(this.Input);
+        console.log(this.ActivationInput);
+        console.log(this.weight);
+        console.log(this.Output);
+    }
 
 }
 

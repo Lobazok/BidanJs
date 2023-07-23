@@ -290,7 +290,7 @@ los *algoritmos de entrenamiento* disponibles actualmente(v0.9.0) en bidanjs es 
 
 
 ### algoritmo evolutivo
-el **algoritmo genético en bidanjs** se implementa usando el ***performace Logger Genetic***, el ***BidanJs Genetic analysis panel*** y el ***Genetic composer***
+el **algoritmo genético en bidanjs** se implementa usando el ***performace Logger Genetic*** para administrar el rendimiento, el ***BidanJs Genetic analysis panel*** para interpretar el rendimiento y el ***Genetic composer*** para crear la nueva generación.
 
 #### performace Logger Genetic
 registra el rendimiento de los agentes, lo procesa y lo guarda en archivos *json*
