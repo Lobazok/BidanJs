@@ -56,6 +56,167 @@ class perceptron {
 
 }
 
+class Convu2D {
+    constructor(name, size, Activationfunction) {
+        this.name = name
+        this.Activationfunction = Activationfunction
+        this.Input = []
+        this.size = size
+        this.ActivationInput = 0
+        this.kerlen = []
+        this.Output = []
+    }
+
+    addInput = (i) => {
+        this.Input.push(i)
+    }
+    convu = () => {
+        if (this.kerlen.length == this.size[0] & this.kerlen[0].length == this.size[1]) {
+            const imagen = [];
+            const halfSizeX = Math.floor(this.size[0] / 2);
+            const halfSizeY = Math.floor(this.size[1] / 2);
+            const kerlenY = this.kerlen.length;
+            const kerlenX = this.kerlen[0].length;
+
+            for (let index = 0; index < this.Input.length; index++) {
+                for (let y = 0; y < this.Input[index].length; y++) {
+                    const capa = [];
+                    for (let x = 0; x < this.Input[index][y].length; x++) {
+                        const pixel = { x: x, y: y, r: 0, g: 0, b: 0, a: 255 };
+    
+                        for (let a = 0; a < kerlenY; a++) {
+                            for (let b = 0; b < kerlenX; b++) {
+                                const pixelY = y + b - halfSizeY;
+                                const pixelX = x + a - halfSizeX;
+    
+                                if (pixelX >= 0 && pixelX < this.Input[index][y].length && pixelY >= 0 && pixelY < this.Input[index].length) {
+                                    const kernelValue = this.kerlen[a][b];
+                                    const pixelData = this.Input[index][pixelY][pixelX] || { r: 0, g: 0, b: 0 };
+    
+                                    pixel.r += pixelData.r * kernelValue;
+                                    pixel.g += pixelData.g * kernelValue;
+                                    pixel.b += pixelData.b * kernelValue;
+                                }
+                            }
+                        }
+    
+                        capa.push(pixel);
+                    }
+                    imagen.push(capa);
+                }
+            }
+
+            return imagen;
+        } else logError("Bidan error 007: kerlen and kerlen size do not coinsiden in " + this.name);
+    };
+
+    activation = () => {
+        if (typeof this.Activationfunction == "function") {
+            if (this.ActivationInput === this.Input.length) {
+                let r = this.convu()
+                let result = r
+
+                for (let index = 0; index < this.Output.length; index++) {
+                    this.Output[index].addInput(result);
+                    // this.Output[index].activation()
+                }
+            }
+        } else {
+            console.log(); ("Bidan error 002: la funcion de activacion de la nueronas:" + this.name + " no es una funcion");
+        }
+
+    }
+    info = () => {
+        console.log(this.name);
+        console.log(this.Activationfunction);
+        console.log(this.size);
+        console.log(this.ActivationInput);
+        console.log(this.kerlen);
+        console.log(this.Output);
+    }
+}
+
+class Maximum {
+    constructor(name, size, strike) {
+        this.name = name
+        this.zancada = strike
+        this.Input = []
+        this.size = size
+        this.ActivationInput = 0
+        this.Output = []
+    }
+
+    addInput = (i) => {
+        this.Input.push(i)
+    }
+
+    agrupar = () => {
+        const imagen = [];
+
+        let ydef = 0
+        let xdef = 0
+        for (let index = 0; index < this.Input.length; index++) {
+            for (let y = 0; y < this.Input[index].length; y = y + this.zancada[0]) {
+                const capa = [];
+                ydef++;
+                for (let x = 0; x < this.Input[index][y].length; x = x + this.zancada[1]) {
+                    let pixels = []
+                    xdef++;
+                    for (let a = 0; a < this.size [0]; a++) {
+                        for (let b = 0; b < this.size [1]; b++) {
+                            if (this.Input[index][y + a]) {
+                                if (this.Input[index][y + a][x + b]) {
+                                    pixels.push(this.Input[index][y + a][x + b])
+                                }
+                            }
+                        }
+    
+                    }
+                    const pixel = {
+                        x: xdef,
+                        y: ydef,
+                        r: Math.max(...pixels.map(obj => obj.r)),
+                        g: Math.max(...pixels.map(obj => obj.g)),
+                        b: Math.max(...pixels.map(obj => obj.b)),
+                        a: Math.max(...pixels.map(obj => obj.a)),
+                    };
+                    capa.push(pixel);
+                }
+                xdef = 0;
+                imagen.push(capa);
+            }
+        }
+
+        return imagen;
+    };
+
+    activation = () => {
+        if (typeof this.Activationfunction == "function") {
+            if (this.ActivationInput === this.Input.length) {
+                let r = this.agrupar()
+                let result = r
+
+                for (let index = 0; index < this.Output.length; index++) {
+                    this.Output[index].addInput(result);
+                    // this.Output[index].activation()
+                }
+            }
+        } else {
+            console.log(); ("Bidan error 002: la funcion de activacion de la nueronas:" + this.name + " no es una funcion");
+        }
+
+    }
+    info = () => {
+        console.log(this.name);
+        console.log(this.Activationfunction);
+        console.log(this.size);
+        console.log(this.ActivationInput);
+        console.log(this.kerlen);
+        console.log(this.Output);
+    }
+}
 module.exports = {
-    perceptron
+    perceptron,
+    Convu2D,
+    Maximum
 }
