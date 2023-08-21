@@ -836,14 +836,8 @@ class analytic {
 			input: process.stdin,
 			output: process.stdout
 		});
-/* 		console.log(colors.green(" ______ _     _               ___         _____                 _   _"));
-		console.log(colors.green("| ___ \\| |   | |             |_  |       |  __ \\               | | (_)"));
-		console.log(colors.green("| |_/ /| | __| | __ _ _ __     | | ___   | |  \\/ ___ _ __   ___| |_ _  ___"));
-		console.log(colors.green("| ___ \\| |/ _` |/ _` | '_ \\    | |/ __|  | | __ / _ \\ '_ \\ / _ \\ __| |/ ___|"));
-		console.log(colors.green("| |_/ /| | (_| | (_| | | | |\\__/ /\\__ \\  | |_\\ \\  __/ | | |  __/ |_| | |__"));
-		console.log(colors.green("\|____/ |_|\\__,_|\\__,_|_| |_|\\____/|___/  \|____/\\___||_| |_|\\___|\\__|_|\\___|"));
 
-		console.log(); */
+
 		console.log(colors.green("  Welcome to the BidanJs Genetic analysis panel!                          "));
 		console.log(colors.green("  use the help command to get information about available commands        "));
 		console.log(colors.green("  Bidan Genetic Panel                                      v:0.8.1      "));

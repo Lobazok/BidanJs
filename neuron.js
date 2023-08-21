@@ -1,9 +1,9 @@
 const {logError} = require("./colors/bidanColors")
 const colors = require("./colors/bidanColors")
 
-class perceptron {
-    constructor(name, Activationfunction) {
-        this.name = name
+class Perceptron {
+    constructor(Activationfunction) {
+        this.name = ""
         this.Activationfunction = Activationfunction
         this.Input = []
         this.ActivationInput = 0
@@ -57,8 +57,8 @@ class perceptron {
 }
 
 class Convu2D {
-    constructor(name, size, Activationfunction) {
-        this.name = name
+    constructor( size, Activationfunction) {
+        this.name = ""
         this.Activationfunction = Activationfunction
         this.Input = []
         this.size = size
@@ -136,14 +136,18 @@ class Convu2D {
     }
 }
 
-class Maximum {
-    constructor(name, size, strike) {
-        this.name = name
+class MaxPooling2D {
+    constructor(size, strike) {
+        this.name = ""
         this.zancada = strike
         this.Input = []
         this.size = size
         this.ActivationInput = 0
         this.Output = []
+        this.Activationfunction = (i) => {
+            var name = "N/A"
+            return i
+        }
     }
 
     addInput = (i) => {
@@ -215,8 +219,67 @@ class Maximum {
         console.log(this.Output);
     }
 }
+
+class Flatter {
+    constructor() {
+        this.name = ""
+        this.Input = []
+        this.ActivationInput = 0
+        this.Output = []
+        this.Activationfunction = (i) => {
+            var name = "N/A"
+            return i
+        }
+    }
+
+    addInput = (i) => {
+        this.Input.push(i)
+    }
+
+    flatter = (matriz2D) => {
+        const vect = [];
+
+        for (let y = 0; y < matriz2D.length; y++) {
+            for (let x = 0; x < matriz2D[y].length; x++) {
+                matriz2D[y][x].r ? vect.push(matriz2D[y][x].r) : 0
+                matriz2D[y][x].g ? vect.push(matriz2D[y][x].g) : 0
+                matriz2D[y][x].b ? vect.push(matriz2D[y][x].b) : 0
+                matriz2D[y][x].a ? vect.push(matriz2D[y][x].a) : 0
+            }
+        }
+
+        return vect;
+    }
+
+    activation = () => {
+        if (typeof this.Activationfunction == "function") {
+            if (this.ActivationInput === this.Input.length) {
+                let result = this.flatter()
+
+                for (let index = 0; index < this.Output.length; index++) {
+                    this.Output[index].addInput(result);
+                    // this.Output[index].activation()
+                }
+            }
+        } else {
+            console.log(); ("Bidan error 002: la funcion de activacion de la nueronas:" + this.name + " no es una funcion");
+        }
+
+    }
+    info = () => {
+        console.log(this.name);
+        console.log(this.Activationfunction);
+        console.log(this.size);
+        console.log(this.ActivationInput);
+        console.log(this.kerlen);
+        console.log(this.Output);
+    }
+    
+}
+
 module.exports = {
-    perceptron,
+    Perceptron,
     Convu2D,
-    Maximum
+    MaxPooling2D,
+    Flatter
 }
