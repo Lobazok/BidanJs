@@ -237,10 +237,16 @@ class Neuralnetwork {
                 for (let u = 0; u < this.Layer[o].length; u++) {
                     if (this.Layer[o + 1]) {
                         this.Layer[o][u].Output = this.Layer[o + 1]
+
                     } else {
                         this.Layer[o][u].Output = this.LayerOutput
                     }
-
+                    
+                    if(this.Layer[o - 1]){
+                        this.Layer[o][u].ActivationInput = this.Layer[o - 1].length
+                    }else {
+                        this.Layer[o][u].ActivationInput = this.LayerInput.length
+                    }
                 }
             }
 
@@ -248,7 +254,7 @@ class Neuralnetwork {
                 //this.LayerOutput[i].info()
                 let weight = []
                 for (let index = 0; index < this.Layer[this.Layer.length - 1].length; index++) {
-                    weight.push(Math.random())
+                    weight.push(1)
                 }
                 this.LayerOutput[i].weight = weight
             }
@@ -337,7 +343,7 @@ class Neuralnetwork {
             } else if (typeof DataSet === "undefined") {
                 logError("Bidan error 007 SP: in StartPrediction the data is not assigned")
             } else logError("Bidan error 007 SP: in StartPrediction the data is neither array nor numbers")
-        } else logError("Wazaaaa")
+        } else logError("Wazaaaaaaaaaaaa👻👻👻")
     }
 
     //funcion para guardar una configuracion

@@ -46,12 +46,13 @@ class Perceptron {
 
     }
     info = ()=>{
-        console.log(this.name);
-        console.log(this.Activationfunction);
-        console.log(this.Input);
-        console.log(this.ActivationInput);
-        console.log(this.weight);
-        console.log(this.Output);
+        console.log({Name : this.name});
+        console.log({Activationfunction : this.Activationfunction});
+        console.log({Input : this.Input});
+        console.log({ActivationInput : this.ActivationInput});
+        console.log({weight : this.weight});
+        console.log({Output :this.Output});
+        console.log();
     }
 
 }
@@ -63,7 +64,7 @@ class Convu2D {
         this.Input = []
         this.size = size
         this.ActivationInput = 0
-        this.kerlen = []
+        this.kerlen = [[1/9,1/9,1/9],[1/9,1/9,1/9],[1/9,1/9,1/9]]
         this.Output = []
     }
 
