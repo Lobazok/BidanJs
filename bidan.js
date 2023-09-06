@@ -5,6 +5,7 @@ const colors = require("./colors/bidanColors")
 const { Perceptron, Convu2D, Flatter, MaxPooling2D } = require("./neuron")
 const fs = require("fs")
 const { relu } = require("./func/Activationfunctions")
+const { log } = require("console")
 
 
 
@@ -25,8 +26,8 @@ class Neuralnetwork {
         }
     }
     //funcion para configurar las capas de entrada
-    LayerInputConfig = (Input, neuron) => {
-
+    LayerInputConfig = (Input, neuronType, neuronConfig) => {
+        let neuron = new neuronType(neuronConfig)
         //comprobamos si Input es un numero
         if (typeof Input == "number") {
             //Input es un numero
@@ -37,6 +38,7 @@ class Neuralnetwork {
                 //agregamos las neuronas a LayerInput
                 this.LayerInputActivationfunction = neuron.Activationfunction
                 for (let index = 0; index < Input; index++) {
+                    let neuron = new neuronType(neuronConfig)
                     neuron.name = "LayerInput" + index
                     this.LayerInput.push(neuron)
                 }
@@ -51,7 +53,7 @@ class Neuralnetwork {
     }
 
     //funcion para configurar las capas
-    LayersConfig = (ArrayInput, neurons) => {
+    LayersConfig = (ArrayInput, neuronType, neuronConfig) => {
 
         if (typeof ArrayInput == "object") {
             this.data.LayersConfig = ArrayInput
@@ -60,23 +62,29 @@ class Neuralnetwork {
                 if (typeof ArrayInput[index] == "number") {
                     if (ArrayInput[index] > 0) {
 
-                        let layer = []
+                        if (neuronType.length == neuronConfig.length) {
+                            let layer = []
 
-                        if (neurons.length == undefined) {
-                            for (let o = 0; o < ArrayInput[index]; o++) {
-                                this.LayerActivationfunction[index] = neurons.Activationfunction
-                                neurons.name = "Layer" + index + "Neuron" + o
-                                layer.push(neurons)
-                            }
-                        } else {
-                            for (let o = 0; o < ArrayInput[index]; o++) {
-                                this.LayerActivationfunction[index] = neurons[index].Activationfunction
-                                neurons[index].name = "Layer" + index + "Neuron" + o
-                                layer.push(neurons[index])
-                            }
-                        }
+                            if (neuronType.length == undefined | neuronType.length == 1) {
+                                for (let o = 0; o < ArrayInput[index]; o++) {
+                                    let neuron = new neuronType(neuronConfig)
 
-                        this.Layer.push(layer)
+                                    this.LayerActivationfunction[index] = neuron.Activationfunction
+                                    neuron.name = "Layer" + index + "Neuron" + o
+                                    layer.push(neuron)
+                                }
+                            } else {
+                                for (let o = 0; o < ArrayInput[index]; o++) {
+                                    let neuron = new neuronType[index](neuronConfig[index])
+
+                                    this.LayerActivationfunction[index] = neuron.Activationfunction
+                                    neuron.name = "Layer" + index + "Neuron" + o
+                                    layer.push(neuron)
+                                }
+                            }
+
+                            this.Layer.push(layer)
+                        }else logError("Bidan error 003 LaHiCo: An attempt was made to configure the type of neurons with arrays that do not match their lengths")
                     } else if (ArrayInput[index] == 0) {
                         logError("Bidan error 003 LaHiCo: The " + index + " layer was assigned zero neurons")
                     } else logError("Bidan error 003 LaHiCo: The " + index + " layer was assigned a negative number of neurons")
@@ -90,8 +98,9 @@ class Neuralnetwork {
             if (ArrayInput > 0) {
                 let layer = []
                 for (let o = 0; o < ArrayInput; o++) {
-                    neurons.name + "Layer" + o + "Neuron" + o
-                    layer.push(neurons)
+                    let neuron = new neuronType(neuronConfig)
+                    neuron.name + "Layer" + o + "Neuron" + o
+                    layer.push(neuron)
                 }
                 this.LayerActivationfunction[0] = neurons.Activationfunction
                 this.Layer.push(layer)
@@ -105,18 +114,22 @@ class Neuralnetwork {
     }
 
     //funcion para configurar las capas de salida
-    LayerOutputConfig = (Output, neuron) => {
+    LayerOutputConfig = (Output, neuronType, neuronConfig) => {
+        let neuron = new neuronType(neuronConfig)
 
         //comprobamos si Input es un numero
         if (typeof Output == "number") {
             //Input es un numero
             this.data.LayerOutputConfig = [Output, neuron.Activationfunction.name]
+
             //comprobamos si input es un numero valido(mayor a 0)
             if (Output > 0) {
                 //input es valido
                 //agregamos las neuronas a LayerInput
                 this.LayerOutputActivationfunction = neuron.Activationfunction
+
                 for (let index = 0; index < Output; index++) {
+                    let neuron = new neuronType(neuronConfig)
                     neuron.name = "LayerOutput" + index
                     this.LayerOutput.push(neuron)
                 }
@@ -241,23 +254,16 @@ class Neuralnetwork {
                     } else {
                         this.Layer[o][u].Output = this.LayerOutput
                     }
-                    
-                    if(this.Layer[o - 1]){
+
+                    if (this.Layer[o - 1]) {
                         this.Layer[o][u].ActivationInput = this.Layer[o - 1].length
-                    }else {
+                    } else {
                         this.Layer[o][u].ActivationInput = this.LayerInput.length
                     }
                 }
             }
 
-            for (let i = 0; i < this.LayerOutput.length; i++) {
-                //this.LayerOutput[i].info()
-                let weight = []
-                for (let index = 0; index < this.Layer[this.Layer.length - 1].length; index++) {
-                    weight.push(1)
-                }
-                this.LayerOutput[i].weight = weight
-            }
+
             if (bool) console.log(colors.initC("init Connections of Neuralnetwork"));
 
         } else if (this.Layer.length != 0 && this.LayerOutput.length != 0) {
@@ -269,7 +275,6 @@ class Neuralnetwork {
         } else console.log(colors.warn("Bidan error 000 iC: Multi-layer configuration error"))
 
     }
-
 
     initWeights = () => {
         // Initialize weights for hidden layers
@@ -284,8 +289,8 @@ class Neuralnetwork {
         }
 
         // Initialize weights for output layer
-        const outputWeight = Array.from({ length: this.Layer[this.Layer.length - 1].length }, () => 0);
-        outputWeight.push(0);
+        const outputWeight = Array.from({ length: this.Layer[this.Layer.length - 1].length }, () => Math.random());
+        outputWeight.push(Math.random());
 
         for (let i = 0; i < this.LayerOutput.length; i++) {
             this.LayerOutput[i].weight = outputWeight;
@@ -299,7 +304,6 @@ class Neuralnetwork {
             this.LayerInput[i].weight = inputWeight;
         }
     }
-
 
     StartPrediction = (DataSet, bool = true) => {
         if (this.LayerInput[0] instanceof Perceptron) {
@@ -414,7 +418,6 @@ class Neuralnetwork {
         return data
     }
 
-
     readWeights = (direction) => {
         let ruta = ""
         if (direction.substring(direction.length - 5) == ".json") {
@@ -431,7 +434,6 @@ class Neuralnetwork {
                 }
 
                 for (let i = 0; i < this.LayerOutput.length; i++) {
-
                     this.LayerOutput[i].weight = data.weight.LayerOutput[i]
                 }
 
