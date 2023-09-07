@@ -54,37 +54,43 @@ class Neuralnetwork {
 
     //funcion para configurar las capas
     LayersConfig = (ArrayInput, neuronType, neuronConfig) => {
-
         if (typeof ArrayInput == "object") {
             this.data.LayersConfig = ArrayInput
             //Input es un array
             for (let index = 0; index < ArrayInput.length; index++) {
                 if (typeof ArrayInput[index] == "number") {
                     if (ArrayInput[index] > 0) {
+                        let layer = []
+                        if (neuronConfig.constructor === Array) {
+                            if (neuronType.length == neuronConfig.length) {
 
-                        if (neuronType.length == neuronConfig.length) {
-                            let layer = []
 
+
+                                for (let o = 0; o < ArrayInput[index]; o++) {
+                                    let neuron = new neuronType[index](neuronConfig[index])
+
+                                    this.LayerActivationfunction.push(neuron.Activationfunction);
+                                    neuron.name = "Layer" + index + "Neuron" + o
+                                    layer.push(neuron)
+                                }
+
+
+                                this.Layer.push(layer)
+                            } else logError("Bidan error 003 LaHiCo: An attempt was made to configure the type of neurons with arrays that do not match their lengths")
+                        } else {
                             if (neuronType.length == undefined | neuronType.length == 1) {
                                 for (let o = 0; o < ArrayInput[index]; o++) {
                                     let neuron = new neuronType(neuronConfig)
 
-                                    this.LayerActivationfunction[index] = neuron.Activationfunction
-                                    neuron.name = "Layer" + index + "Neuron" + o
-                                    layer.push(neuron)
-                                }
-                            } else {
-                                for (let o = 0; o < ArrayInput[index]; o++) {
-                                    let neuron = new neuronType[index](neuronConfig[index])
-
-                                    this.LayerActivationfunction[index] = neuron.Activationfunction
+                                    this.LayerActivationfunction.push(neuron.Activationfunction);
                                     neuron.name = "Layer" + index + "Neuron" + o
                                     layer.push(neuron)
                                 }
                             }
+                        }
 
-                            this.Layer.push(layer)
-                        } else logError("Bidan error 003 LaHiCo: An attempt was made to configure the type of neurons with arrays that do not match their lengths")
+                        this.Layer.push(layer)
+
                     } else if (ArrayInput[index] == 0) {
                         logError("Bidan error 003 LaHiCo: The " + index + " layer was assigned zero neurons")
                     } else logError("Bidan error 003 LaHiCo: The " + index + " layer was assigned a negative number of neurons")
@@ -95,6 +101,7 @@ class Neuralnetwork {
 
         } else if (typeof ArrayInput == "number") {
             let neuron = new neuronType(neuronConfig)
+            this.LayerActivationfunction[0] = neuron.Activationfunction
             //Input es un numero
             if (ArrayInput > 0) {
                 let layer = []
@@ -103,7 +110,7 @@ class Neuralnetwork {
                     neuron.name + "Layer" + o + "Neuron" + o
                     layer.push(neuron)
                 }
-                this.LayerActivationfunction[0] = neuron.Activationfunction
+
                 this.Layer.push(layer)
             } else if (Input == 0) {
                 logError("Bidan error 003 LaHiCo: The hidden layer was assigned zero neurons")
@@ -201,25 +208,32 @@ class Neuralnetwork {
     //funcion para obtener informacion de la red nueronal
     info = () => {
         if (this.LayerInput.length != 0) {
-            console.log(colors.LyInputTitle("Number of neurons in the input layer: " + this.LayerInput.length))
-            console.log(colors.LyInput(" Input layer activation function: " + this.LayerInputActivationfunction.name))
+            console.log(colors.LyInputTitle("¬¬ Input layer ¬¬"));
+            console.log(colors.LyInput(" ¬  Number of neurons in the input layer : " + this.LayerInput.length))
+            console.log(colors.LyInput(" ¬  Input layer activation function      : " + this.LayerInputActivationfunction.name))
+            console.log(colors.LyInput(" ¬  Input layer neuron type              : " + this.LayerInput[0].typeof))
         } else {
             console.log(colors.warn("Bidan error 000 in: Configuration error in input layer"))
         }
 
         if (this.Layer.length != 0) {
-            console.log(colors.LyTitle("Number of hidden Layers: " + this.Layer.length))
+            console.log(colors.LyTitle("++ Hidden Layers ++"));
+            console.log(colors.Ly(" + Number of hidden Layers: " + this.Layer.length))
             for (let index = 0; index < this.Layer.length; index++) {
-                console.log(colors.Ly(" Number of neurons in the layer " + index + ": " + this.Layer[index].length))
-                console.log(colors.Lymin("  layer activation function: " + this.LayerActivationfunction[index].name))
+                console.log(colors.Ly("  -- layer " + index + " --"))
+                console.log(colors.Ly("   -  Number of neurons in the layer " + index + " : " + this.Layer[index].length))
+                console.log(colors.Ly("   -  Layer activation function      " + (" ".repeat(index.toString().length)) + " : " + this.LayerActivationfunction[index].name))
+                console.log(colors.Ly("   -  Layer neuron type              " + (" ".repeat(index.toString().length)) + " : " + this.Layer[index][0].typeof))
             }
         } else {
             console.log(colors.warn("Bidan error 000 in: Hidden layers configuration error"))
         }
 
         if (this.LayerOutput.length != 0) {
-            console.log(colors.LyTitleOutput("Number of neurons in the output layer: " + this.LayerOutput.length))
-            console.log(colors.LyOutput(" Input layer activation function: " + this.LayerOutputActivationfunction.name))
+            console.log(colors.LyTitleOutput("** Output layer **"));
+            console.log(colors.LyOutput(" *  Number of neurons in the output layer : " + this.LayerOutput.length))
+            console.log(colors.LyOutput(" *  Output layer activation function      : " + this.LayerOutputActivationfunction.name))
+            console.log(colors.LyOutput(" *  Output layer neuron type              : " + this.LayerOutput[0].typeof))
         } else {
             console.log(colors.warn("Bidan error 000 in: Configuration error in output layer"))
         }
@@ -277,41 +291,61 @@ class Neuralnetwork {
 
     }
 
-    initWeights = () => {
+    initWeights = (Factor = 1, mode = "IncrementFactor") => {
         // Initialize weights for hidden layers
         for (let o = 0; o < this.Layer.length; o++) {
-            const prevLayerLength = o > 0 ? this.Layer[o - 1].length : this.LayerInput.length;
-            const weight = Array.from({ length: prevLayerLength }, () => Math.random());
-            weight.push(Math.random());
 
-            for (let u = 0; u < this.Layer[o].length; u++) {
-                this.Layer[o][u].weight = weight;
+            if (this.Layer[o][0] instanceof Perceptron) {
+                const prevLayerLength = o > 0 ? this.Layer[o - 1].length : this.LayerInput.length;
+                const weight = mode == "Range" ? Array.from({ length: prevLayerLength }, () => Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1]) : Array.from({ length: prevLayerLength }, () => Math.random() * Factor)
+                let w = mode == "Range" ? Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1] : Math.random() * Factor
+                weight.push(w);
+
+                for (let u = 0; u < this.Layer[o].length; u++) {
+                    this.Layer[o][u].weight = weight;
+                }
+            } else if (this.Layer[o][0] instanceof Convu2D) {
+                // Initialize weights for input layer
+                const inputWeight = mode == "Range" ? Array.from({ length: this.Layer[o][0].size[0] * this.Layer[o][0].size[1] }, () => Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1]) : Array.from({ length: this.LayerInput[0].size[0] * this.LayerInput[0].size[1] }, () => Math.random() * Factor);
+                for (let u = 0; u < this.Layer[o].length; u++) {
+                    this.Layer[o][u].weight = inputWeight;
+                }
             }
         }
 
-        // Initialize weights for output layer
-        const outputWeight = Array.from({ length: this.Layer[this.Layer.length - 1].length }, () => Math.random());
-        outputWeight.push(Math.random());
+        if (this.LayerOutput[0] instanceof Perceptron) {
+            // Initialize weights for output layer
+            const outputWeight = mode == "Range" ? Array.from({ length: this.Layer[this.Layer.length - 1].length }, () => Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1]) : Array.from({ length: this.Layer[this.Layer.length - 1].length }, () => Math.random() * Factor)
+            let wOut = mode == mode == "Range" ? Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1] : Math.random() * Factor
+            outputWeight.push(wOut);
 
-        for (let i = 0; i < this.LayerOutput.length; i++) {
-            this.LayerOutput[i].weight = outputWeight;
+            for (let i = 0; i < this.LayerOutput.length; i++) {
+                this.LayerOutput[i].weight = outputWeight;
+            }
+        }else if (this.LayerOutput[0] instanceof Convu2D) {
+            // Initialize weights for input layer
+            const inputWeight = mode == "Range" ? Array.from({ length: this.LayerOutput[0].size[0] * this.LayerOutput[0].size[1] }, () => Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1]) : Array.from({ length: this.LayerInput[0].size[0] * this.LayerInput[0].size[1] }, () => Math.random() * Factor);
+            for (let i = 0; i < this.LayerOutput.length; i++) {
+                this.LayerOutput[i].weight = inputWeight;
+            }
         }
+
         if (this.LayerInput[0] instanceof Perceptron) {
             // Initialize weights for input layer
-            const inputWeight = Array.from({ length: this.Layer[this.Layer.length - 1].length }, () => Math.random());
-            inputWeight.push(Math.random());
+            const inputWeight = mode == "Range" ? Array.from({ length: 1 }, () => Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1]) : Array.from({ length: 1 }, () => Math.random() * Factor)
+            let wIn = mode == mode == "Range" ? Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1] : Math.random() * Factor
+            inputWeight.push(wIn);
 
             for (let i = 0; i < this.LayerInput.length; i++) {
                 this.LayerInput[i].weight = inputWeight;
             }
-        }else if (this.LayerInput[0] instanceof Convu2D) {
+        } else if (this.LayerInput[0] instanceof Convu2D) {
             // Initialize weights for input layer
-            const inputWeight = Array.from({ length: this.LayerInput[0].size[0] * this.LayerInput[0].size[1] }, () => Math.random());
+            
+            const inputWeight = mode == "Range" ? Array.from({ length: this.LayerInput[0].size[0] * this.LayerInput[0].size[1] }, () => Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1]) : Array.from({ length: this.LayerInput[0].size[0] * this.LayerInput[0].size[1] }, () => Math.random() * Factor);
             for (let i = 0; i < this.LayerInput.length; i++) {
                 this.LayerInput[i].weight = inputWeight;
             }
-        } {
-             
         }
 
     }
@@ -381,11 +415,15 @@ class Neuralnetwork {
         for (let o = 0; o < this.Layer.length; o++) {
             let layer = []
             for (let u = 0; u < this.Layer[o].length; u++) {
-                let a = []
-                for (let i = 0; i < this.Layer[o][u].weight.length; i++) {
-                    a.push(this.Layer[o][u].weight[i])
-                }
-                layer.push(a)
+                if (this.Layer[o][u].weight) {
+                    let a = []
+                    for (let i = 0; i < this.Layer[o][u].weight.length; i++) {
+                        a.push(this.Layer[o][u].weight[i])
+                    }
+                    layer.push(a)
+                }else layer.push(0)
+                
+                
             }
             data.weight.Layer.push(layer)
         }

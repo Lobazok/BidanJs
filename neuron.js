@@ -1,10 +1,11 @@
 const { logError } = require("./colors/bidanColors")
 const colors = require("./colors/bidanColors")
-const { relu } = require("./func/Activationfunctions")
+const { relu, NotApplicable } = require("./func/Activationfunctions")
 
 class Perceptron {
     constructor(config) {
         this.name = "";
+        this.typeof = "Perceptron"
         this.Activationfunction = config.Activationfunction || config.fun || relu;
         this.Input = [];
         this.ActivationInput = 0;
@@ -14,7 +15,7 @@ class Perceptron {
 
     addInput = (num) => {
         if (typeof num === "number") {
-            this.Input.push(num)
+            this.Input.push(num);
         }
     }
 
@@ -22,7 +23,7 @@ class Perceptron {
         if (typeof this.Input == "object") {
             let r = 0;
             for (let i = 0; i < this.Input.length; i++) {
-                r += (this.Input[i] * this.weight[i])
+                r += (this.Input[i] * this.weight[i]);
             }
             r += this.weight[this.weight.length - 1];
             return r;
@@ -32,13 +33,13 @@ class Perceptron {
     activation = () => {
         if (typeof this.Activationfunction == "function") {
             if (this.ActivationInput === this.Input.length) {
-                let r = this.cal()
+                let r = this.cal();
 
                 let result = this.Activationfunction(r);
 
                 for (let index = 0; index < this.Output.length; index++) {
                     this.Output[index].addInput(result);
-                    this.Output[index].activation()
+                    this.Output[index].activation();
                 }
             }
         } else {
@@ -60,18 +61,19 @@ class Perceptron {
 
 class Convu2D {
     constructor(config) {
-        this.name = ""
+        this.name = "";
+        this.typeof = "Convu2D"
         this.Activationfunction = config.Activationfunction || config.fun || relu;
-        this.Input = []
+        this.Input = [];
         this.size = config.size || [3, 3];
-        this.ActivationInput = 0
-        this.kerlen = [[1 / 9, 1 / 9, 1 / 9], [1 / 9, 1 / 9, 1 / 9], [1 / 9, 1 / 9, 1 / 9]]
-        this.Output = []
+        this.ActivationInput = 0;
+        this.kerlen = [[1 / 9, 1 / 9, 1 / 9], [1 / 9, 1 / 9, 1 / 9], [1 / 9, 1 / 9, 1 / 9]];
+        this.Output = [];
         this.weight = [];
     }
 
     addInput = (i) => {
-        this.Input.push(i)
+        this.Input.push(i);
     }
     toKerlen = () => {
         let weights = []
@@ -83,7 +85,7 @@ class Convu2D {
             }
             weights.push(subarray);
         }
-        this.weight = weights
+        this.kerlen = weights;
     }
     convu = () => {
         if (this.kerlen.length == this.size[0] & this.kerlen[0].length == this.size[1]) {
@@ -114,7 +116,9 @@ class Convu2D {
                                 }
                             }
                         }
-
+                        pixel.r = this.Activationfunction(pixel.r);
+                        pixel.g = this.Activationfunction(pixel.g);
+                        pixel.r = this.Activationfunction(pixel.r);
                         capa.push(pixel);
                     }
                     imagen.push(capa);
@@ -128,13 +132,13 @@ class Convu2D {
         
         if (typeof this.Activationfunction == "function") {
             if (this.ActivationInput === this.Input.length) {
-                this.toKerlen()
-                let r = this.convu()
-                let result = r
+                this.toKerlen();
+                let r = this.convu();
+                let result = r;
 
                 for (let index = 0; index < this.Output.length; index++) {
                     this.Output[index].addInput(result);
-                    this.Output[index].activation()
+                    this.Output[index].activation();
                 }
             }
         } else {
@@ -154,39 +158,37 @@ class Convu2D {
 
 class MaxPooling2D {
     constructor(config) {
-        this.name = ""
-        this.zancada = config.strike
-        this.Input = []
-        this.size = config.size
-        this.ActivationInput = 0
-        this.Output = []
-        this.Activationfunction = (i) => {
-            var name = "N/A"
-            return i
-        }
+        this.name = "";
+        this.typeof = "MaxPooling2D"
+        this.zancada = config.strike;
+        this.Input = [];
+        this.size = config.size;
+        this.ActivationInput = 0;
+        this.Output = [];
+        this.Activationfunction = NotApplicable;
     }
 
     addInput = (i) => {
-        this.Input.push(i)
+        this.Input.push(i);
     }
 
     agrupar = () => {
         const imagen = [];
 
-        let ydef = 0
-        let xdef = 0
+        let ydef = 0;
+        let xdef = 0;
         for (let index = 0; index < this.Input.length; index++) {
             for (let y = 0; y < this.Input[index].length; y = y + this.zancada[0]) {
                 const capa = [];
                 ydef++;
                 for (let x = 0; x < this.Input[index][y].length; x = x + this.zancada[1]) {
-                    let pixels = []
+                    let pixels = [];
                     xdef++;
                     for (let a = 0; a < this.size[0]; a++) {
                         for (let b = 0; b < this.size[1]; b++) {
                             if (this.Input[index][y + a]) {
                                 if (this.Input[index][y + a][x + b]) {
-                                    pixels.push(this.Input[index][y + a][x + b])
+                                    pixels.push(this.Input[index][y + a][x + b]);
                                 }
                             }
                         }
@@ -213,12 +215,12 @@ class MaxPooling2D {
     activation = () => {
         if (typeof this.Activationfunction == "function") {
             if (this.ActivationInput === this.Input.length) {
-                let r = this.agrupar()
-                let result = r
+                let r = this.agrupar();
+                let result = r;
 
                 for (let index = 0; index < this.Output.length; index++) {
                     this.Output[index].addInput(result);
-                    // this.Output[index].activation()
+                    this.Output[index].activation();
                 }
             }
         } else {
@@ -237,20 +239,18 @@ class MaxPooling2D {
 }
 
 class Flatter {
-    constructor(config) {
-        this.name = ""
-        this.Input = []
-        this.ActivationInput = 0
-        this.Output = []
+    constructor() {
+        this.name = "";
+        this.typeof = "Flatter"
+        this.Input = [];
+        this.ActivationInput = 0;
+        this.Output = [];
         this.weight = [];
-        this.Activationfunction = (i) => {
-            var name = "N/A"
-            return i
-        }
+        this.Activationfunction = NotApplicable;
     }
 
     addInput = (i) => {
-        this.Input.push(i)
+        this.Input.push(i);
     }
 
     flatter = (matriz2D) => {
@@ -258,10 +258,10 @@ class Flatter {
 
         for (let y = 0; y < matriz2D.length; y++) {
             for (let x = 0; x < matriz2D[y].length; x++) {
-                matriz2D[y][x].r ? vect.push(matriz2D[y][x].r) : 0
-                matriz2D[y][x].g ? vect.push(matriz2D[y][x].g) : 0
-                matriz2D[y][x].b ? vect.push(matriz2D[y][x].b) : 0
-                matriz2D[y][x].a ? vect.push(matriz2D[y][x].a) : 0
+                matriz2D[y][x].r ? vect.push(matriz2D[y][x].r) : 0;
+                matriz2D[y][x].g ? vect.push(matriz2D[y][x].g) : 0;
+                matriz2D[y][x].b ? vect.push(matriz2D[y][x].b) : 0;
+                matriz2D[y][x].a ? vect.push(matriz2D[y][x].a) : 0;
             }
         }
 
@@ -271,11 +271,11 @@ class Flatter {
     activation = () => {
         if (typeof this.Activationfunction == "function") {
             if (this.ActivationInput === this.Input.length) {
-                let result = this.flatter()
+                let result = this.flatter(this.Input[this.name.match(/\d+$/)]);
 
                 for (let index = 0; index < this.Output.length; index++) {
                     this.Output[index].addInput(result);
-                    // this.Output[index].activation()
+                    this.Output[index].activation();
                 }
             }
         } else {

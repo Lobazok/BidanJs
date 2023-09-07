@@ -1,7 +1,6 @@
 const {logError} = require("../colors/bidanColors")
 
 const step = (Input) => {
-    var name = "step"
     if (typeof Input == "number") {
         if (Input >= 0) {
             return 1
@@ -10,8 +9,6 @@ const step = (Input) => {
 }
 
 const relu = (Input) => {
-
-    var name = "relu"
     if (typeof Input == "number") {
         if (Input > 0) {
             return Input
@@ -20,7 +17,6 @@ const relu = (Input) => {
 }
 
 const leakyrule = (Input) => {
-    var name = "relu"
     if (typeof Input == "number") {
         if (Input > 0) {
             return Input
@@ -30,17 +26,19 @@ const leakyrule = (Input) => {
 
 
 const sigmoid = (Input) => {
-    var name = "logistica"
     if (typeof Input == "number") {
         return 1 / (1 + (Math.E ** -Input))
     } else logError("Bidan error 003: la funcion de activacion <<sigmoid>> no obtuvo un valor numerico")
 }
 
 const tanh = (Input) => {
-    var name = "logistica"
     if (typeof Input == "number") {
         return ((Math.E ** Input) - (Math.E ** -Input)) / ((Math.E ** Input) + (Math.E ** -Input))
     } else logError("Bidan error 003: la funcion de activacion <<tanh>> no obtuvo un valor numerico")
+}
+
+const NotApplicable = (i) => {
+    return i;
 }
 
 const funcions = [
@@ -48,7 +46,8 @@ const funcions = [
     relu,
     leakyrule,
     sigmoid,
-    tanh
+    tanh,
+    NotApplicable
 ]
 
 module.exports = {
@@ -57,5 +56,6 @@ module.exports = {
     relu,
     leakyrule,
     sigmoid,
-    tanh
+    tanh,
+    NotApplicable
 }

@@ -22,9 +22,11 @@ const Ly = (text) => {
 }
 
 const Lymin = (text) => {
-    return (Cilan.cyan(Cilan.dim(text)))
+    return (Cilan.cyan(Cilan.italic(text)))
 }
-
+const LyminTitle = (text) => {
+    return (Cilan.cyan(Cilan.dim(Cilan.bold(text))))
+}
 const LyTitle = (text) => {
     return (Cilan.cyan(Cilan.bold(text)))
 }
@@ -85,5 +87,6 @@ module.exports = {
     expe: expe,
     update: update,
     new: nuevo,
-    performance: performance
+    performance: performance,
+    LyminTitle : LyminTitle
 }
