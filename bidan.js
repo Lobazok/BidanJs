@@ -84,7 +84,7 @@ class Neuralnetwork {
                             }
 
                             this.Layer.push(layer)
-                        }else logError("Bidan error 003 LaHiCo: An attempt was made to configure the type of neurons with arrays that do not match their lengths")
+                        } else logError("Bidan error 003 LaHiCo: An attempt was made to configure the type of neurons with arrays that do not match their lengths")
                     } else if (ArrayInput[index] == 0) {
                         logError("Bidan error 003 LaHiCo: The " + index + " layer was assigned zero neurons")
                     } else logError("Bidan error 003 LaHiCo: The " + index + " layer was assigned a negative number of neurons")
@@ -94,6 +94,7 @@ class Neuralnetwork {
             }
 
         } else if (typeof ArrayInput == "number") {
+            let neuron = new neuronType(neuronConfig)
             //Input es un numero
             if (ArrayInput > 0) {
                 let layer = []
@@ -102,7 +103,7 @@ class Neuralnetwork {
                     neuron.name + "Layer" + o + "Neuron" + o
                     layer.push(neuron)
                 }
-                this.LayerActivationfunction[0] = neurons.Activationfunction
+                this.LayerActivationfunction[0] = neuron.Activationfunction
                 this.Layer.push(layer)
             } else if (Input == 0) {
                 logError("Bidan error 003 LaHiCo: The hidden layer was assigned zero neurons")
@@ -295,14 +296,24 @@ class Neuralnetwork {
         for (let i = 0; i < this.LayerOutput.length; i++) {
             this.LayerOutput[i].weight = outputWeight;
         }
+        if (this.LayerInput[0] instanceof Perceptron) {
+            // Initialize weights for input layer
+            const inputWeight = Array.from({ length: this.Layer[this.Layer.length - 1].length }, () => Math.random());
+            inputWeight.push(Math.random());
 
-        // Initialize weights for input layer
-        const inputWeight = Array.from({ length: this.Layer[this.Layer.length - 1].length }, () => Math.random());
-        inputWeight.push(Math.random());
-
-        for (let i = 0; i < this.LayerInput.length; i++) {
-            this.LayerInput[i].weight = inputWeight;
+            for (let i = 0; i < this.LayerInput.length; i++) {
+                this.LayerInput[i].weight = inputWeight;
+            }
+        }else if (this.LayerInput[0] instanceof Convu2D) {
+            // Initialize weights for input layer
+            const inputWeight = Array.from({ length: this.LayerInput[0].size[0] * this.LayerInput[0].size[1] }, () => Math.random());
+            for (let i = 0; i < this.LayerInput.length; i++) {
+                this.LayerInput[i].weight = inputWeight;
+            }
+        } {
+             
         }
+
     }
 
     StartPrediction = (DataSet, bool = true) => {
@@ -333,7 +344,7 @@ class Neuralnetwork {
         } else if (this.LayerInput[0] instanceof Convu2D || this.LayerInput[0] instanceof MaxPooling2D || this.LayerInput[0] instanceof Flatter) {
             if (typeof DataSet === "object") {
                 for (let i = 0; i < this.LayerInput.length; i++) {
-                    logError(DataSet.length)
+
                     this.LayerInput[i].addInput(DataSet)
                     this.LayerInput[i].activation()
                 }

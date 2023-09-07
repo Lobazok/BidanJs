@@ -1,14 +1,15 @@
-const {logError} = require("./colors/bidanColors")
+const { logError } = require("./colors/bidanColors")
 const colors = require("./colors/bidanColors")
+const { relu } = require("./func/Activationfunctions")
 
 class Perceptron {
-    constructor(Activationfunction) {
-        this.name = ""
-        this.Activationfunction = Activationfunction
-        this.Input = []
-        this.ActivationInput = 0
-        this.weight = []
-        this.Output = []
+    constructor(config) {
+        this.name = "";
+        this.Activationfunction = config.Activationfunction || config.fun || relu;
+        this.Input = [];
+        this.ActivationInput = 0;
+        this.weight = [];
+        this.Output = [];
     }
 
     addInput = (num) => {
@@ -23,7 +24,7 @@ class Perceptron {
             for (let i = 0; i < this.Input.length; i++) {
                 r += (this.Input[i] * this.weight[i])
             }
-            r += this.weight[this.weight.length - 1 ] ;
+            r += this.weight[this.weight.length - 1];
             return r;
         } else logError("Bidan error 004: la neurona: " + this.name + " no risivio un array de numeros como input");
     }
@@ -45,31 +46,44 @@ class Perceptron {
         }
 
     }
-    info = ()=>{
-        console.log({Name : this.name});
-        console.log({Activationfunction : this.Activationfunction});
-        console.log({Input : this.Input});
-        console.log({ActivationInput : this.ActivationInput});
-        console.log({weight : this.weight});
-        console.log({Output :this.Output});
+    info = () => {
+        console.log({ Name: this.name });
+        console.log({ Activationfunction: this.Activationfunction });
+        console.log({ Input: this.Input });
+        console.log({ ActivationInput: this.ActivationInput });
+        console.log({ weight: this.weight });
+        console.log({ Output: this.Output });
         console.log();
     }
 
 }
 
 class Convu2D {
-    constructor( size, Activationfunction) {
+    constructor(config) {
         this.name = ""
-        this.Activationfunction = Activationfunction
+        this.Activationfunction = config.Activationfunction || config.fun || relu;
         this.Input = []
-        this.size = size
+        this.size = config.size || [3, 3];
         this.ActivationInput = 0
-        this.kerlen = [[1/9,1/9,1/9],[1/9,1/9,1/9],[1/9,1/9,1/9]]
+        this.kerlen = [[1 / 9, 1 / 9, 1 / 9], [1 / 9, 1 / 9, 1 / 9], [1 / 9, 1 / 9, 1 / 9]]
         this.Output = []
+        this.weight = [];
     }
 
     addInput = (i) => {
         this.Input.push(i)
+    }
+    toKerlen = () => {
+        let weights = []
+        for (let i = 0; i < this.size[0]; i++) {
+            const subarray = [];
+            for (let j = 0; j < this.size[1]; j++) {
+                const indice = i * this.size[1] + j;
+                subarray.push(this.weight[indice]);
+            }
+            weights.push(subarray);
+        }
+        this.weight = weights
     }
     convu = () => {
         if (this.kerlen.length == this.size[0] & this.kerlen[0].length == this.size[1]) {
@@ -84,42 +98,43 @@ class Convu2D {
                     const capa = [];
                     for (let x = 0; x < this.Input[index][y].length; x++) {
                         const pixel = { x: x, y: y, r: 0, g: 0, b: 0, a: 255 };
-    
+
                         for (let a = 0; a < kerlenY; a++) {
                             for (let b = 0; b < kerlenX; b++) {
                                 const pixelY = y + b - halfSizeY;
                                 const pixelX = x + a - halfSizeX;
-    
+
                                 if (pixelX >= 0 && pixelX < this.Input[index][y].length && pixelY >= 0 && pixelY < this.Input[index].length) {
                                     const kernelValue = this.kerlen[a][b];
                                     const pixelData = this.Input[index][pixelY][pixelX] || { r: 0, g: 0, b: 0 };
-    
+
                                     pixel.r += pixelData.r * kernelValue;
                                     pixel.g += pixelData.g * kernelValue;
                                     pixel.b += pixelData.b * kernelValue;
                                 }
                             }
                         }
-    
+
                         capa.push(pixel);
                     }
                     imagen.push(capa);
                 }
             }
-
             return imagen;
         } else logError("Bidan error 007: kerlen and kerlen size do not coinsiden in " + this.name);
     };
 
     activation = () => {
+        
         if (typeof this.Activationfunction == "function") {
             if (this.ActivationInput === this.Input.length) {
+                this.toKerlen()
                 let r = this.convu()
                 let result = r
 
                 for (let index = 0; index < this.Output.length; index++) {
                     this.Output[index].addInput(result);
-                    // this.Output[index].activation()
+                    this.Output[index].activation()
                 }
             }
         } else {
@@ -138,11 +153,11 @@ class Convu2D {
 }
 
 class MaxPooling2D {
-    constructor(size, strike) {
+    constructor(config) {
         this.name = ""
-        this.zancada = strike
+        this.zancada = config.strike
         this.Input = []
-        this.size = size
+        this.size = config.size
         this.ActivationInput = 0
         this.Output = []
         this.Activationfunction = (i) => {
@@ -167,15 +182,15 @@ class MaxPooling2D {
                 for (let x = 0; x < this.Input[index][y].length; x = x + this.zancada[1]) {
                     let pixels = []
                     xdef++;
-                    for (let a = 0; a < this.size [0]; a++) {
-                        for (let b = 0; b < this.size [1]; b++) {
+                    for (let a = 0; a < this.size[0]; a++) {
+                        for (let b = 0; b < this.size[1]; b++) {
                             if (this.Input[index][y + a]) {
                                 if (this.Input[index][y + a][x + b]) {
                                     pixels.push(this.Input[index][y + a][x + b])
                                 }
                             }
                         }
-    
+
                     }
                     const pixel = {
                         x: xdef,
@@ -222,11 +237,12 @@ class MaxPooling2D {
 }
 
 class Flatter {
-    constructor() {
+    constructor(config) {
         this.name = ""
         this.Input = []
         this.ActivationInput = 0
         this.Output = []
+        this.weight = [];
         this.Activationfunction = (i) => {
             var name = "N/A"
             return i
@@ -275,7 +291,7 @@ class Flatter {
         console.log(this.kerlen);
         console.log(this.Output);
     }
-    
+
 }
 
 module.exports = {
