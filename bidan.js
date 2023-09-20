@@ -75,7 +75,6 @@ class Neuralnetwork {
                                 }
 
 
-                                this.Layer.push(layer)
                             } else logError("Bidan error 003 LaHiCo: An attempt was made to configure the type of neurons with arrays that do not match their lengths")
                         } else {
                             if (neuronType.length == undefined | neuronType.length == 1) {
@@ -88,7 +87,6 @@ class Neuralnetwork {
                                 }
                             }
                         }
-
                         this.Layer.push(layer)
 
                     } else if (ArrayInput[index] == 0) {
