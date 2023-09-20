@@ -737,7 +737,7 @@ class analytic {
 				} else if (answer == "comparation" | answer == "com") {
 					this.Terminal.Comparation(t)
 
-				} else if (answer == "length") {
+				} else if (answer == "length" | answer == "len" | answer == "lenght" | answer == "lenhtg" | answer == "lenhgt" | answer == "lenthg" | answer == "lentgh") {
 					console.log(colors.blue("  > Number of generations: " + this.data.length));
 					this.Terminal.index(t)
 
@@ -748,7 +748,7 @@ class analytic {
 					console.clear()
 					this.Terminal.index(t)
 
-				} else if (answer == "exit") {
+				} else if (answer == "exit" | answer == "quit") {
 					t.close()
 
 				} else if (answer == "help") {
@@ -822,14 +822,6 @@ class analytic {
 	}
 
 	openTerminal = () => {
-		//	______ _     _               ___         _____                 _   _      
-		//	| ___ (_)   | |             |_  |       |  __ \               | | (_)     
-		//	| |_/ /_  __| | __ _ _ __     | | ___   | |  \/ ___ _ __   ___| |_ _  ___ 
-		//	| ___ \ |/ _` |/ _` | '_ \    | |/ __|  | | __ / _ \ '_ \ / _ \ __| |/ __|
-		//	| |_/ / | (_| | (_| | | | /\__/ /\__ \  | |_\ \  __/ | | |  __/ |_| | (__ 
-		//	\____/|_|\__,_|\__,_|_| |_\____/ |___/   \____/\___|_| |_|\___|\__|_|\___|
-
-
 
 
 		const terminal = readline.createInterface({
@@ -838,9 +830,9 @@ class analytic {
 		});
 
 
-		console.log(colors.green("  Welcome to the BidanJs Genetic analysis panel!                          "));
-		console.log(colors.green("  use the help command to get information about available commands        "));
-		console.log(colors.green("  Bidan Genetic Panel                                      v:0.8.1      "));
+		console.log(colors.green("  Welcome to the BidanJs Genetic analysis panel!                  "));
+		console.log(colors.green("  use the help command to get information about available commands"));
+		console.log(colors.green("  Bidan Genetic Panel                                    v:0.10.10"));
 		this.Terminal.index(terminal)
 	}
 }
