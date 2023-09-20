@@ -55,15 +55,10 @@ class PerformanceLogger {
         } else logError("Bidan Genetic Error 001: initAgent did not receive a valid value in Generation and Agent")
     }
 
-    addResult = (result) => {
-        if (typeof result == "number") {
-            this.PerformaceAgentCurrent += result
-        } else logError("Bidan Genetic Error 001: the addResult function did not receive any valid parameters")
-    }
-
-    analyzeResult = (fun = (r)=> {return r}, color = colors.performance) => {
-        console.log(color(fun(this.PerformaceAgentCurrent)))
-        this.PerformanceCurrent.push(fun(this.PerformaceAgentCurrent))
+    
+    addResult = (result = 0, color = colors.performance) => {
+        console.log(color(result))
+        this.PerformanceCurrent.push(result)
     }
 
     saveData = () => {
