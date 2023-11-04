@@ -1,12 +1,13 @@
 const { logError } = require("./colors/bidanColors")
 const colors = require("./colors/bidanColors")
-const { relu, NotApplicable } = require("./func/Activationfunctions")
+const { relu, NotApplicable, reluDerivative, NotApplicableDerivative } = require("./func/Activationfunctions")
 
 class Perceptron {
     constructor(config) {
         this.name = "";
         this.typeof = "Perceptron"
-        this.Activationfunction = config.Activationfunction || config.fun || relu;
+        this.Activationfunction = config.Activationfunction || config.fun || config.func || relu;
+        this.Derivative = config.Derivative ||config.d || reluDerivative;
         this.Input = [];
         this.ActivationInput = 0;
         this.weight = [];
@@ -63,7 +64,8 @@ class Convu2D {
     constructor(config) {
         this.name = "";
         this.typeof = "Convu2D"
-        this.Activationfunction = config.Activationfunction || config.fun || relu;
+        this.Activationfunction = config.Activationfunction || config.fun || config.func || relu;
+        this.Derivative = config.Derivative ||config.d || reluDerivative;
         this.Input = [];
         this.size = config.size || [3, 3];
         this.ActivationInput = 0;
@@ -166,6 +168,8 @@ class MaxPooling2D {
         this.ActivationInput = 0;
         this.Output = [];
         this.Activationfunction = NotApplicable;
+        this.Derivative = NotApplicableDerivative;
+
     }
 
     addInput = (i) => {
@@ -247,6 +251,7 @@ class Flatter {
         this.Output = [];
         this.weight = [];
         this.Activationfunction = NotApplicable;
+        this.Derivative = NotApplicableDerivative;
     }
 
     addInput = (i) => {

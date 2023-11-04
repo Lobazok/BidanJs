@@ -4,7 +4,7 @@ const colors = require("./colors/bidanColors")
 
 const { Perceptron, Convu2D, Flatter, MaxPooling2D } = require("./neuron")
 const fs = require("fs")
-const { relu } = require("./func/Activationfunctions")
+const { relu, reluDerivative } = require("./func/Activationfunctions")
 const { log } = require("console")
 
 
@@ -25,6 +25,7 @@ class Neuralnetwork {
             "LayerOutputConfig": []
         }
     }
+
     //funcion para configurar las capas de entrada
     LayerInputConfig = (Input, neuronType, neuronConfig) => {
         let neuron = new neuronType(neuronConfig)
@@ -289,22 +290,21 @@ class Neuralnetwork {
 
     }
 
-    initWeights = (Factor = 1, mode = "IncrementFactor") => {
+    initWeights = (Factor = [-1 / 9, 1 / 9], mode = "Range") => {
         // Initialize weights for hidden layers
         for (let o = 0; o < this.Layer.length; o++) {
 
             if (this.Layer[o][0] instanceof Perceptron) {
                 const prevLayerLength = o > 0 ? this.Layer[o - 1].length : this.LayerInput.length;
-                const weight = mode == "Range" ? Array.from({ length: prevLayerLength }, () => Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1]) : Array.from({ length: prevLayerLength }, () => Math.random() * Factor)
-                let w = mode == "Range" ? Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1] : Math.random() * Factor
-                weight.push(w);
+                const weight = mode === "Range" ? Array.from({ length: prevLayerLength }, () => Math.random() * (Factor[1] - Factor[0]) + Factor[0]) : Array.from({ length: prevLayerLength }, () => Math.random() * (Factor[1] - Factor[0]) + Factor[0]);
 
                 for (let u = 0; u < this.Layer[o].length; u++) {
                     this.Layer[o][u].weight = weight;
                 }
             } else if (this.Layer[o][0] instanceof Convu2D) {
                 // Initialize weights for input layer
-                const inputWeight = mode == "Range" ? Array.from({ length: this.Layer[o][0].size[0] * this.Layer[o][0].size[1] }, () => Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1]) : Array.from({ length: this.LayerInput[0].size[0] * this.LayerInput[0].size[1] }, () => Math.random() * Factor);
+                const inputWeight = mode === "Range" ? Array.from({ length: this.Layer[o][0].size[0] * this.Layer[o][0].size[1] }, () => Math.random() * (Factor[1] - Factor[0]) + Factor[0]) : Array.from({ length: this.LayerInput[0].size[0] * this.LayerInput[0].size[1] }, () => Math.random() * (Factor[1] - Factor[0]) + Factor[0]);
+
                 for (let u = 0; u < this.Layer[o].length; u++) {
                     this.Layer[o][u].weight = inputWeight;
                 }
@@ -313,16 +313,15 @@ class Neuralnetwork {
 
         if (this.LayerOutput[0] instanceof Perceptron) {
             // Initialize weights for output layer
-            const outputWeight = mode == "Range" ? Array.from({ length: this.Layer[this.Layer.length - 1].length }, () => Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1]) : Array.from({ length: this.Layer[this.Layer.length - 1].length }, () => Math.random() * Factor)
-            let wOut = mode == mode == "Range" ? Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1] : Math.random() * Factor
-            outputWeight.push(wOut);
+            const outputWeight = mode === "Range" ? Array.from({ length: this.Layer[this.Layer.length - 1].length }, () => Math.random() * (Factor[1] - Factor[0]) + Factor[0]) : Array.from({ length: this.Layer[this.Layer.length - 1].length }, () => Math.random() * (Factor[1] - Factor[0]) + Factor[0]);
 
             for (let i = 0; i < this.LayerOutput.length; i++) {
                 this.LayerOutput[i].weight = outputWeight;
             }
-        }else if (this.LayerOutput[0] instanceof Convu2D) {
+        } else if (this.LayerOutput[0] instanceof Convu2D) {
             // Initialize weights for input layer
-            const inputWeight = mode == "Range" ? Array.from({ length: this.LayerOutput[0].size[0] * this.LayerOutput[0].size[1] }, () => Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1]) : Array.from({ length: this.LayerInput[0].size[0] * this.LayerInput[0].size[1] }, () => Math.random() * Factor);
+            const inputWeight = mode === "Range" ? Array.from({ length: this.LayerOutput[0].size[0] * this.LayerOutput[0].size[1] }, () => Math.random() * (Factor[1] - Factor[0]) + Factor[0]) : Array.from({ length: this.LayerInput[0].size[0] * this.LayerInput[0].size[1] }, () => Math.random() * (Factor[1] - Factor[0]) + Factor[0]);
+
             for (let i = 0; i < this.LayerOutput.length; i++) {
                 this.LayerOutput[i].weight = inputWeight;
             }
@@ -330,22 +329,19 @@ class Neuralnetwork {
 
         if (this.LayerInput[0] instanceof Perceptron) {
             // Initialize weights for input layer
-            const inputWeight = mode == "Range" ? Array.from({ length: 1 }, () => Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1]) : Array.from({ length: 1 }, () => Math.random() * Factor)
-            let wIn = mode == mode == "Range" ? Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1] : Math.random() * Factor
-            inputWeight.push(wIn);
+            const inputWeight = mode === "Range" ? Array.from({ length: 1 }, () => Math.random() * (Factor[1] - Factor[0]) + Factor[0]) : Array.from({ length: 1 }, () => Math.random() * (Factor[1] - Factor[0]) + Factor[0]);
 
             for (let i = 0; i < this.LayerInput.length; i++) {
                 this.LayerInput[i].weight = inputWeight;
             }
         } else if (this.LayerInput[0] instanceof Convu2D) {
             // Initialize weights for input layer
-            
-            const inputWeight = mode == "Range" ? Array.from({ length: this.LayerInput[0].size[0] * this.LayerInput[0].size[1] }, () => Math.floor(Math.random() * (Factor[0] - Factor[1] + 1)) + Factor[1]) : Array.from({ length: this.LayerInput[0].size[0] * this.LayerInput[0].size[1] }, () => Math.random() * Factor);
+            const inputWeight = mode === "Range" ? Array.from({ length: this.LayerInput[0].size[0] * this.LayerInput[0].size[1] }, () => Math.random() * (Factor[1] - Factor[0]) + Factor[0]) : Array.from({ length: this.LayerInput[0].size[0] * this.LayerInput[0].size[1] }, () => Math.random() * (Factor[1] - Factor[0]) + Factor[0]);
+
             for (let i = 0; i < this.LayerInput.length; i++) {
                 this.LayerInput[i].weight = inputWeight;
             }
         }
-
     }
 
     StartPrediction = (DataSet, bool = true) => {
@@ -419,9 +415,9 @@ class Neuralnetwork {
                         a.push(this.Layer[o][u].weight[i])
                     }
                     layer.push(a)
-                }else layer.push(0)
-                
-                
+                } else layer.push(0)
+
+
             }
             data.weight.Layer.push(layer)
         }
@@ -530,6 +526,7 @@ class Neuralnetwork {
         console.log(colors.resu("r: " + r));
         return r
     }
+
     reset = () => {
         for (let o = 0; o < this.Layer.length; o++) {
 
@@ -547,6 +544,116 @@ class Neuralnetwork {
             this.LayerInput[i].Input = []
         }
     }
+
+    mean_squared_error = (output, target) => {
+        let error = 0;
+        for (let i = 0; i < output.length; i++) {
+            error += 0.5 * Math.pow((target[i] - output[i]), 2);
+        }
+        return error;
+    }
+
+    train = (trainingData, targetData, learningRate, epochs, activationFunctions, print = true) => {
+        if (
+            this.LayerInput.length === 0 ||
+            this.LayerOutput.length === 0 ||
+            this.Layer.length === 0
+        ) {
+            logError("Bidan error: Network not properly configured for training");
+            return;
+        }
+
+        for (let epoch = 0; epoch < epochs; epoch++) {
+            let totalError = 0;
+
+            for (let dataIndex = 0; dataIndex < trainingData.length; dataIndex++) {
+                // Reset neuron inputs
+                this.reset();
+
+                // Set input data
+                this.StartPrediction(trainingData[dataIndex], false);
+
+                let errorLO = 0
+
+                let errors = []
+                for (let i = 0; i < this.LayerOutput.length; i++) {
+                    const output = this.LayerOutput[i].Activationfunction(this.LayerOutput[i].cal());
+                    const target = targetData[dataIndex];
+                    const error = target - output;
+                    
+                    totalError += Math.abs(error);
+
+                    // Backpropagate the error
+                    const derivative = this.LayerOutput[i].Derivative(output);
+                    const delta = error * derivative;
+
+                    errorLO += delta;
+
+                    for (let j = 0; j < this.LayerOutput[i].weight.length; j++) {
+                        this.LayerOutput[i].weight[j] += learningRate * delta * this.LayerOutput[i].Input[j];
+                    }
+                }
+
+                errorLO /= this.LayerOutput.length
+                errors.push(errorLO)
+                for (let l = 0; l < this.Layer.length; l++) {
+                    let errorLH = 0
+                    for (let i = 0; i < this.Layer[l].length; i++) {
+
+                        // Backpropagate the error
+                        const derivative = this.Layer[l][i].Derivative(this.Layer[l][i].Activationfunction(this.Layer[l][i].cal()));
+
+                        // Calculate the delta for the current neuron
+                        let delta = 0;
+                        for (let j = 0; j < this.Layer[l][i].weight.length; j++) {
+                            delta += this.Layer[l][i].weight[j] * errors[errors.length-1];
+                        }
+                        totalError += Math.abs(delta);
+
+                        
+                        delta *= derivative
+
+                        errorLH += delta
+
+
+                        for (let j = 0; j < this.Layer[l][i].weight.length; j++) {
+                            this.Layer[l][i].weight[j] += learningRate * delta * this.Layer[l][i].Input[j];
+                        }
+                    }
+                    errors.push(errorLH)
+                }
+
+                for (let i = 0; i < this.LayerInput.length; i++) {
+
+                    // Backpropagate the error
+                    const derivative = this.LayerInput[i].Derivative(this.LayerInput[i].Activationfunction(this.LayerInput[i].cal()));
+
+                    // Calculate the delta for the current neuron
+                    let delta = 0;
+                    for (let j = 0; j < this.LayerInput[i].weight.length; j++) {
+                        delta += this.LayerInput[i].weight[j] * errors[errors.length-1];
+                    }
+                    totalError += Math.abs(delta);
+
+                    
+                    delta *= derivative
+
+
+                    for (let j = 0; j < this.LayerInput[i].weight.length; j++) {
+                        this.LayerInput[i].weight[j] += learningRate * delta * this.LayerInput[i].Input[j];
+                    }
+                }
+            }
+
+            if (epoch % 10 === 0 && print) {
+                console.log(`Epoch ${epoch}: Total Error = ${totalError}`);
+
+            }
+        }
+
+        console.log("Training completed.");
+    };
+
 }
 module.exports = {
     Neuralnetwork

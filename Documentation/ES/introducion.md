@@ -56,11 +56,12 @@ npm i bidanjs
 
 ## inicialización  
 
-Para inicializar el **archivo en el cual se trabajara**, se debe **importar** todos los **módulos y archivos necesarios**, **necesariamente se deben** importar el **modulo de NPM** y las funciones de activación que se usaran
+Para inicializar el **archivo en el cual se trabajara**, se debe **importar** todos los **módulos y archivos necesarios**, **necesariamente se deben** importar el **modulo de NPM**, las **funciones de activación** y las **neuronas** que se usaran
 ~~~ JavaScript
 const bidan = require("bidanjs")
 
-const { relu, sigmoid } = require("bidanjs/Activationfunctions.js")
+const { relu, sigmoid } = require("bidanjs/Activationfunctions")
+const { Convu2D, Flatter, MaxPooling2D, Perceptron } = require("bidanjs/neuron")
 ~~~
 
 Se **importa** ***BidanJs*** y las ***funciones de activación*** que se usarán.
@@ -75,27 +76,26 @@ Se crea un nuevo objecto de tipo Neuralnetwork y se configura
 
 ### configuración de capas
 
-En ***BidanJs*** se **configuran las capas** con **funciones**, se configura el **numero de neuronas** y las **funciones de activación**.
+En ***BidanJs*** se **configuran las capas** con **funciones**, se configura el **numero de neuronas**, el **tipo de neurona** y la **configuración de la capa**.
 #### función config de cada capa
 
 ~~~ JavaScript
-lian.LayerInputConfig(2, sigmoid)
-lian.LayersConfig([3,4,2], relu)
-lian.LayerOutputConfig(4, sigmoid)
+lian.LayerInputConfig(2, Convu2D, { fun: relu, size: [3, 3] })
+lian.LayersConfig([3,4], [MaxPooling2D, Flatter], [{ size: [2, 2], strike: [2, 2] }, { fun: NotApplicable }])
+lian.LayerOutputConfig(5, Perceptron, { fun: sigmoid })
 ~~~
 
 
-+ LayerInputConfig para la configuración de capa de entrada, el primer parámetro es la cantidad de neuronas en forma de número y el segundo la función de activación que usa la capa.
++ LayerInputConfig para la configuración de capa de entrada, el primer parámetro es la cantidad de neuronas en forma de número, el segundo parámetro es el tipo de neurona y el tercer es la configuración de las neuronas de esa capa.
 
-+ LayersConfig para la configuración de las capas ocultas, el primer parámetro si es un array es la cantidad de neuronas de cada capa, cada elemento del array es una capa y si se recibe como número será una sola capa con la cantidad de neuronas específicas, el segundo la función de activación que usa la capa.
++ LayersConfig para la configuración de las capas ocultas, el primer parámetro si es un array es la cantidad de neuronas de cada capa, cada elemento del array es una capa y si se recibe como número será una sola capa con la cantidad de neuronas específicas, el segundo parámetro es el tipo de neuronas y el tercer es la configuración de las neuronas de esa capa.
 
-+ LayerOutputConfig para la configuración de capa de salida, el primer parámetro es la cantidad de neuronas en forma de número y el segundo la función de activación que usa la capa.
-
++ LayerOutputConfig para la configuración de capa de salida, el primer parámetro es la cantidad de neuronas en forma de número, el segundo parámetro es el tipo de neurona y el tercer es la configuración de las neuronas de esa capa
 #### función config  general
 Alternativamente a configurar las capas con funciones por separado, se puede configurar todas las capas con una misma función llamada ***config***.
 
 ~~~ JavaScript
-lian.config(2, sigmoid, [3,4,2], relu, 4, sigmoid)
+lian.config(2,  Convu2D, { fun: relu, size: [3, 3] }, [3,4], [MaxPooling2D, Flatter], [{ size: [2, 2], strike: [2, 2] }, { fun: NotApplicable }], 5, Perceptron, { fun: sigmoid })
 ~~~
 
 
