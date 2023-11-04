@@ -553,7 +553,7 @@ class Neuralnetwork {
         return error;
     }
 
-    train = (trainingData, targetData, learningRate, epochs, activationFunctions, print = true) => {
+    train = (trainingData, targetData, learningRate, epochs, print = true) => {
         if (
             this.LayerInput.length === 0 ||
             this.LayerOutput.length === 0 ||
